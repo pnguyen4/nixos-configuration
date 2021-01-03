@@ -12,13 +12,28 @@ let
   };
 in
 {
-
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # Home-Manager Module
       (import "${home-manager}/nixos")
     ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+ 
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev";
+    enableCryptodisk = true;
+    mirroredBoots = [
+      { devices = [ "/dev/disk/by-id/wwn-0x5000cca22bc33c45-part1" ];
+        path = "/boot/efi-fallback"; }
+    ];
+  };
 
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -46,11 +61,6 @@ in
     onShutdown = "shutdown";
   };
 
-  # Use the systemd-boot EFI boot loader.
-  #boot.loader.systemd-boot.enable = true;
-  #boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.device = "/dev/disk/by-id/wwn-0x5000c50093411ab1";
-
   networking.hostName = "nixos-machine"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -70,23 +80,23 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-  #   font = "Lat2-Terminus16";
-      keyMap = "dvorak";
+    font = "Lat2-Terminus16";
+    keyMap = "dvorak";
   };
 
   # Configure X Server and Window Manager
   services.xserver = {
+    enable = true;
+    displayManager.lightdm.enable = true;
+    windowManager.i3 = {
       enable = true;
-      displayManager.lightdm.enable = true;
-      windowManager.i3 = {
-          enable = true;
-          extraPackages = with pkgs; [
-            dmenu
-            i3status
-            i3lock
-          ];
-          extraSessionCommands = "${pkgs.autorandr}/bin/autorandr -c";
-      };
+      extraPackages = with pkgs; [
+        dmenu
+        i3status
+        i3lock
+      ];
+      extraSessionCommands = "${pkgs.autorandr}/bin/autorandr -c";
+    };
   };
 
   # Configure AMD video drivers
@@ -109,19 +119,19 @@ in
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "libvirtd"]; # Enable ‘sudo’ for the user.
+    isNormalUser = true;
+    extraGroups = [ "wheel" "libvirtd"]; # Enable ‘sudo’ for the user.
   };
-  home-manager.users.user = import /home/user/home.nix;
+  #home-manager.users.user = import /home/user/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-      wget vim htop pciutils git virtmanager
+    wget vim htop pciutils git virtmanager
   ];
 
   fonts.fonts = with pkgs; [
-      terminus_font
+    terminus_font
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -153,3 +163,4 @@ in
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
 }
+
