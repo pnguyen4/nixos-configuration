@@ -16,6 +16,13 @@
     pkgs.alsaTools
   ];
 
+  # Configure Git
+  programs.git = {
+    enable = true;
+    userEmail = "pnguyen4711@gmail.com";
+    userName  = "Phillip Nguyen";
+  };
+
   # Vim Settings
   programs.vim = {
       enable = true;

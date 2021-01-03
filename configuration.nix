@@ -20,18 +20,22 @@ in
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  #boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  #boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  #boot.loader.efi.efiSysMountPoint = "/boot/efi-fallback";
  
   boot.loader.grub = {
     enable = true;
     efiSupport = true;
-    device = "nodev";
     enableCryptodisk = true;
     mirroredBoots = [
-      { devices = [ "/dev/disk/by-id/wwn-0x5000cca22bc33c45-part1" ];
-        path = "/boot/efi-fallback"; }
+     { devices = [ "nodev" ];
+       path = "/boot/efi";
+     }
+     { devices = [ "nodev" ];
+       path = "/boot/efi-fallback"; 
+     }
     ];
   };
 
@@ -122,7 +126,7 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" "libvirtd"]; # Enable ‘sudo’ for the user.
   };
-  #home-manager.users.user = import /home/user/home.nix;
+  home-manager.users.user = import /home/user/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
