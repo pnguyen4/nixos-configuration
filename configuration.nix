@@ -19,12 +19,8 @@ in
       (import "${home-manager}/nixos")
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  #boot.loader.systemd-boot.enable = true;
+  # Bootloader Settings
   boot.loader.efi.canTouchEfiVariables = true;
-  #boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  #boot.loader.efi.efiSysMountPoint = "/boot/efi-fallback";
- 
   boot.loader.grub = {
     enable = true;
     efiSupport = true;
@@ -56,7 +52,6 @@ in
     done
     modprobe -i vfio-pci
   '';
-
   virtualisation.libvirtd = {
     enable = true;
     qemuOvmf = true;
@@ -65,8 +60,8 @@ in
     onShutdown = "shutdown";
   };
 
-  networking.hostName = "nixos-machine"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Define your hostname.
+  networking.hostName = "nixos-machine";
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -109,7 +104,6 @@ in
 
   # Configure keymap in X11
   services.xserver.layout = "dvorak";
-  # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -157,6 +151,7 @@ in
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  # Sorry Stallman
   nixpkgs.config.allowUnfree = true;
 
   # This value determines the NixOS release from which the default
