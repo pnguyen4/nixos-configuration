@@ -1,9 +1,0 @@
-References:
-https://gist.github.com/MaxXor/ba1665f47d56c24018a943bb114640d7
-https://elis.nu/blog/2019/08/encrypted-zfs-mirror-with-mirrored-boot-on-nixos/
-https://kennyballou.com/blog/2019/07/nixos-md-luks-lvm-setup
-https://nixos.wiki/wiki/Bootloader
-https://nixos.org/manual/nixos/stable/index.html#sec-obtaining
-https://jappieklooster.nl/nixos-on-encrypted-btrfs.html
-
-
