@@ -26,14 +26,24 @@ in
     efiSupport = true;
     enableCryptodisk = true;
     mirroredBoots = [
-     { devices = [ "nodev" ];
-       path = "/boot/efi";
-     }
-     { devices = [ "nodev" ];
-       path = "/boot/efi-fallback"; 
-     }
+      { devices = [ "nodev" ];
+        efiSysMountPoint = "/boot/efi";
+        path = "/boot/efi";
+      }
+      { devices = [ "nodev" ];
+        efiSysMountPoint = "/boot/efi-fallback";
+        path = "/boot/efi-fallback";
+      }
     ];
   };
+
+  # NTFS support via FUSE
+  boot.supportedFilesystems = [ "ntfs" ];
+
+  # Monthly btrfs scrubbing:
+  # read all data and metadata blocks and verify checksums.
+  # Automatically repair corrupted blocks.
+  services.btrfs.autoScrub.enable = true;
 
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -87,6 +97,9 @@ in
   services.xserver = {
     enable = true;
     displayManager.lightdm.enable = true;
+    deviceSection = ''
+      Option "TearFree" "true"
+    '';
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -162,4 +175,3 @@ in
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
 }
-
