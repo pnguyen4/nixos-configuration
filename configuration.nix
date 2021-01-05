@@ -97,6 +97,8 @@ in
   services.xserver = {
     enable = true;
     displayManager.lightdm.enable = true;
+    # My IBM Model M keyboard doesn't have a 'windows' key
+    xkbOptions = "caps:super";
     deviceSection = ''
       Option "TearFree" "true"
     '';
@@ -114,6 +116,10 @@ in
   # Configure AMD video drivers
   services.xserver.videoDrivers = [ "amdgpu" ];
   services.acpid.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+  };
 
   # Configure keymap in X11
   services.xserver.layout = "dvorak";
@@ -138,7 +144,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim htop pciutils git virtmanager
+    wget vim parted pciutils git virtmanager
   ];
 
   fonts.fonts = with pkgs; [
