@@ -41,8 +41,8 @@ in
   boot.supportedFilesystems = [ "ntfs" ];
 
   # Monthly btrfs scrubbing:
-  # read all data and metadata blocks and verify checksums.
-  # Automatically repair corrupted blocks.
+  # - Read all data and metadata blocks and verify checksums.
+  # - Automatically repair corrupted blocks.
   services.btrfs.autoScrub.enable = true;
 
   # GPU Passthrough for VMs
@@ -98,25 +98,27 @@ in
     enable = true;
     # Configure keymap in X11
     layout = "dvorak";
-    # NixOS uses systemd to launch x11; setting up xinit is hard
-    displayManager.lightdm.enable = true;
-    # My IBM Model M keyboard doesn't have a 'windows' key
-    xkbOptions = "caps:super";
+    # NixOS uses systemd to launch x11 but at least this way xorg runs rootless
+    displayManager.gdm.enable = true;
+    # This is a single user system
+    displayManager.autoLogin = {
+      enable = true;
+      user = "user";
+    };
+    # Use home manager configure window manager
+    desktopManager.session = [
+      { manage = "desktop";
+        name = "home-manager";
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.hm-xsession &
+          waitPID=$!
+        '';
+      }
+    ];
     # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"
     '';
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-        i3status
-        i3lock
-      ];
-      extraSessionCommands = ''
-        ${pkgs.autorandr}/bin/autorandr -c
-      '';
-    };
   };
 
   # Configure AMD video drivers
@@ -137,12 +139,11 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "libvirtd"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
   home-manager.users.user = import /home/user/home.nix;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
     wget vim parted pciutils git virtmanager
   ];

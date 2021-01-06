@@ -13,15 +13,51 @@
     pkgs.screenfetch      # System Information Tool
     pkgs.lm_sensors       # Command Line Utility for Monitoring Temperatures
     pkgs.radeon-profile   # GUI Application to Set GPU Fan Curve
-    pkgs.alsaTools
     pkgs.smartmontools    # Get HDD SMART Information
     pkgs.runelite         # Old School Runescape
     pkgs.file             # Standard UNIX Program to Detect File Types
     pkgs.mesa             # OpenGL Library
     pkgs.htop             # Pretty and Interactive Process Viewer
     pkgs.signal-desktop   # Encrypted Messaging
-    pkgs.xbindkeys-config # Modify Mouse Thumb Buttons
+    pkgs.xbindkeys        # Launch Commands with Keyboard or Mouse Button
+    pkgs.xvkbd            # Virtual Keyboard Commands
   ];
+
+  # My IBM Model M Doesn't Have Super Key
+  home.keyboard.layout = "dvorak";
+  home.keyboard.options = [ "caps:super" ];
+
+  # Launch i3wm automatically from gdm
+  xsession = {
+    enable = true;
+    scriptPath = ".hm-xsession";
+    windowManager.i3 = {
+      enable = true;
+      config = {
+        modifier = "Mod4";        # Use Super/Windows Key Instead of Alt
+        fonts = [ "terminus 8" ];
+        terminal = "alacritty";
+      };
+    };
+    profileExtra = ''
+      ${pkgs.autorandr}/bin/autorandr -c
+      ${pkgs.xbindkeys}/bin/xbindkeys
+    '';
+  };
+
+  # PulseAudio System Tray
+  services.pasystray.enable = true;
+
+  # Network Manager Applet
+  #services.network-manager-applet.enable = true;
+
+  # My Cooler Master MM710 Preference
+  home.file.".xbindkeysrc".text = ''
+    "xvkbd -text "\[Left]""
+      m:0x0 + b:8
+    "xvkbd -text "\[Right]""
+      m:0x0 + b:9
+  '';
 
   # Configure Git
   programs.git = {
@@ -217,6 +253,7 @@
         bold.family   = "terminus";
         italic.family = "terminus";
       };
+      # Solarized Light Theme
       colors = {
         primary = {
           background = "#fdf6e3";
