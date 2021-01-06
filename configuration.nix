@@ -96,9 +96,13 @@ in
   # Configure X Server and Window Manager
   services.xserver = {
     enable = true;
+    # Configure keymap in X11
+    layout = "dvorak";
+    # NixOS uses systemd to launch x11; setting up xinit is hard
     displayManager.lightdm.enable = true;
     # My IBM Model M keyboard doesn't have a 'windows' key
     xkbOptions = "caps:super";
+    # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"
     '';
@@ -109,7 +113,9 @@ in
         i3status
         i3lock
       ];
-      extraSessionCommands = "${pkgs.autorandr}/bin/autorandr -c";
+      extraSessionCommands = ''
+        ${pkgs.autorandr}/bin/autorandr -c
+      '';
     };
   };
 
@@ -121,18 +127,12 @@ in
     driSupport = true;
   };
 
-  # Configure keymap in X11
-  services.xserver.layout = "dvorak";
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {

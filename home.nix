@@ -3,23 +3,24 @@
 {
   # User Programs
   home.packages = [
-    pkgs.alacritty       # Terminal Emulator
-    pkgs.firefox         # Web Browser
-    pkgs.pavucontrol     # Audio Control Panel
-    pkgs.arandr          # Display Configuration Tool
-    pkgs.autorandr       # Create and Automatically Apply Display Profiles
-    pkgs.mpv             # Video Player
-    pkgs.youtube-dl      # Download Videos From YouTube & Many Other Sites
-    pkgs.screenfetch     # System Information Tool
-    pkgs.lm_sensors      # Command Line Utility for Monitoring Temperatures
-    pkgs.radeon-profile  # GUI Application to Set GPU Fan Curve
+    pkgs.alacritty        # Terminal Emulator
+    pkgs.firefox          # Web Browser
+    pkgs.pavucontrol      # Audio Control Panel
+    pkgs.arandr           # Display Configuration Tool
+    pkgs.autorandr        # Create and Automatically Apply Display Profiles
+    pkgs.mpv              # Video Player
+    pkgs.youtube-dl       # Download Videos From YouTube & Many Other Sites
+    pkgs.screenfetch      # System Information Tool
+    pkgs.lm_sensors       # Command Line Utility for Monitoring Temperatures
+    pkgs.radeon-profile   # GUI Application to Set GPU Fan Curve
     pkgs.alsaTools
-    pkgs.smartmontools   # Get HDD SMART Information
-    pkgs.runelite        # Old School Runescape
-    pkgs.file            # Standard UNIX Program to Detect File Types
-    pkgs.mesa            # OpenGL Library
-    pkgs.htop            # Pretty and Interactive Process Viewer
-    pkgs.signal-desktop  # Encrypted Messaging
+    pkgs.smartmontools    # Get HDD SMART Information
+    pkgs.runelite         # Old School Runescape
+    pkgs.file             # Standard UNIX Program to Detect File Types
+    pkgs.mesa             # OpenGL Library
+    pkgs.htop             # Pretty and Interactive Process Viewer
+    pkgs.signal-desktop   # Encrypted Messaging
+    pkgs.xbindkeys-config # Modify Mouse Thumb Buttons
   ];
 
   # Configure Git
