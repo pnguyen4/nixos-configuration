@@ -45,6 +45,16 @@ in
   # - Automatically repair corrupted blocks.
   services.btrfs.autoScrub.enable = true;
 
+  # Automatic Garbage Collection of Nix Store
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+
+  # Save Space by Optimizing the Store (hardlink identical files)
+  nix.autoOptimiseStore = true;
+
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [ "amd_iommu=on" "pcie_aspm=off" "vfio-pci.ids=1002:687f,1002:aaf8" ];
