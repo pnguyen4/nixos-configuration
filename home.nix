@@ -98,7 +98,12 @@
       command W w !sudo tee % > /dev/null
 
       " set scrolloff (# of lines above/below cursor)
-      set so=10 " turn on wildmenu for filename completion in command mode set wildmenu set wildmode=longest,list,full set wildignore+=*.a,*.o
+      set so=10
+
+      " turn on wildmenu for filename completion in command mode
+      set wildmenu
+      set wildmode=longest,list,full
+      set wildignore+=*.a,*.o
       set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
       set wildignore+=.DS_Store,.git,.hg,.svn
       set wildignore+=*~,*.swp,*.tmp
