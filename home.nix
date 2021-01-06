@@ -45,6 +45,12 @@
     '';
   };
 
+  # i3status config (enable this when home-manager updates)
+  #programs.i3status-rust = {
+  #  enable = true;
+  #  bars.default.theme = "gruvbox-light";
+  #};
+
   # PulseAudio System Tray
   services.pasystray.enable = true;
 
@@ -70,11 +76,17 @@
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes nerdtree ];
+    settings = {
+      history = 700;     # Undo Limit
+      number = true;     # Line Numbers
+      expandtab = true;  # Convert Tabs to Spaces
+      tabstop = 4;       # Width of Tab Character
+      shiftwidth = 4;    # Indent With 4 Spaces When Shifting Lines
+      ignorecase = true; # Search Option
+      smartcase = true;  # Case Sensitive When Search Contains Uppercase Letter
+    };
     extraConfig =
       ''
-      " Sets # lines of history
-      set history=700
-
       " Enable filetype plugins
       filetype plugin on
       filetype indent on
@@ -86,12 +98,7 @@
       command W w !sudo tee % > /dev/null
 
       " set scrolloff (# of lines above/below cursor)
-      set so=10
-
-      " turn on wildmenu for filename completion in command mode
-      set wildmenu
-      set wildmode=longest,list,full
-      set wildignore+=*.a,*.o
+      set so=10 " turn on wildmenu for filename completion in command mode set wildmenu set wildmode=longest,list,full set wildignore+=*.a,*.o
       set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
       set wildignore+=.DS_Store,.git,.hg,.svn
       set wildignore+=*~,*.swp,*.tmp
@@ -109,8 +116,6 @@
       set whichwrap+=<,>,h,l
 
       " make search good
-      set ignorecase
-      set smartcase
       set hlsearch
       set incsearch
 
@@ -131,8 +136,6 @@
       " enable syntax highlighting
       syntax enable
       autocmd BufEnter * :syntax sync fromstart
-      autocmd BufEnter * :set number
-      "highlight LineNr ctermfg=grey
 
       " why isn't this universal yet?
       set encoding=utf8
@@ -144,10 +147,7 @@
       set noswapfile
 
       " tab config, commence holy war
-      set expandtab
       set smarttab
-      set shiftwidth=4
-      set tabstop=4
 
       " auto and smart indent
       set ai
@@ -158,17 +158,11 @@
       set tw=500
 
       " 80 column marker (gray)
-      "set colorcolumn=80
-      "highlight ColorColumn ctermbg=236
       highlight ColorColumn ctermbg=grey
       call matchadd('ColorColumn', '\%81v', 100)
 
       " wrap lines
       set wrap
-
-      " treat long lines as break lines
-      map j gj
-      map k gk
 
       " Specify buffer behavior when switching between buffers
       try
@@ -198,36 +192,8 @@
       " get rid of trailing white space on save
       autocmd BufWritePre * :%s/\s\+$//e
 
-      " wizard mode
-      map <up> <nop>
-      map <down> <nop>
-      map <left> <nop>
-      map <right> <nop>
-
-      " Don't close window, when deleting a buffer
-      command! Bclose call <SID>BufcloseCloseIt()
-      function! <SID>BufcloseCloseIt()
-         let l:currentBufNum = bufnr("%")
-         let l:alternateBufNum = bufnr("#")
-
-         if buflisted(l:alternateBufNum)
-           buffer #
-         else
-           bnext
-         endif
-
-         if bufnr("%") == l:currentBufNum
-           new
-         endif
-
-         if buflisted(l:currentBufNum)
-           execute("bdelete! ".l:currentBufNum)
-         endif
-      endfunction
-
       " disable Background Color Erase (BCE) so that color schemes
       " render properly when inside 256-color tmux and GNU screen.
-      " see also http://sunaku.github.io/vim-256color-bce.html
       if &term =~ '256color'
           set t_ut=
       endif
@@ -250,8 +216,8 @@
       font = {
         size = 12;
         normal.family = "terminus";
-        bold.family   = "terminus";
         italic.family = "terminus";
+        bold.family   = "terminus";
       };
       # Solarized Light Theme
       colors = {
@@ -286,7 +252,6 @@
       };
     };
   };
-
 
   # Automatically Apply Monitor Settings On Boot
   programs.autorandr = {
