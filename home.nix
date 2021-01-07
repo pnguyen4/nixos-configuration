@@ -13,6 +13,7 @@
     pkgs.screenfetch      # System Information Tool
     pkgs.lm_sensors       # Command Line Utility for Monitoring Temperatures
     pkgs.radeon-profile   # GUI Application to Set GPU Fan Curve
+    pkgs.glxinfo          # Info About OpenGL/Mesa
     pkgs.smartmontools    # Get HDD SMART Information
     pkgs.runelite         # Old School Runescape
     pkgs.file             # Standard UNIX Program to Detect File Types
@@ -21,6 +22,12 @@
     pkgs.signal-desktop   # Encrypted Messaging
     pkgs.xbindkeys        # Launch Commands with Keyboard or Mouse Button
     pkgs.xvkbd            # Virtual Keyboard Commands
+    pkgs.emacs            # The Beginning and The End
+    pkgs.emacs-all-the-icons-fonts
+    pkgs.ripgrep          # Doom Emacs Dependency
+    pkgs.fd               # Doom Emacs Dependency
+    pkgs.nixfmt           # Formatter for Nix Code
+    pkgs.shellcheck       # Script Analysis Tool
   ];
 
   # My IBM Model M Doesn't Have Super Key
