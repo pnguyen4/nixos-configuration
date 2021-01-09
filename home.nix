@@ -3,31 +3,30 @@
 {
   # User Programs
   home.packages = [
-    pkgs.alacritty        # Terminal Emulator
-    pkgs.firefox          # Web Browser
-    pkgs.pavucontrol      # Audio Control Panel
-    pkgs.arandr           # Display Configuration Tool
-    pkgs.autorandr        # Create and Automatically Apply Display Profiles
-    pkgs.mpv              # Video Player
-    pkgs.youtube-dl       # Download Videos From YouTube & Many Other Sites
-    pkgs.screenfetch      # System Information Tool
-    pkgs.lm_sensors       # Command Line Utility for Monitoring Temperatures
-    pkgs.radeon-profile   # GUI Application to Set GPU Fan Curve
-    pkgs.glxinfo          # Info About OpenGL/Mesa
-    pkgs.smartmontools    # Get HDD SMART Information
-    pkgs.runelite         # Old School Runescape
-    pkgs.file             # Standard UNIX Program to Detect File Types
-    pkgs.mesa             # OpenGL Library
-    pkgs.htop             # Pretty and Interactive Process Viewer
-    pkgs.signal-desktop   # Encrypted Messaging
-    pkgs.xbindkeys        # Launch Commands with Keyboard or Mouse Button
-    pkgs.xvkbd            # Virtual Keyboard Commands
-    pkgs.emacs            # The Beginning and The End
-    pkgs.emacs-all-the-icons-fonts
-    pkgs.ripgrep          # Doom Emacs Dependency
-    pkgs.fd               # Doom Emacs Dependency
-    pkgs.nixfmt           # Formatter for Nix Code
-    pkgs.shellcheck       # Script Analysis Tool
+    pkgs.alacritty                  # Terminal Emulator
+    pkgs.firefox                    # Web Browser
+    pkgs.pavucontrol                # Audio Control Panel
+    pkgs.arandr                     # Display Configuration Tool
+    pkgs.autorandr                  # Create and Apply Display Profiles
+    pkgs.mpv                        # Best Video Player
+    pkgs.youtube-dl                 # Download Videos From YouTube & Other Sites
+    pkgs.screenfetch                # System Information Tool
+    pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
+    pkgs.mesa                       # OpenGL Library
+    pkgs.glxinfo                    # Info About OpenGL/Mesa
+    pkgs.smartmontools              # Get HDD SMART Information
+    pkgs.runelite                   # Old School Runescape
+    pkgs.file                       # Standard UNIX Utility to Detect File Types
+    pkgs.htop                       # Pretty and Interactive Process Viewer
+    pkgs.signal-desktop             # Encrypted Messaging
+    pkgs.xbindkeys                  # Launch Cmds with Keyboard or Mouse Button
+    pkgs.xvkbd                      # Virtual Keyboard Commands
+    pkgs.emacs-all-the-icons-fonts  # Doom Emacs Fonts
+    pkgs.ripgrep                    # Doom Emacs Dependency
+    pkgs.fd                         # Doom Emacs Dependency
+    pkgs.nixfmt                     # Formatter for Nix Code
+    pkgs.shellcheck                 # Script Analysis Tool
+    pkgs.scrot                      # Simple Screenshot Tool
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -41,9 +40,12 @@
     windowManager.i3 = {
       enable = true;
       config = {
-        modifier = "Mod4";        # Use Super/Windows Key Instead of Alt
-        fonts = [ "terminus 8" ];
+        modifier = "Mod4";          # Use Super/Windows Key Instead of Alt
+        fonts = [ "terminus 8" ];   # Titlebar Font
         terminal = "alacritty";
+        bars = [ {
+          fonts = [ "terminus 8" ]; # Statusbar Font
+        } ];
       };
     };
     profileExtra = ''
@@ -61,7 +63,7 @@
   # PulseAudio System Tray
   services.pasystray.enable = true;
 
-  # Network Manager Applet
+  # Network Manager Applet (enable this when you decide to switch)
   #services.network-manager-applet.enable = true;
 
   # My Cooler Master MM710 Preference
@@ -71,6 +73,12 @@
     "xvkbd -text "\[Right]""
       m:0x0 + b:9
   '';
+
+  # Emacs
+  programs.emacs = {
+    enable = true;
+    extraPackages = (epkgs: [ epkgs.vterm ]);
+  };
 
   # Configure Git
   programs.git = {

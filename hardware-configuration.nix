@@ -13,16 +13,6 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b04a4d37-b78e-4dcc-ae0b-010cb58e2911";
-      fsType = "btrfs";
-      options = [ "subvol=nixos" "compress=zstd" "noatime" ];
-    };
-
-  boot.initrd.luks.devices."crypted-nixos1".device = "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
-  boot.initrd.luks.devices."crypted-nixos2".device = "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
-  boot.initrd.luks.reusePassphrases = true;
-
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/6EA4-F836";
       fsType = "vfat";
@@ -32,7 +22,4 @@
     { device = "/dev/disk/by-uuid/6F20-487E";
       fsType = "vfat";
     };
-
-  swapDevices = [ ];
-
 }
