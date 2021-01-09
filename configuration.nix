@@ -57,6 +57,7 @@ in
         };
       }
     ];
+  boot.resumeDevice = "/dev/mapper/crypted-swap";
 
   # NTFS support via FUSE
   boot.supportedFilesystems = [ "ntfs" ];
@@ -78,7 +79,7 @@ in
 
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "amd_iommu=on" "pcie_aspm=off" "vfio-pci.ids=1002:687f,1002:aaf8" ];
+  boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ];
   boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
   boot.blacklistedKernelModules = [ "amdgpu" ];
   boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];

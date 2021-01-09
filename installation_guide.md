@@ -1,6 +1,6 @@
 # NixOS BTRFS Raid1 on LUKS with mirrored ESP for UEFI boot
 
-Each Disk will have an EFI System Partition and an encrypted LUKS partition (I don't use swap).
+Each Disk will have an EFI System Partition and an encrypted LUKS partition. No swap on hard disks.
 This setup should only be used on systems with modern CPUs because of the cost of double-encryption.
 
 ## Part 1: Identify Disks and Set Variables
@@ -71,15 +71,27 @@ This ensures that the system is bootable even if one disk goes offline. Caveat: 
     # mount $DISK1-part1 /mnt/boot/efi
     # mount $DISK2-part1 /mnt/boot/efi-fallback
 
+## Addendum: Adding Swap
+
+I found that not having swap was less than ideal so I decided to put a swap partition on a spare ssd.
+
+    # SWAP=/dev/disk/by-id/{_id string of spare ssd_}
+    # parted $DISK1 -- mklabel gpt
+    # sgdisk -n1:0:0 -t1:8309 $SWAP
+    # cryptsetup luksFormat --type luks2 -c aes-xts-plain64 -s 512 -h sha256 --verify-passphrase $SWAP
+    # cryptsetup luksOpen $SWAP crypted-swap
+    # mkswap /dev/mapper/crypted-swap
+    # swapon /dev/mapper/crypted-swap
+    
 ## Part 5: Install NixOS
 
     # nixos-generate-config --root /mnt
 
-Last time I tried this nixos-generate-config failed to detect my second luks partition. It also did not correctly set my btrfs mounting options. Correct this and add `boot.initrd.luks.reusePassphrases = true` for convenience
+Last time I tried this nixos-generate-config failed to detect my second luks partition. It also did not correctly set my btrfs mounting options. I moved and corrected all disk configuration to my configuration.nix and deleted the duplicate options in hardware-configuration.nix
 
     # vim /mnt/etc/nixos/hardware-configuration.nix
 
-Make your changes to system configuration before installation
+Make your changes to system configuration before installation (feel free to use my example on github)
 
     # vim /mnt/etc/nixos/configuration.nix
     # nixos-install
@@ -87,7 +99,7 @@ Make your changes to system configuration before installation
 Fingers crossed
 
     # reboot
-
+    
 ## References:
 
 https://gist.github.com/MaxXor/ba1665f47d56c24018a943bb114640d7
