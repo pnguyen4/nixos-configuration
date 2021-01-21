@@ -3,34 +3,35 @@
 {
   # User Programs
   home.packages = [
+    # Does not include software enabled by options programs.* and services.*
     pkgs.alacritty                  # Terminal Emulator
-    pkgs.firefox                    # Web Browser
-    pkgs.pavucontrol                # Audio Control Panel
     pkgs.arandr                     # Display Configuration Tool
-    pkgs.autorandr                  # Create and Apply Display Profiles
-    pkgs.youtube-dl                 # Download Videos From YouTube & Other Sites
-    pkgs.screenfetch                # System Information Tool
-    pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
-    pkgs.mesa                       # OpenGL Library
-    pkgs.glxinfo                    # Info About OpenGL/Mesa
-    pkgs.smartmontools              # Get HDD SMART Information
-    pkgs.runelite                   # Old School Runescape
-    pkgs.file                       # Standard UNIX Utility to Detect File Types
-    pkgs.htop                       # Pretty and Interactive Process Viewer
-    pkgs.signal-desktop             # Encrypted Messaging
-    pkgs.xbindkeys                  # Launch Cmds with Keyboard or Mouse Button
-    pkgs.xvkbd                      # Virtual Keyboard Commands
-    pkgs.emacs-all-the-icons-fonts  # Doom Emacs Fonts
-    pkgs.ripgrep                    # Doom Emacs Dependency
-    pkgs.fd                         # Doom Emacs Dependency
-    pkgs.nixfmt                     # Formatter for Nix Code
-    pkgs.shellcheck                 # Script Analysis Tool
-    pkgs.scrot                      # Simple Screenshot Tool
-    pkgs.qbittorrent                # GUI Torrent Client
     pkgs.audacity                   # Audio Editor and Recording Software
+    pkgs.autorandr                  # Create and Apply Display Profiles
+    pkgs.emacs-all-the-icons-fonts  # Doom Emacs Fonts
+    pkgs.fd                         # Doom Emacs Dependency
+    pkgs.file                       # Standard UNIX Utility to Detect File Types
+    pkgs.firefox                    # Web Browser
+    pkgs.glxinfo                    # Info About OpenGL/Mesa
+    pkgs.htop                       # Pretty and Interactive Process Viewer
+    pkgs.mesa                       # OpenGL Library
     pkgs.networkmanager-openvpn     # NM Plugin for VPNs
     pkgs.networkmanagerapplet       # NM GUI for Taskbar
+    pkgs.nixfmt                     # Formatter for Nix Code
+    pkgs.pavucontrol                # Audio Control Panel
+    pkgs.qbittorrent                # GUI Torrent Client
+    pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
+    pkgs.ripgrep                    # Doom Emacs Dependency
+    pkgs.runelite                   # Old School Runescape
+    pkgs.screenfetch                # System Information Tool
+    pkgs.scrot                      # Simple Screenshot Tool
+    pkgs.shellcheck                 # Script Analysis Tool
+    pkgs.signal-desktop             # Encrypted Messaging
+    pkgs.smartmontools              # Get HDD SMART Information
     pkgs.usbutils                   # Utils Like lsusb
+    pkgs.xbindkeys                  # Launch Cmds with Keyboard or Mouse Button
+    pkgs.xvkbd                      # Virtual Keyboard Commands
+    pkgs.youtube-dl                 # Download Videos From YouTube & Other Sites
     pkgs.zathura                    # PDF/PS/DJVU/CB Viewer
   ];
 
@@ -57,7 +58,6 @@
       ${pkgs.autorandr}/bin/autorandr -c
       ${pkgs.xbindkeys}/bin/xbindkeys
     '';
-      #${pkgs.networkmanagerapplet}/bin/nm-applet &
   };
 
   # Screensaver and Screen Locking Settings
@@ -73,17 +73,66 @@
     };
   };
 
+  # PulseAudio System Tray Applet
+  services.pasystray.enable = true;
+
+  # Network Manager System Tray Applet
+  services.network-manager-applet.enable = true;
+
+  # My Cooler Master MM710 Preference
+  home.file.".xbindkeysrc".text = ''
+    "xvkbd -text "\[Left]""
+      m:0x0 + b:8
+    "xvkbd -text "\[Right]""
+      m:0x0 + b:9
+  '';
+
+  # Automatically Apply Monitor Settings On Boot
+  programs.autorandr = {
+    enable = true;
+    profiles = {
+      "default" = {
+        fingerprint = {
+          "DVI-D-1" = "00ffffffffffff00047228060e0c1084291c0103803c22782a9055a75553a028135054b36c00714f818081c081009500b300d1c00101023a801871382d40582c450056502100001e000000ff0054394441413030333339303000000000fd0030901ea021000a202020202020000000fc00454432373320410a202020202001df02030700421890fb7e8088703812401820350056502100001e1a1d008051d01c204080350056502100001c866f80a0703840403020350056502100001e023a801871382d40582c450056502100001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012";
+          "HDMI-A-0" = "00ffffffffffff004c2dfe080000000029150103801009780aee91a3544c99260f5054bdef80714f81c0810081809500a9c0b3000101023a801871382d40582c4500a05a0000001e662156aa51001e30468f3300a05a0000001e000000fd00184b0f5117000a202020202020000000fc0053414d53554e470a2020202020011d02031ff147900405032022072309070783010000e2000f67030c001000b82d011d8018711c1620582c2500a05a0000009e011d007251d01e206e285500a05a0000001e8c0ad08a20e02d10103e9600a05a00000018000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6";
+        };
+        config = {
+          "DVI-D-1" = {
+            enable = true;
+            primary = true;
+            position = "0x0";
+            mode = "1920x1080";
+            rate = "60.00";
+          };
+          "HDMI-A-0" = {
+            enable = true;
+            mode = "1920x1080";
+            position = "1920x0";
+            rate = "60.00";
+          };
+        };
+      };
+    };
+  };
+
   # i3status config (enable this when home-manager updates)
   #programs.i3status-rust = {
   #  enable = true;
   #  bars.default.theme = "gruvbox-light";
   #};
 
-  # PulseAudio System Tray Applet
-  services.pasystray.enable = true;
+  # Emacs
+  programs.emacs = {
+    enable = true;
+    extraPackages = (epkgs: [ epkgs.vterm ]);
+  };
 
-  # Network Manager System Tray Applet
-  services.network-manager-applet.enable = true;
+  # Default Git User
+  programs.git = {
+    enable = true;
+    userEmail = "pnguyen4711@gmail.com";
+    userName  = "Phillip Nguyen";
+  };
 
   # The Best Video Player
   programs.mpv = {
@@ -96,25 +145,48 @@
     };
   };
 
-  # My Cooler Master MM710 Preference
-  home.file.".xbindkeysrc".text = ''
-    "xvkbd -text "\[Left]""
-      m:0x0 + b:8
-    "xvkbd -text "\[Right]""
-      m:0x0 + b:9
-  '';
-
-  # Emacs
-  programs.emacs = {
+  # Terminal Settings
+  programs.alacritty = {
     enable = true;
-    extraPackages = (epkgs: [ epkgs.vterm ]);
-  };
-
-  # Configure Git
-  programs.git = {
-    enable = true;
-    userEmail = "pnguyen4711@gmail.com";
-    userName  = "Phillip Nguyen";
+    settings = {
+      font = {
+        size = 12;
+        normal.family = "terminus";
+        italic.family = "terminus";
+        bold.family   = "terminus";
+      };
+      # Solarized Light Theme
+      colors = {
+        primary = {
+          background = "#fdf6e3";
+          foreground = "#657b83";
+        };
+        cursor = {
+          text   = "#fdf6e3";
+          cursor = "#657b83";
+        };
+        normal = {
+          black   = "#073642";
+          red     = "#dc322f";
+          green   = "#859900";
+          yellow  = "#b58900";
+          blue    = "#268bd2";
+          magenta = "#d33682";
+          cyan    = "#2aa198";
+          white   = "#eee8d5";
+        };
+        bright = {
+          black   = "#002b36";
+          red     = "#cb4b16";
+          green   = "#586e75";
+          yellow  = "#657b83";
+          blue    = "#839496";
+          magenta = "#6c71c4";
+          cyan    = "#93a1a1";
+          white   = "#fdf6e3";
+        };
+      };
+    };
   };
 
   # Vim Settings
@@ -257,77 +329,5 @@
       let g:airline_symbols.space = " "
       let g:airline#extensions#tabline#enabled = 1
       '';
-  };
-
-  # Terminal Settings
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font = {
-        size = 12;
-        normal.family = "terminus";
-        italic.family = "terminus";
-        bold.family   = "terminus";
-      };
-      # Solarized Light Theme
-      colors = {
-        primary = {
-          background = "#fdf6e3";
-          foreground = "#657b83";
-        };
-        cursor = {
-          text   = "#fdf6e3";
-          cursor = "#657b83";
-        };
-        normal = {
-          black   = "#073642";
-          red     = "#dc322f";
-          green   = "#859900";
-          yellow  = "#b58900";
-          blue    = "#268bd2";
-          magenta = "#d33682";
-          cyan    = "#2aa198";
-          white   = "#eee8d5";
-        };
-        bright = {
-          black   = "#002b36";
-          red     = "#cb4b16";
-          green   = "#586e75";
-          yellow  = "#657b83";
-          blue    = "#839496";
-          magenta = "#6c71c4";
-          cyan    = "#93a1a1";
-          white   = "#fdf6e3";
-        };
-      };
-    };
-  };
-
-  # Automatically Apply Monitor Settings On Boot
-  programs.autorandr = {
-    enable = true;
-    profiles = {
-      "default" = {
-        fingerprint = {
-          "DVI-D-1" = "00ffffffffffff00047228060e0c1084291c0103803c22782a9055a75553a028135054b36c00714f818081c081009500b300d1c00101023a801871382d40582c450056502100001e000000ff0054394441413030333339303000000000fd0030901ea021000a202020202020000000fc00454432373320410a202020202001df02030700421890fb7e8088703812401820350056502100001e1a1d008051d01c204080350056502100001c866f80a0703840403020350056502100001e023a801871382d40582c450056502100001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012";
-          "HDMI-A-0" = "00ffffffffffff004c2dfe080000000029150103801009780aee91a3544c99260f5054bdef80714f81c0810081809500a9c0b3000101023a801871382d40582c4500a05a0000001e662156aa51001e30468f3300a05a0000001e000000fd00184b0f5117000a202020202020000000fc0053414d53554e470a2020202020011d02031ff147900405032022072309070783010000e2000f67030c001000b82d011d8018711c1620582c2500a05a0000009e011d007251d01e206e285500a05a0000001e8c0ad08a20e02d10103e9600a05a00000018000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6";
-        };
-        config = {
-          "DVI-D-1" = {
-            enable = true;
-            primary = true;
-            position = "0x0";
-            mode = "1920x1080";
-            rate = "60.00";
-          };
-          "HDMI-A-0" = {
-            enable = true;
-            mode = "1920x1080";
-            position = "1920x0";
-            rate = "60.00";
-          };
-        };
-      };
-    };
   };
 }
