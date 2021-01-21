@@ -7,17 +7,17 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
+    rev = "f33be4894cf5260f99d95ecd750c783837f33cfd";
     ref = "release-20.09";
   };
 in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # Home-Manager Module
-      (import "${home-manager}/nixos")
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    # Home-Manager Module
+    (import "${home-manager}/nixos")
+  ];
 
   # Bootloader Settings
   boot.loader.efi.canTouchEfiVariables = true;
@@ -38,25 +38,25 @@ in
   };
 
   # Storage & Swap
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b04a4d37-b78e-4dcc-ae0b-010cb58e2911";
-      fsType = "btrfs";
-      options = [ "subvol=nixos" "compress=zstd" "noatime" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/b04a4d37-b78e-4dcc-ae0b-010cb58e2911";
+    fsType = "btrfs";
+    options = [ "subvol=nixos" "compress=zstd" "noatime" ];
+  };
   boot.initrd.luks.devices."crypted-nixos1".device =
     "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
   boot.initrd.luks.devices."crypted-nixos2".device =
     "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
   boot.initrd.luks.reusePassphrases = true;
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
-        encrypted = {
-          enable = true;
-          label = "crypted-swap";
-          blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
-        };
-      }
-    ];
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
+      encrypted = {
+      enable = true;
+      label = "crypted-swap";
+      blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
+      };
+    }
+  ];
   boot.resumeDevice = "/dev/mapper/crypted-swap";
 
   # NTFS support via FUSE
@@ -102,11 +102,11 @@ in
     onShutdown = "shutdown";
   };
 
-  # Define your hostname.
-  networking.hostName = "nixos-machine";
-
   # Set your time zone.
   time.timeZone = "America/New_York";
+
+  # Define your hostname.
+  networking.hostName = "nixos-machine";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -126,7 +126,8 @@ in
   services.xserver = {
     enable = true;
     # Configure keymap in X11
-    layout = "dvorak";
+    layout = "us";
+    xkbVariant = "dvorak";
     # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"

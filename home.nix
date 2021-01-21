@@ -18,6 +18,7 @@
     pkgs.networkmanager-openvpn     # NM Plugin for VPNs
     pkgs.networkmanagerapplet       # NM GUI for Taskbar
     pkgs.nixfmt                     # Formatter for Nix Code
+    pkgs.papirus-icon-theme         # FOSS SVG Icon Theme for Linux
     pkgs.pavucontrol                # Audio Control Panel
     pkgs.qbittorrent                # GUI Torrent Client
     pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
@@ -52,6 +53,30 @@
         bars = [ {
           fonts = [ "terminus 8" ]; # Statusbar Font
         } ];
+        keybindings =
+          let
+            modifier = config.xsession.windowManager.i3.config.modifier;
+          in lib.mkOptionDefault {
+            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun -icon-theme \"Papirus\" -show-icons";
+            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -show window -icon-theme \"Papirus\" -show-icons" ;
+          };
+        window.commands = [
+          { # enable floating mode for all network manager windows
+            criteria = {
+              class = "Nm-connection-editor";
+              instance = "nm-connection-editor";
+            };
+            command = "floating enable";
+          }
+
+          { # enable floating mode for firefox history/bookmarks menu
+            criteria = {
+              class = "Firefox";
+              instance = "Places";
+            };
+            command = "floating enable";
+          }
+        ];
       };
     };
     profileExtra = ''
@@ -59,6 +84,71 @@
       ${pkgs.xbindkeys}/bin/xbindkeys
     '';
   };
+
+  programs.rofi = {
+    enable = true;
+    font = "Dejavu Sans 11";
+    terminal = "alacritty";
+    theme = "Paper";
+  };
+
+  #xsession.windowManager.bspwm = {
+  #  enable = true;
+  #  monitors = {
+  #    HDMI-A-0 = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+  #    DVI-D-1 = [ "I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X" ];
+  #  };
+  #};
+
+  #services.sxhkd = {
+  #  enable = true;
+  #  # Prevents sxhkd from starting before keyboard layout is set
+  #  extraOptions = [ "-m 1" ];
+  #  keybindings = {
+  #    # Exit BSPWM
+  #    "super + shift + e" = "bspc quit";
+  #    # Close Window
+  #    "super + shift + q" = "bspc node -c";
+  #    # Application Launcher
+  #    "super + d" = "dmenu_run";
+  #    # Launch Terminal
+  #    "super + Return" = "alacritty";
+  #    # Toggle Window Floating Mode
+  #    "super + space" = "bspc node -t floating";
+  #    # Toggle Window Fullscreen Mode
+  #    "super + f" = "bspc node -t fullscreen";
+  #    # Toggle Window Tiling Mode
+  #    "super + t" = "bspc node -t tiled";
+  #    # Change Window Focus
+  #    "super + {h,j,k,l}" = "bspc node -f {west,south,north,east}";
+  #    "super + {left,down,up,right}" = "bspc node -f {west,south,north,east}";
+  #    # Swap Window With Direction
+  #    "super + shift + {h,j,k,l}" = "bspc node -s {west,south,north,east}";
+  #    "super + shift + {left,down,up,right}" = "bspc node -s {west,south,north,east}";
+  #    # Change Desktop Focus
+  #    "super + {0-9}" = "bspc desktop -f {0-9}";
+  #    # Send Window to Desktop
+  #    "super + shift + {0-9}" = "bspc node -d {0-9}";
+  #    # Change Monitor Focus
+  #    "super + grave" = "bspc monitor -f next";
+  #    # Send Window to Next Monitor
+  #    "super + shift + grave" = "bspc node -m next";
+  #    # Reload Simple X Hotkey Daemon
+  #    "super + shift + r" = "pkill -USR1 -x sxhkd";
+  #  };
+  #};
+
+  #services.polybar = {
+  #  enable = true;
+  #  script = "polybar bar &";
+  #};
+
+  # i3status config (enable this when home-manager updates)
+  #programs.i3status-rust = {
+  #  enable = true;
+  #  bars.default.theme = "gruvbox-light";
+  #};
+
 
   # Screensaver and Screen Locking Settings
   services.xscreensaver = {
@@ -114,12 +204,6 @@
       };
     };
   };
-
-  # i3status config (enable this when home-manager updates)
-  #programs.i3status-rust = {
-  #  enable = true;
-  #  bars.default.theme = "gruvbox-light";
-  #};
 
   # Emacs
   programs.emacs = {
