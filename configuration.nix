@@ -113,6 +113,7 @@ in
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp4s0.useDHCP = true;
+  networking.networkmanager.enable = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -173,7 +174,7 @@ in
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git virtmanager
+    wget vim parted pciutils git virtmanager samba
   ];
 
   fonts.fonts = with pkgs; [
@@ -186,6 +187,38 @@ in
   # Security Settings
   security.hideProcessInformation = true;
   security.protectKernelImage = true;
+
+  # Samba for shared folder with virtual machine
+  services.samba = {
+    enable = true;
+    enableNmbd = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = smbnix
+      netbios name = smbnix
+      security = user
+      ntlm auth = yes
+      hosts allow = 192.168.122.  localhost
+      hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
+    shares = {
+      public = {
+        path = "/home/user/Public";
+        browseable = "yes";
+        "read only" = "yes";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+      };
+    };
+  };
+
+  # Apparently samba service doesn't open the ports it needs
+  networking.firewall.allowedTCPPorts = [ 445 139 ];
+  networking.firewall.allowedUDPPorts = [ 137 138 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

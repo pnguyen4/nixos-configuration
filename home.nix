@@ -8,7 +8,6 @@
     pkgs.pavucontrol                # Audio Control Panel
     pkgs.arandr                     # Display Configuration Tool
     pkgs.autorandr                  # Create and Apply Display Profiles
-    pkgs.mpv                        # Best Video Player
     pkgs.youtube-dl                 # Download Videos From YouTube & Other Sites
     pkgs.screenfetch                # System Information Tool
     pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
@@ -27,6 +26,12 @@
     pkgs.nixfmt                     # Formatter for Nix Code
     pkgs.shellcheck                 # Script Analysis Tool
     pkgs.scrot                      # Simple Screenshot Tool
+    pkgs.qbittorrent                # GUI Torrent Client
+    pkgs.audacity                   # Audio Editor and Recording Software
+    pkgs.networkmanager-openvpn     # NM Plugin for VPNs
+    pkgs.networkmanagerapplet       # NM GUI for Taskbar
+    pkgs.usbutils                   # Utils Like lsusb
+    pkgs.zathura                    # PDF/PS/DJVU/CB Viewer
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -52,6 +57,20 @@
       ${pkgs.autorandr}/bin/autorandr -c
       ${pkgs.xbindkeys}/bin/xbindkeys
     '';
+      #${pkgs.networkmanagerapplet}/bin/nm-applet &
+  };
+
+  # Screensaver and Screen Locking Settings
+  services.xscreensaver = {
+    enable = true;
+    settings = {
+      timeout = 20;        # Activate when idle for 20 minutes
+      cycle = 5;           # Change screensavers every 5 minutes
+      lock = true;         # Ask for user password to reenter
+      lockTimeout = 10;    # Lock after (total) 30 minutes idle
+      dpmsEnabled = true;  # Enable display power management
+      dpmsSuspend = 180;   # Go into power saving mode after 3 hours
+    };
   };
 
   # i3status config (enable this when home-manager updates)
@@ -60,11 +79,22 @@
   #  bars.default.theme = "gruvbox-light";
   #};
 
-  # PulseAudio System Tray
+  # PulseAudio System Tray Applet
   services.pasystray.enable = true;
 
-  # Network Manager Applet (enable this when you decide to switch)
-  #services.network-manager-applet.enable = true;
+  # Network Manager System Tray Applet
+  services.network-manager-applet.enable = true;
+
+  # The Best Video Player
+  programs.mpv = {
+    enable = true;
+    config = {
+      profile = "gpu-hq";
+      video-sync = "display-resample";
+      interpolation = true;
+      tscale = "oversample";
+    };
+  };
 
   # My Cooler Master MM710 Preference
   home.file.".xbindkeysrc".text = ''
