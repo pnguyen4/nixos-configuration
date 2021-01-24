@@ -8,18 +8,23 @@
     pkgs.arandr                     # Display Configuration Tool
     pkgs.audacity                   # Audio Editor and Recording Software
     pkgs.autorandr                  # Create and Apply Display Profiles
+    pkgs.brave                      # Privacy Browser
+    pkgs.desmume                    # Nintendo DS Emulator
     pkgs.emacs-all-the-icons-fonts  # Doom Emacs Fonts
     pkgs.fd                         # Doom Emacs Dependency
     pkgs.file                       # Standard UNIX Utility to Detect File Types
     pkgs.firefox                    # Web Browser
     pkgs.glxinfo                    # Info About OpenGL/Mesa
     pkgs.htop                       # Pretty and Interactive Process Viewer
+    pkgs.killall                    # Kill Processes by Name
     pkgs.mesa                       # OpenGL Library
     pkgs.networkmanager-openvpn     # NM Plugin for VPNs
     pkgs.networkmanagerapplet       # NM GUI for Taskbar
     pkgs.nixfmt                     # Formatter for Nix Code
+    pkgs.pandoc                     # Universal Document Converter
     pkgs.papirus-icon-theme         # FOSS SVG Icon Theme for Linux
     pkgs.pavucontrol                # Audio Control Panel
+    pkgs.python3                    # Guido's Programming Language
     pkgs.qbittorrent                # GUI Torrent Client
     pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
     pkgs.ripgrep                    # Doom Emacs Dependency
@@ -37,8 +42,9 @@
   ];
 
   # My IBM Model M Doesn't Have Super Key
-  home.keyboard.layout = "dvorak";
   home.keyboard.options = [ "caps:super" ];
+  home.keyboard.layout = "dvorak, us";
+  gtk.iconTheme.name = "Papirus";
 
   # Launch i3wm automatically from gdm
   xsession = {
@@ -50,15 +56,13 @@
         modifier = "Mod4";          # Use Super/Windows Key Instead of Alt
         fonts = [ "terminus 8" ];   # Titlebar Font
         terminal = "alacritty";
-        bars = [ {
-          fonts = [ "terminus 8" ]; # Statusbar Font
-        } ];
+        bars = [ ];                 # Use Polybar
         keybindings =
           let
             modifier = config.xsession.windowManager.i3.config.modifier;
           in lib.mkOptionDefault {
             "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun -icon-theme \"Papirus\" -show-icons";
-            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -show window -icon-theme \"Papirus\" -show-icons" ;
+            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -show window -icon-theme \"Papirus\" -show-icons";
           };
         window.commands = [
           { # enable floating mode for all network manager windows
@@ -77,6 +81,7 @@
             command = "floating enable";
           }
         ];
+        startup = [ { command = "~/.reload_polybar.sh"; always = true; } ];
       };
     };
     profileExtra = ''
@@ -85,6 +90,7 @@
     '';
   };
 
+  # Window Switcher + Run Dialog (dmenu replacement)
   programs.rofi = {
     enable = true;
     font = "Dejavu Sans 11";
@@ -94,10 +100,10 @@
 
   #xsession.windowManager.bspwm = {
   #  enable = true;
-  #  monitors = {
-  #    HDMI-A-0 = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-  #    DVI-D-1 = [ "I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X" ];
-  #  };
+  #  extraConfig = ''
+  #  bspc monitor ^1 -d I II III IV V VI VII VIII IX X
+  #  bspc monitor ^2 -d 1 2 3 4 5 6 7 8 9 10
+  #  ''
   #};
 
   #services.sxhkd = {
@@ -108,47 +114,121 @@
   #    # Exit BSPWM
   #    "super + shift + e" = "bspc quit";
   #    # Close Window
-  #    "super + shift + q" = "bspc node -c";
+  #    "super + shift + q" = "bspc node --close";
   #    # Application Launcher
-  #    "super + d" = "dmenu_run";
+  #    "super + d" = "rofi -show drun -icon-theme \"Papirus\" -show-icons";
+  #    # Window Switcher
+  #    "super + tab" = "rofi -show window -icon-theme \"Papirus\" -show-icons";
   #    # Launch Terminal
   #    "super + Return" = "alacritty";
   #    # Toggle Window Floating Mode
-  #    "super + space" = "bspc node -t floating";
+  #    "super + space" = "bspc node --state \~floating";
   #    # Toggle Window Fullscreen Mode
-  #    "super + f" = "bspc node -t fullscreen";
+  #    "super + f" = "bspc node --state \~fullscreen";
   #    # Toggle Window Tiling Mode
-  #    "super + t" = "bspc node -t tiled";
+  #    "super + t" = "bspc node --state \~tiled";
   #    # Change Window Focus
-  #    "super + {h,j,k,l}" = "bspc node -f {west,south,north,east}";
+  #    "super + {h,j,k,l}" = "bspc node --focus {west,south,north,east}";
   #    "super + {left,down,up,right}" = "bspc node -f {west,south,north,east}";
   #    # Swap Window With Direction
-  #    "super + shift + {h,j,k,l}" = "bspc node -s {west,south,north,east}";
+  #    "super + shift + {h,j,k,l}" = "bspc node --swap {west,south,north,east}";
   #    "super + shift + {left,down,up,right}" = "bspc node -s {west,south,north,east}";
   #    # Change Desktop Focus
-  #    "super + {0-9}" = "bspc desktop -f {0-9}";
+  #    "super + {0-9}" = "bspc desktop --focus {0-9}";
   #    # Send Window to Desktop
-  #    "super + shift + {0-9}" = "bspc node -d {0-9}";
+  #    "super + shift + {0-9}" = "bspc node --to-desktop {0-9}";
   #    # Change Monitor Focus
-  #    "super + grave" = "bspc monitor -f next";
+  #    "super + grave" = "bspc monitor --focus next";
   #    # Send Window to Next Monitor
-  #    "super + shift + grave" = "bspc node -m next";
+  #    "super + shift + grave" = "bspc node --to-monitor next";
   #    # Reload Simple X Hotkey Daemon
   #    "super + shift + r" = "pkill -USR1 -x sxhkd";
   #  };
   #};
 
-  #services.polybar = {
-  #  enable = true;
-  #  script = "polybar bar &";
-  #};
+  services.polybar = {
+    enable = true;
+    package = pkgs.polybar.override {
+      i3Support = true;
+      pulseSupport = true;
+    };
+    config = {
+      "bar/bottom" = {
+        monitor = "\${env:MONITOR:}";
+        bottom = true;
+        font-0 = "terminus:size=11;0";
+        enable-ipc = true;
+        locale = "en_US.UTF8";
+        tray-position = "right";
+        tray-max-size = "12";
+        padding-right = "1";
+        padding-top = "1";
+        scroll-up = "i3.prev";
+        scroll-down = "i3.next";
+        separator = " | ";
+        modules-left = "i3";
+        modules-right = "xkeyboard network filesystem cpu memory date";
+      };
+      "module/cpu" = {
+        type = "internal/cpu";
+        label = "CPU %percentage%%";
+      };
+      "module/date" = {
+        type = "internal/date";
+        date = "%A %m-%d-%Y";
+        time = "%H:%M:%S";
+        label = "%date% %time%";
+      };
+      "module/filesystem" = {
+        type = "internal/fs";
+        mount-0 = "/";
+        label-mounted = "HDD %used% / %total%";
+      };
+      "module/i3" = {
+        type = "internal/i3";
+        pin-workspaces = true;
+        label-focused-background = "#285577";
+        label-focused-padding-right = "1";
+        label-visible-background= "#5f676a";
+        label-visible-padding-right = "1";
+        label-unfocused-background = "#222222";
+        label-unfocused-padding-right = "1";
+        label-urgent-background = "#900000";
+        label-urgent-padding-right = "1";
+      };
+      "module/xkeyboard" = {
+        type = "internal/xkeyboard";
+        format = "<label-layout>";
+        label-layout = "%name%";
+      };
+      "module/memory" = {
+        type = "internal/memory";
+        label = "RAM %percentage_used%%";
+      };
+      "module/network" = {
+        type = "internal/network";
+        interface = "enp4s0";
+        label-connected = "NET %ifname%";
+        label-connected-foreground = "#00cc66";
+        label-disconnected = "NET down";
+        label-disconnected-foreground = "#ff3333";
+      };
+    };
+    script = ""; # handle this in window manager
+  };
 
-  # i3status config (enable this when home-manager updates)
-  #programs.i3status-rust = {
-  #  enable = true;
-  #  bars.default.theme = "gruvbox-light";
-  #};
-
+  # Automatically Put Polybar On Each Monitor
+  # Launch from window manager startup file
+  home.file.".reload_polybar.sh" = {
+    executable = true;
+    text = ''
+      #!/bin/sh
+      polybar-msg cmd quit
+      for m in $(polybar --list-monitors | cut -d":" -f1); do
+          MONITOR=$m polybar --reload bottom &
+      done
+    '';
+  };
 
   # Screensaver and Screen Locking Settings
   services.xscreensaver = {

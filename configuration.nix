@@ -105,15 +105,13 @@ in
   # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # Define your hostname.
-  networking.hostName = "nixos-machine";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp4s0.useDHCP = true;
-  networking.networkmanager.enable = true;
+  # Networking Settings
+  networking = {
+    hostName = "nixos-machine";
+    useDHCP = false;
+    interfaces.enp4s0.useDHCP = true;
+    networkmanager.enable = true;
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -169,7 +167,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
   home-manager.users.user = import /home/user/home.nix;
 
@@ -180,6 +178,7 @@ in
 
   fonts.fonts = with pkgs; [
     terminus_font
+    (nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
   ];
 
   # Sorry Stallman
