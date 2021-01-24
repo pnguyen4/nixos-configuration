@@ -381,14 +381,6 @@
       " set scrolloff (# of lines above/below cursor)
       set so=10
 
-      " turn on wildmenu for filename completion in command mode
-      set wildmenu
-      set wildmode=longest,list,full
-      set wildignore+=*.a,*.o
-      set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
-      set wildignore+=.DS_Store,.git,.hg,.svn
-      set wildignore+=*~,*.swp,*.tmp
-
       " basic UI fixes
       set ruler
       set cmdheight=1
@@ -443,46 +435,11 @@
       set lbr
       set tw=500
 
-      " 80 column marker (gray)
-      highlight ColorColumn ctermbg=grey
-      call matchadd('ColorColumn', '\%81v', 100)
-
       " wrap lines
       set wrap
 
-      " Specify buffer behavior when switching between buffers
-      try
-        set switchbuf=useopen,usetab,newtab
-        set stal=1
-      catch
-      endtry
-
-      " return to last edit position when opening files
-      autocmd BufReadPost *
-          \ if line("'\"") > 0 && line("'\"") <= line("$") |
-          \ exe "normal! g'\"" |
-          \ endif
-
-      " remember info about open buffers on close
-      set viminfo^=%
-
-      " mappings for moving between windows
-      map <C-j> <C-W>j
-      map <C-k> <C-W>k
-      map <C-h> <C-W>h
-      map <C-l> <C-W>l
-
-      " make 0 work like it should
-      map 0 ^
-
       " get rid of trailing white space on save
       autocmd BufWritePre * :%s/\s\+$//e
-
-      " disable Background Color Erase (BCE) so that color schemes
-      " render properly when inside 256-color tmux and GNU screen.
-      if &term =~ '256color'
-          set t_ut=
-      endif
 
       " plugins
       let g:airline_powerline_fonts = 1
