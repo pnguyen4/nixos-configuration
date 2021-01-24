@@ -177,8 +177,10 @@ in
   ];
 
   fonts.fonts = with pkgs; [
+    symbola
+    noto-fonts
+    noto-fonts-cjk
     terminus_font
-    (nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
   ];
 
   # Sorry Stallman

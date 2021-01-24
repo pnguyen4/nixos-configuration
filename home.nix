@@ -4,41 +4,42 @@
   # User Programs
   home.packages = [
     # Does not include software enabled by options programs.* and services.*
-    pkgs.alacritty                  # Terminal Emulator
-    pkgs.arandr                     # Display Configuration Tool
-    pkgs.audacity                   # Audio Editor and Recording Software
-    pkgs.autorandr                  # Create and Apply Display Profiles
-    pkgs.brave                      # Privacy Browser
-    pkgs.desmume                    # Nintendo DS Emulator
-    pkgs.emacs-all-the-icons-fonts  # Doom Emacs Fonts
-    pkgs.fd                         # Doom Emacs Dependency
-    pkgs.file                       # Standard UNIX Utility to Detect File Types
-    pkgs.firefox                    # Web Browser
-    pkgs.glxinfo                    # Info About OpenGL/Mesa
-    pkgs.htop                       # Pretty and Interactive Process Viewer
-    pkgs.killall                    # Kill Processes by Name
-    pkgs.mesa                       # OpenGL Library
-    pkgs.networkmanager-openvpn     # NM Plugin for VPNs
-    pkgs.networkmanagerapplet       # NM GUI for Taskbar
-    pkgs.nixfmt                     # Formatter for Nix Code
-    pkgs.pandoc                     # Universal Document Converter
-    pkgs.papirus-icon-theme         # FOSS SVG Icon Theme for Linux
-    pkgs.pavucontrol                # Audio Control Panel
-    pkgs.python3                    # Guido's Programming Language
-    pkgs.qbittorrent                # GUI Torrent Client
-    pkgs.radeon-profile             # GUI Application to Set GPU Fan Curve
-    pkgs.ripgrep                    # Doom Emacs Dependency
-    pkgs.runelite                   # Old School Runescape
-    pkgs.screenfetch                # System Information Tool
-    pkgs.scrot                      # Simple Screenshot Tool
-    pkgs.shellcheck                 # Script Analysis Tool
-    pkgs.signal-desktop             # Encrypted Messaging
-    pkgs.smartmontools              # Get HDD SMART Information
-    pkgs.usbutils                   # Utils Like lsusb
-    pkgs.xbindkeys                  # Launch Cmds with Keyboard or Mouse Button
-    pkgs.xvkbd                      # Virtual Keyboard Commands
-    pkgs.youtube-dl                 # Download Videos From YouTube & Other Sites
-    pkgs.zathura                    # PDF/PS/DJVU/CB Viewer
+    pkgs.alacritty                      # Terminal Emulator
+    pkgs.arandr                         # Display Configuration Tool
+    pkgs.audacity                       # Audio Editor and Recording Software
+    pkgs.autorandr                      # Create and Apply Display Profiles
+    pkgs.brave                          # Privacy Browser
+    pkgs.desmume                        # Nintendo DS Emulator
+    pkgs.emacs-all-the-icons-fonts      # Doom Emacs Fonts
+    pkgs.fd                             # Doom Emacs Dependency
+    pkgs.file                           # Standard UNIX Utility to Detect File Types
+    pkgs.firefox                        # Web Browser
+    pkgs.glxinfo                        # Info About OpenGL/Mesa
+    pkgs.htop                           # Pretty and Interactive Process Viewer
+    pkgs.killall                        # Kill Processes by Name
+    pkgs.mesa                           # OpenGL Library
+    pkgs.networkmanager-openvpn         # NM Plugin for VPNs
+    pkgs.networkmanagerapplet           # NM GUI for Taskbar
+    pkgs.nixfmt                         # Formatter for Nix Code
+    pkgs.pandoc                         # Universal Document Converter
+    pkgs.papirus-icon-theme             # FOSS SVG Icon Theme for Linux
+    pkgs.pavucontrol                    # Audio Control Panel
+    pkgs.python3                        # Guido's Programming Language
+    pkgs.qbittorrent                    # GUI Torrent Client
+    pkgs.radeon-profile                 # GUI Application to Set GPU Fan Curve
+    pkgs.ripgrep                        # Doom Emacs Dependency
+    pkgs.runelite                       # Old School Runescape
+    pkgs.screenfetch                    # System Information Tool
+    pkgs.scrot                          # Simple Screenshot Tool
+    pkgs.shellcheck                     # Script Analysis Tool
+    pkgs.signal-desktop                 # Encrypted Messaging
+    pkgs.smartmontools                  # Get HDD SMART Information
+    pkgs.texlive.combined.scheme-full   # LaTeX Distribution
+    pkgs.usbutils                       # Utils Like lsusb
+    pkgs.xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
+    pkgs.xvkbd                          # Virtual Keyboard Commands
+    pkgs.youtube-dl                     # Download Videos From YouTube & Other Sites
+    pkgs.zathura                         # PDF/PS/DJVU/CB Viewer
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -288,7 +289,7 @@
   # Emacs
   programs.emacs = {
     enable = true;
-    extraPackages = (epkgs: [ epkgs.vterm ]);
+    extraPackages = (epkgs: [ epkgs.vterm epkgs.emojify ]);
   };
 
   # Default Git User
