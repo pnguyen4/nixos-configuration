@@ -4,6 +4,7 @@
   # User Programs
   home.packages = [
     # Does not include software enabled by options programs.* and services.*
+    pkgs.adwaita-qt                     # Make Qt Apps Match GTK Apps
     pkgs.alacritty                      # Terminal Emulator
     pkgs.arandr                         # Display Configuration Tool
     pkgs.audacity                       # Audio Editor and Recording Software
@@ -22,7 +23,7 @@
     pkgs.networkmanagerapplet           # NM GUI for Taskbar
     pkgs.nixfmt                         # Formatter for Nix Code
     pkgs.pandoc                         # Universal Document Converter
-    pkgs.papirus-icon-theme             # FOSS SVG Icon Theme for Linux
+    pkgs.papirus-icon-theme             # Pretty Icons
     pkgs.pavucontrol                    # Audio Control Panel
     pkgs.python3                        # Guido's Programming Language
     pkgs.qbittorrent                    # GUI Torrent Client
@@ -39,13 +40,17 @@
     pkgs.xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     pkgs.xvkbd                          # Virtual Keyboard Commands
     pkgs.youtube-dl                     # Download Videos From YouTube & Other Sites
-    pkgs.zathura                         # PDF/PS/DJVU/CB Viewer
+    pkgs.zathura                        # PDF/PS/DJVU/CB Viewer
   ];
 
   # My IBM Model M Doesn't Have Super Key
   home.keyboard.options = [ "caps:super" ];
   home.keyboard.layout = "dvorak, us";
-  gtk.iconTheme.name = "Papirus";
+
+  # Environment Variables
+  home.sessionVariables = {
+    QT_STYLE_OVERRIDE= "adwaita";
+  };
 
   # Launch i3wm automatically from gdm
   xsession = {
@@ -94,7 +99,7 @@
   # Window Switcher + Run Dialog (dmenu replacement)
   programs.rofi = {
     enable = true;
-    font = "Dejavu Sans 11";
+    font = "DejaVu Sans 11";
     terminal = "alacritty";
     theme = "Paper";
   };
@@ -168,7 +173,7 @@
         scroll-down = "i3.next";
         separator = " | ";
         modules-left = "i3";
-        modules-right = "xkeyboard network filesystem cpu memory date";
+        modules-right = "xkeyboard network vpn cpu memory date";
       };
       "module/cpu" = {
         type = "internal/cpu";
@@ -179,11 +184,6 @@
         date = "%A %m-%d-%Y";
         time = "%H:%M:%S";
         label = "%date% %time%";
-      };
-      "module/filesystem" = {
-        type = "internal/fs";
-        mount-0 = "/";
-        label-mounted = "HDD %used% / %total%";
       };
       "module/i3" = {
         type = "internal/i3";
@@ -214,8 +214,56 @@
         label-disconnected = "NET down";
         label-disconnected-foreground = "#ff3333";
       };
+      "module/vpn" = {
+        type = "custom/script";
+        exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN ON"; else echo "%{F#ff3333}VPN OFF"; fi'';
+      };
     };
     script = ""; # handle this in window manager
+  };
+
+  # Lightweight Notification Daemon
+  services.dunst = {
+    enable = true;
+    iconTheme = {
+      package = pkgs.gnome3.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+    settings = {
+      global = {
+        font = "DejaVu Sans 11";
+        follow = "keyboard";
+        frame_width = "5";
+        geometry = "300x5-30+50";
+        icon_position = "left";
+        idle_threshold = "300";
+        markup = "yes";
+        padding = "10";
+        horizontal_padding = "10";
+        shrink = "yes";
+        separator_color = "frame";
+        show_indications = "false";
+        word_wrap = true;
+      };
+      urgency_low = {
+        background = "#202020";
+        foreground = "#fffff8";
+        frame_color = "#4c7899";
+        timeout = "10";
+      };
+      urgency_normal = {
+        background = "#202020";
+        foreground = "#fffff8";
+        frame_color = "#4c7899";
+        timeout = "10";
+      };
+      urgency_critical = {
+        background = "#202020";
+        foreground = "#fffff8";
+        frame_color = "#e00000";
+        timeout = "0";
+      };
+    };
   };
 
   # Automatically Put Polybar On Each Monitor
@@ -235,10 +283,10 @@
   services.xscreensaver = {
     enable = true;
     settings = {
-      timeout = 20;        # Activate when idle for 20 minutes
+      timeout = 30;        # Activate when idle for 30 minutes
       cycle = 5;           # Change screensavers every 5 minutes
       lock = true;         # Ask for user password to reenter
-      lockTimeout = 10;    # Lock after (total) 30 minutes idle
+      lockTimeout = 30;    # Lock after (total) 60 minutes idle
       dpmsEnabled = true;  # Enable display power management
       dpmsSuspend = 180;   # Go into power saving mode after 3 hours
     };
@@ -250,7 +298,7 @@
   # Network Manager System Tray Applet
   services.network-manager-applet.enable = true;
 
-  # My Cooler Master MM710 Preference
+  # My Cooler Master MM710 Thumb Button Preference
   home.file.".xbindkeysrc".text = ''
     "xvkbd -text "\[Left]""
       m:0x0 + b:8
@@ -305,7 +353,7 @@
     config = {
       profile = "gpu-hq";
       video-sync = "display-resample";
-      interpolation = true;
+      interpolation = true; # not motion interpolation
       tscale = "oversample";
     };
   };
@@ -357,7 +405,7 @@
   # Vim Settings
   programs.vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes nerdtree ];
+    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes ];
     settings = {
       history = 700;     # Undo Limit
       number = true;     # Line Numbers
@@ -370,8 +418,7 @@
     extraConfig =
       ''
       " Enable filetype plugins
-      filetype plugin on
-      filetype indent on
+      filetype plugin indent on
 
       " auto read when file in changed from outside buffer
       set autoread
@@ -384,14 +431,16 @@
 
       " basic UI fixes
       set ruler
-      set cmdheight=1
-      set laststatus=2 " see theme section for the statusline format
+      set laststatus=2 " display statusline always
 
       " hide abandoned buffers
-      set hid
+      set hidden
 
       " backspace config
       set backspace=eol,start,indent
+
+      " automatically move to next line after reaching
+      " first/last character in line (only normal mode)
       set whichwrap+=<,>,h,l
 
       " make search good
@@ -400,9 +449,6 @@
 
       " don't redraw when executing macros (good performance)
       set lazyredraw
-
-      " regex magic
-      set magic
 
       " Show matching brackets on indicator hover
       set showmatch
@@ -432,10 +478,6 @@
       set ai
       set si
 
-      " linebreak on 100 chars
-      set lbr
-      set tw=500
-
       " wrap lines
       set wrap
 
@@ -445,10 +487,10 @@
       " plugins
       let g:airline_powerline_fonts = 1
       if !exists('g:airline_symbols')
-           let g:airline_symbols = {}
+          let g:airline_symbols = {}
       endif
-      let g:airline_theme='base16_google'
       let g:airline_symbols.space = " "
+      let g:airline_theme='base16_google'
       let g:airline#extensions#tabline#enabled = 1
       '';
   };

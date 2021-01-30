@@ -167,7 +167,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "libvirtd" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "libvirtd" "networkmanager" "jupyter" ];
   };
   home-manager.users.user = import /home/user/home.nix;
 
@@ -176,6 +176,8 @@ in
     wget vim parted pciutils git virtmanager samba
   ];
 
+  # Ricing
+  programs.dconf.enable = true;
   fonts.fonts = with pkgs; [
     symbola
     noto-fonts
@@ -189,6 +191,8 @@ in
   # Security Settings
   security.hideProcessInformation = true;
   security.protectKernelImage = true;
+  security.pam.services.gdm.enableGnomeKeyring = true;
+  services.gnome3.gnome-keyring.enable = true;
 
   # Samba for shared folder with virtual machine
   services.samba = {
