@@ -185,7 +185,7 @@ in
     terminus_font
   ];
 
-  # Sorry Stallman
+  # Sorry Stallman Senpai
   nixpkgs.config.allowUnfree = true;
 
   # Security Settings

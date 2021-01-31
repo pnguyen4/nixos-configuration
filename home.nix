@@ -1,46 +1,51 @@
 { config, pkgs, lib, ... }:
 
+with import <nixpkgs> {
+  config.allowUnfree = true;
+};
 {
   # User Programs
   home.packages = [
     # Does not include software enabled by options programs.* and services.*
-    pkgs.adwaita-qt                     # Make Qt Apps Match GTK Apps
-    pkgs.alacritty                      # Terminal Emulator
-    pkgs.arandr                         # Display Configuration Tool
-    pkgs.audacity                       # Audio Editor and Recording Software
-    pkgs.autorandr                      # Create and Apply Display Profiles
-    pkgs.brave                          # Privacy Browser
-    pkgs.desmume                        # Nintendo DS Emulator
-    pkgs.emacs-all-the-icons-fonts      # Doom Emacs Fonts
-    pkgs.fd                             # Doom Emacs Dependency
-    pkgs.file                           # Standard UNIX Utility to Detect File Types
-    pkgs.firefox                        # Web Browser
-    pkgs.glxinfo                        # Info About OpenGL/Mesa
-    pkgs.htop                           # Pretty and Interactive Process Viewer
-    pkgs.killall                        # Kill Processes by Name
-    pkgs.mesa                           # OpenGL Library
-    pkgs.networkmanager-openvpn         # NM Plugin for VPNs
-    pkgs.networkmanagerapplet           # NM GUI for Taskbar
-    pkgs.nixfmt                         # Formatter for Nix Code
-    pkgs.pandoc                         # Universal Document Converter
-    pkgs.papirus-icon-theme             # Pretty Icons
-    pkgs.pavucontrol                    # Audio Control Panel
-    pkgs.python3                        # Guido's Programming Language
-    pkgs.qbittorrent                    # GUI Torrent Client
-    pkgs.radeon-profile                 # GUI Application to Set GPU Fan Curve
-    pkgs.ripgrep                        # Doom Emacs Dependency
-    pkgs.runelite                       # Old School Runescape
-    pkgs.screenfetch                    # System Information Tool
-    pkgs.scrot                          # Simple Screenshot Tool
-    pkgs.shellcheck                     # Script Analysis Tool
-    pkgs.signal-desktop                 # Encrypted Messaging
-    pkgs.smartmontools                  # Get HDD SMART Information
-    pkgs.texlive.combined.scheme-full   # LaTeX Distribution
-    pkgs.usbutils                       # Utils Like lsusb
-    pkgs.xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
-    pkgs.xvkbd                          # Virtual Keyboard Commands
-    pkgs.youtube-dl                     # Download Videos From YouTube & Other Sites
-    pkgs.zathura                        # PDF/PS/DJVU/CB Viewer
+    adwaita-qt                     # Make Qt Apps Match GTK Apps
+    alacritty                      # Terminal Emulator
+    arandr                         # Display Configuration Tool
+    audacity                       # Audio Editor and Recording Software
+    autorandr                      # Create and Apply Display Profiles
+    brave                          # Privacy Browser
+    desmume                        # Nintendo DS Emulator
+    emacs-all-the-icons-fonts      # Doom Emacs Fonts
+    fd                             # Doom Emacs Dependency
+    file                           # Standard UNIX Utility to Detect File Types
+    firefox                        # Web Browser
+    glxinfo                        # Info About OpenGL/Mesa
+    htop                           # Pretty and Interactive Process Viewer
+    killall                        # Kill Processes by Name
+    mesa                           # OpenGL Library
+    networkmanager-openvpn         # NM Plugin for VPNs
+    networkmanagerapplet           # NM GUI for Taskbar
+    nixfmt                         # Formatter for Nix Code
+    pandoc                         # Universal Document Converter
+    papirus-icon-theme             # Pretty Icons
+    pavucontrol                    # Audio Control Panel
+    python3                        # Guido's Programming Language
+    qbittorrent                    # GUI Torrent Client
+    radeon-profile                 # GUI Application to Set GPU Fan Curve
+    ripgrep                        # Doom Emacs Dependency
+    runelite                       # Old School Runescape
+    screenfetch                    # System Information Tool
+    scrot                          # Simple Screenshot Tool
+    shellcheck                     # Script Analysis Tool
+    signal-desktop                 # Encrypted Messaging
+    slack                          # Corporate IRC
+    smartmontools                  # Get HDD SMART Information
+    teams                          # Microsoft Teams
+    texlive.combined.scheme-full   # LaTeX Distribution
+    usbutils                       # Utils Like lsusb
+    xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
+    xvkbd                          # Virtual Keyboard Commands
+    youtube-dl                     # Download Videos From YouTube & Other Sites
+    zathura                        # PDF/PS/DJVU/CB Viewer
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -160,34 +165,32 @@
     };
     config = {
       "bar/bottom" = {
-        monitor = "\${env:MONITOR:}";
         bottom = true;
-        font-0 = "terminus:size=11;0";
         enable-ipc = true;
+        font-0 = "terminus:size=11;1";
+        height = "25";
         locale = "en_US.UTF8";
-        tray-position = "right";
-        tray-max-size = "12";
+        modules-left = "i3";
+        modules-right = "xkeyboard network vpn cpu memory date";
+        monitor = "\${env:MONITOR:}";
         padding-right = "1";
-        padding-top = "1";
         scroll-up = "i3.prev";
         scroll-down = "i3.next";
         separator = " | ";
-        modules-left = "i3";
-        modules-right = "xkeyboard network vpn cpu memory date";
+        tray-position = "right";
+        tray-max-size = "12";
       };
       "module/cpu" = {
-        type = "internal/cpu";
         label = "CPU %percentage%%";
+        type = "internal/cpu";
       };
       "module/date" = {
-        type = "internal/date";
         date = "%A %m-%d-%Y";
-        time = "%H:%M:%S";
         label = "%date% %time%";
+        time = "%H:%M:%S";
+        type = "internal/date";
       };
       "module/i3" = {
-        type = "internal/i3";
-        pin-workspaces = true;
         label-focused-background = "#285577";
         label-focused-padding-right = "1";
         label-visible-background= "#5f676a";
@@ -196,27 +199,29 @@
         label-unfocused-padding-right = "1";
         label-urgent-background = "#900000";
         label-urgent-padding-right = "1";
+        pin-workspaces = true;
+        type = "internal/i3";
       };
       "module/xkeyboard" = {
-        type = "internal/xkeyboard";
         format = "<label-layout>";
         label-layout = "%name%";
+        type = "internal/xkeyboard";
       };
       "module/memory" = {
-        type = "internal/memory";
         label = "RAM %percentage_used%%";
+        type = "internal/memory";
       };
       "module/network" = {
-        type = "internal/network";
         interface = "enp4s0";
         label-connected = "NET %ifname%";
         label-connected-foreground = "#00cc66";
         label-disconnected = "NET down";
         label-disconnected-foreground = "#ff3333";
+        type = "internal/network";
       };
       "module/vpn" = {
-        type = "custom/script";
         exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN ON"; else echo "%{F#ff3333}VPN OFF"; fi'';
+        type = "custom/script";
       };
     };
     script = ""; # handle this in window manager
@@ -233,35 +238,36 @@
       global = {
         font = "DejaVu Sans 11";
         follow = "keyboard";
-        frame_width = "5";
+        format = "<b>%s</b>\n%b";
+        frame_width = 5;
         geometry = "300x5-30+50";
         icon_position = "left";
-        idle_threshold = "300";
+        idle_threshold = 300;
         markup = "yes";
-        padding = "10";
-        horizontal_padding = "10";
+        max_icon_size = 64;
+        padding = 10;
+        horizontal_padding = 10;
         shrink = "yes";
         separator_color = "frame";
-        show_indications = "false";
+        show_indicators = "no";
         word_wrap = true;
       };
       urgency_low = {
         background = "#202020";
         foreground = "#fffff8";
         frame_color = "#4c7899";
-        timeout = "10";
+        timeout = 10;
       };
       urgency_normal = {
         background = "#202020";
         foreground = "#fffff8";
         frame_color = "#4c7899";
-        timeout = "10";
+        timeout = 10;
       };
       urgency_critical = {
         background = "#202020";
         foreground = "#fffff8";
         frame_color = "#e00000";
-        timeout = "0";
       };
     };
   };
@@ -283,12 +289,12 @@
   services.xscreensaver = {
     enable = true;
     settings = {
-      timeout = 30;        # Activate when idle for 30 minutes
       cycle = 5;           # Change screensavers every 5 minutes
-      lock = true;         # Ask for user password to reenter
-      lockTimeout = 30;    # Lock after (total) 60 minutes idle
       dpmsEnabled = true;  # Enable display power management
       dpmsSuspend = 180;   # Go into power saving mode after 3 hours
+      lock = true;         # Ask for user password to reenter
+      lockTimeout = 30;    # Lock after (total) 60 minutes idle
+      timeout = 30;        # Activate when idle for 30 minutes
     };
   };
 
@@ -351,10 +357,10 @@
   programs.mpv = {
     enable = true;
     config = {
-      profile = "gpu-hq";
-      video-sync = "display-resample";
       interpolation = true; # not motion interpolation
+      profile = "gpu-hq";
       tscale = "oversample";
+      video-sync = "display-resample";
     };
   };
 
@@ -363,40 +369,40 @@
     enable = true;
     settings = {
       font = {
-        size = 12;
-        normal.family = "terminus";
-        italic.family = "terminus";
         bold.family   = "terminus";
+        italic.family = "terminus";
+        normal.family = "terminus";
+        size = 12;
       };
       # Solarized Light Theme
       colors = {
-        primary = {
-          background = "#fdf6e3";
-          foreground = "#657b83";
-        };
         cursor = {
           text   = "#fdf6e3";
           cursor = "#657b83";
         };
-        normal = {
-          black   = "#073642";
-          red     = "#dc322f";
-          green   = "#859900";
-          yellow  = "#b58900";
-          blue    = "#268bd2";
-          magenta = "#d33682";
-          cyan    = "#2aa198";
-          white   = "#eee8d5";
-        };
         bright = {
           black   = "#002b36";
-          red     = "#cb4b16";
-          green   = "#586e75";
-          yellow  = "#657b83";
           blue    = "#839496";
-          magenta = "#6c71c4";
           cyan    = "#93a1a1";
+          green   = "#586e75";
+          magenta = "#6c71c4";
+          red     = "#cb4b16";
           white   = "#fdf6e3";
+          yellow  = "#657b83";
+        };
+        normal = {
+          black   = "#073642";
+          blue    = "#268bd2";
+          cyan    = "#2aa198";
+          green   = "#859900";
+          magenta = "#d33682";
+          red     = "#dc322f";
+          white   = "#eee8d5";
+          yellow  = "#b58900";
+        };
+        primary = {
+          background = "#fdf6e3";
+          foreground = "#657b83";
         };
       };
     };
@@ -407,13 +413,13 @@
     enable = true;
     plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes ];
     settings = {
-      history = 700;     # Undo Limit
-      number = true;     # Line Numbers
       expandtab = true;  # Convert Tabs to Spaces
-      tabstop = 4;       # Width of Tab Character
-      shiftwidth = 4;    # Indent With 4 Spaces When Shifting Lines
+      history = 700;     # Undo Limit
       ignorecase = true; # Search Option
+      number = true;     # Line Numbers
+      shiftwidth = 4;    # Indent With 4 Spaces When Shifting Lines
       smartcase = true;  # Case Sensitive When Search Contains Uppercase Letter
+      tabstop = 4;       # Width of Tab Character
     };
     extraConfig =
       ''
