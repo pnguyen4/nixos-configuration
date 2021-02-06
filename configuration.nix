@@ -170,6 +170,7 @@ in
     extraGroups = [ "wheel" "video" "libvirtd" "networkmanager" "jupyter" ];
   };
   home-manager.users.user = import /home/user/home.nix;
+  home-manager.useGlobalPkgs = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
@@ -179,9 +180,10 @@ in
   # Ricing
   programs.dconf.enable = true;
   fonts.fonts = with pkgs; [
-    symbola
+    ibm-plex
     noto-fonts
     noto-fonts-cjk
+    symbola
     terminus_font
   ];
 

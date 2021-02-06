@@ -3,6 +3,15 @@
 with import <nixpkgs> {
   config.allowUnfree = true;
 };
+let my-python-packages = python-packages: with python-packages; [
+      (import ./personal-repo/cs202.nix)
+      pybullet                # Physics Engine for Robot Simulation
+      pyflakes                # For Doom Emacs Python Linting
+      pytest                  # Framework for Writing Python Tests
+      python-language-server  # For Doom Emacs Python LSP Support
+    ];
+    python-with-my-packages = python3.withPackages my-python-packages;
+in
 {
   # User Programs
   home.packages = [
@@ -13,14 +22,18 @@ with import <nixpkgs> {
     audacity                       # Audio Editor and Recording Software
     autorandr                      # Create and Apply Display Profiles
     brave                          # Privacy Browser
+    cmake                          # Cross-Platform Makefile Generator
     desmume                        # Nintendo DS Emulator
     emacs-all-the-icons-fonts      # Doom Emacs Fonts
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
     firefox                        # Web Browser
+    gcc                            # GNU Compiler Collection
     glxinfo                        # Info About OpenGL/Mesa
+    gnumake                        # Build Automation Tool
     htop                           # Pretty and Interactive Process Viewer
     killall                        # Kill Processes by Name
+    libtool                        # Generic Library Support Script
     mesa                           # OpenGL Library
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
@@ -28,7 +41,7 @@ with import <nixpkgs> {
     pandoc                         # Universal Document Converter
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
-    python3                        # Guido's Programming Language
+    python-with-my-packages        # Guido's Programming Language WITH packages in path
     qbittorrent                    # GUI Torrent Client
     radeon-profile                 # GUI Application to Set GPU Fan Curve
     ripgrep                        # Doom Emacs Dependency
@@ -54,7 +67,7 @@ with import <nixpkgs> {
 
   # Environment Variables
   home.sessionVariables = {
-    QT_STYLE_OVERRIDE= "adwaita";
+    QT_STYLE_OVERRIDE = "adwaita";
   };
 
   # Launch i3wm automatically from gdm
@@ -72,8 +85,8 @@ with import <nixpkgs> {
           let
             modifier = config.xsession.windowManager.i3.config.modifier;
           in lib.mkOptionDefault {
-            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun -icon-theme \"Papirus\" -show-icons";
-            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -show window -icon-theme \"Papirus\" -show-icons";
+            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun -icon-theme \"Papirus\" -show-icons";
+            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -modi window -show window -icon-theme \"Papirus\" -show-icons";
           };
         window.commands = [
           { # enable floating mode for all network manager windows
@@ -88,6 +101,13 @@ with import <nixpkgs> {
             criteria = {
               class = "Firefox";
               instance = "Places";
+            };
+            command = "floating enable";
+          }
+
+          { # enable floating mode for all Microsoft Teams notifications
+            criteria = {
+              title = "Microsoft Teams Notification";
             };
             command = "floating enable";
           }
