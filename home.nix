@@ -137,54 +137,6 @@ in
     theme = "Paper";
   };
 
-  #xsession.windowManager.bspwm = {
-  #  enable = true;
-  #  extraConfig = ''
-  #  bspc monitor ^1 -d I II III IV V VI VII VIII IX X
-  #  bspc monitor ^2 -d 1 2 3 4 5 6 7 8 9 10
-  #  ''
-  #};
-
-  #services.sxhkd = {
-  #  enable = true;
-  #  # Prevents sxhkd from starting before keyboard layout is set
-  #  extraOptions = [ "-m 1" ];
-  #  keybindings = {
-  #    # Exit BSPWM
-  #    "super + shift + e" = "bspc quit";
-  #    # Close Window
-  #    "super + shift + q" = "bspc node --close";
-  #    # Application Launcher
-  #    "super + d" = "rofi -show drun -icon-theme \"Papirus\" -show-icons";
-  #    # Window Switcher
-  #    "super + tab" = "rofi -show window -icon-theme \"Papirus\" -show-icons";
-  #    # Launch Terminal
-  #    "super + Return" = "alacritty";
-  #    # Toggle Window Floating Mode
-  #    "super + space" = "bspc node --state \~floating";
-  #    # Toggle Window Fullscreen Mode
-  #    "super + f" = "bspc node --state \~fullscreen";
-  #    # Toggle Window Tiling Mode
-  #    "super + t" = "bspc node --state \~tiled";
-  #    # Change Window Focus
-  #    "super + {h,j,k,l}" = "bspc node --focus {west,south,north,east}";
-  #    "super + {left,down,up,right}" = "bspc node -f {west,south,north,east}";
-  #    # Swap Window With Direction
-  #    "super + shift + {h,j,k,l}" = "bspc node --swap {west,south,north,east}";
-  #    "super + shift + {left,down,up,right}" = "bspc node -s {west,south,north,east}";
-  #    # Change Desktop Focus
-  #    "super + {0-9}" = "bspc desktop --focus {0-9}";
-  #    # Send Window to Desktop
-  #    "super + shift + {0-9}" = "bspc node --to-desktop {0-9}";
-  #    # Change Monitor Focus
-  #    "super + grave" = "bspc monitor --focus next";
-  #    # Send Window to Next Monitor
-  #    "super + shift + grave" = "bspc node --to-monitor next";
-  #    # Reload Simple X Hotkey Daemon
-  #    "super + shift + r" = "pkill -USR1 -x sxhkd";
-  #  };
-  #};
-
   services.polybar = {
     enable = true;
     package = pkgs.polybar.override {
