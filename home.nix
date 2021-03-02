@@ -5,6 +5,8 @@ with import <nixpkgs> {
 };
 let my-python-packages = python-packages: with python-packages; [
       (import ./personal-repo/cs202.nix)
+      matplotlib              # plotting library
+      numpy                   # numerical python for data science
       pybullet                # Physics Engine for Robot Simulation
       pyflakes                # For Doom Emacs Python Linting
       pytest                  # Framework for Writing Python Tests
@@ -24,11 +26,13 @@ in
     brave                          # Privacy Browser
     cmake                          # Cross-Platform Makefile Generator
     desmume                        # Nintendo DS Emulator
+    discord                        # Voice and Text Chat for Gamers
     emacs-all-the-icons-fonts      # Doom Emacs Fonts
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
     firefox                        # Web Browser
     gcc                            # GNU Compiler Collection
+    gimp                           # The GNU Image Manipulation Program
     glxinfo                        # Info About OpenGL/Mesa
     gnumake                        # Build Automation Tool
     htop                           # Pretty and Interactive Process Viewer
@@ -38,6 +42,7 @@ in
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
     nixfmt                         # Formatter for Nix Code
+    obs-studio                     # Video Recording and Live Streaming Software
     pandoc                         # Universal Document Converter
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
@@ -54,11 +59,14 @@ in
     smartmontools                  # Get HDD SMART Information
     teams                          # Microsoft Teams
     texlive.combined.scheme-full   # LaTeX Distribution
+    unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
+    xorg.xev                       # Prints Contents of X Events for Debugging
     xvkbd                          # Virtual Keyboard Commands
     youtube-dl                     # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
+    zip                            # Compressor/Archiver
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -86,7 +94,7 @@ in
             modifier = config.xsession.windowManager.i3.config.modifier;
           in lib.mkOptionDefault {
             "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun -icon-theme \"Papirus\" -show-icons";
-            "${modifier}+grave" = "exec ${pkgs.rofi}/bin/rofi -modi window -show window -icon-theme \"Papirus\" -show-icons";
+            "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -modi window -show window -icon-theme \"Papirus\" -show-icons";
           };
         window.commands = [
           { # enable floating mode for all network manager windows
@@ -187,15 +195,13 @@ in
       "bar/bottom" = {
         bottom = true;
         enable-ipc = true;
-        font-0 = "terminus:size=11;1";
+        font-0 = "terminus:size=12;1";
         height = "25";
         locale = "en_US.UTF8";
         modules-left = "i3";
-        modules-right = "xkeyboard network vpn cpu memory date";
+        modules-right = "xkeyboard vpn cpu memory date";
         monitor = "\${env:MONITOR:}";
         padding-right = "1";
-        scroll-up = "i3.prev";
-        scroll-down = "i3.next";
         separator = " | ";
         tray-position = "right";
         tray-max-size = "12";
@@ -205,12 +211,13 @@ in
         type = "internal/cpu";
       };
       "module/date" = {
-        date = "%A %m-%d-%Y";
+        date = "%a %b %d";
         label = "%date% %time%";
         time = "%H:%M:%S";
         type = "internal/date";
       };
       "module/i3" = {
+        enable-scroll = false;
         label-focused-background = "#285577";
         label-focused-padding-right = "1";
         label-visible-background= "#5f676a";
@@ -230,14 +237,6 @@ in
       "module/memory" = {
         label = "RAM %percentage_used%%";
         type = "internal/memory";
-      };
-      "module/network" = {
-        interface = "enp4s0";
-        label-connected = "NET %ifname%";
-        label-connected-foreground = "#00cc66";
-        label-disconnected = "NET down";
-        label-disconnected-foreground = "#ff3333";
-        type = "internal/network";
       };
       "module/vpn" = {
         exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN ON"; else echo "%{F#ff3333}VPN OFF"; fi'';
