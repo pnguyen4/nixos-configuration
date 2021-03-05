@@ -43,7 +43,6 @@ in
     pavucontrol                    # Audio Control Panel
     python-with-my-packages        # Guido's Programming Language WITH packages in path
     qbittorrent                    # GUI Torrent Client
-    radeon-profile                 # GUI Application to Set GPU Fan Curve
     ripgrep                        # Doom Emacs Dependency
     runelite                       # Old School Runescape
     screenfetch                    # System Information Tool

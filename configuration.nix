@@ -35,6 +35,9 @@ in
 
   # Save Space by Optimizing the Store (hardlink identical files)
   nix.autoOptimiseStore = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -43,7 +46,6 @@ in
     hostName = "nixos-machine";
     useDHCP = false;
     interfaces.enp0s25.useDHCP = true;
-    interfaces.wl01.useDHCP = true;
     networkmanager.enable = true;
   };
 
@@ -66,11 +68,6 @@ in
     '';
     # NixOS uses systemd to launch x11 but at least this way xorg runs rootless
     displayManager.gdm.enable = true;
-    # This is a single user system with FDE
-    displayManager.autoLogin = {
-      enable = true;
-      user = "user";
-    };
     desktopManager.gnome3.enable = true;
   };
 
@@ -95,12 +92,22 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "networkmanager" "jupyter" ];
   };
-  home-manager.users.user = import ../../home/user/home.nix;
+  home-manager.users.user = import /home/user/home.nix;
   home-manager.useGlobalPkgs = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
     wget vim parted pciutils git gnomeExtensions.appindicator
+  ];
+
+  environment.gnome3.excludePackages = with pkgs; [
+    gnome3.geary gnome3.gnome-music gnome3.gnome-terminal epiphany evince
+    gnome3.gnome-calculator gnome3.gnome-calendar gnome3.gnome-contacts
+    gnome3.gnome-weather gnome3.gnome-characters gnome3.gnome-disk-utility
+    gnome3.gnome-system-monitor gnome3.cheese gnome3.file-roller gnome3.gedit
+    gnome3.gnome-font-viewer gnome3.gnome-maps gnome3.totem gnome3.eog
+    gnome3.gnome-screenshot gnome3.seahorse gnome-photos baobab xterm
+    gnome3.gnome-logs gnome3.gnome-clocks
   ];
 
   # Ricing
