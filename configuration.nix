@@ -20,52 +20,11 @@ in
   ];
 
   # Bootloader Settings
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    enableCryptodisk = true;
-    mirroredBoots = [
-      { devices = [ "nodev" ];
-        efiSysMountPoint = "/boot/efi";
-        path = "/boot/efi";
-      }
-      { devices = [ "nodev" ];
-        efiSysMountPoint = "/boot/efi-fallback";
-        path = "/boot/efi-fallback";
-      }
-    ];
-  };
-
-  # Storage & Swap
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/b04a4d37-b78e-4dcc-ae0b-010cb58e2911";
-    fsType = "btrfs";
-    options = [ "subvol=nixos" "compress=zstd" "noatime" ];
-  };
-  boot.initrd.luks.devices."crypted-nixos1".device =
-    "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
-  boot.initrd.luks.devices."crypted-nixos2".device =
-    "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
-  boot.initrd.luks.reusePassphrases = true;
-  swapDevices = [
-    { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
-      encrypted = {
-      enable = true;
-      label = "crypted-swap";
-      blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
-      };
-    }
-  ];
-  boot.resumeDevice = "/dev/mapper/crypted-swap";
 
   # NTFS support via FUSE
   boot.supportedFilesystems = [ "ntfs" ];
-
-  # Monthly btrfs scrubbing:
-  # - Read all data and metadata blocks and verify checksums.
-  # - Automatically repair corrupted blocks.
-  services.btrfs.autoScrub.enable = true;
 
   # Automatic Garbage Collection of Nix Store
   nix.gc = {
@@ -76,32 +35,6 @@ in
 
   # Save Space by Optimizing the Store (hardlink identical files)
   nix.autoOptimiseStore = true;
-
-  # GPU Passthrough for VMs
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ];
-  boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
-  boot.blacklistedKernelModules = [ "amdgpu" ];
-  boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
-  boot.extraModprobeConfig = ''
-    softdep amdgpu pre: vfio vfio-pci
-    options vfio-pci ids=1002:687f,1002:aaf8
-  '';
-  boot.initrd.preDeviceCommands = ''
-    DEVS="0000:0a:00.0 0000:0a:00.1"
-    for DEV in $DEVS; do
-      echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
-    done
-    modprobe -i vfio-pci
-  '';
-  virtualisation.libvirtd = {
-    enable = true;
-    qemuOvmf = true;
-    qemuRunAsRoot = false;
-    onBoot = "ignore";
-    onShutdown = "shutdown";
-  };
-
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -109,7 +42,8 @@ in
   networking = {
     hostName = "nixos-machine";
     useDHCP = false;
-    interfaces.enp4s0.useDHCP = true;
+    interfaces.enp0s25.useDHCP = true;
+    interfaces.wl01.useDHCP = true;
     networkmanager.enable = true;
   };
 
@@ -137,20 +71,12 @@ in
       enable = true;
       user = "user";
     };
-    # Use home manager configure window manager
-    desktopManager.session = [
-      { manage = "desktop";
-        name = "home-manager";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.hm-xsession &
-          waitPID=$!
-        '';
-      }
-    ];
+    desktopManager.gnome3.enable = true;
   };
 
-  # Configure AMD video drivers
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  # Configure video drivers
+  services.xserver.videoDrivers = [ "modesetting" ];
+  services.xserver.useGlamor = true;
   services.acpid.enable = true;
   hardware.opengl = {
     enable = true;
@@ -167,14 +93,14 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "libvirtd" "networkmanager" "jupyter" ];
+    extraGroups = [ "wheel" "video" "networkmanager" "jupyter" ];
   };
-  home-manager.users.user = import /home/user/home.nix;
+  home-manager.users.user = import ../../home/user/home.nix;
   home-manager.useGlobalPkgs = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git virtmanager samba
+    wget vim parted pciutils git gnomeExtensions.appindicator
   ];
 
   # Ricing
@@ -187,6 +113,8 @@ in
     terminus_font
   ];
 
+  services.udev.packages = with pkgs; [gnome3.gnome-settings-daemon ];
+
   # Sorry Stallman Senpai
   nixpkgs.config.allowUnfree = true;
 
@@ -195,38 +123,6 @@ in
   security.protectKernelImage = true;
   security.pam.services.gdm.enableGnomeKeyring = true;
   services.gnome3.gnome-keyring.enable = true;
-
-  # Samba for shared folder with virtual machine
-  services.samba = {
-    enable = true;
-    enableNmbd = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = smbnix
-      netbios name = smbnix
-      security = user
-      ntlm auth = yes
-      hosts allow = 192.168.122.  localhost
-      hosts deny = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
-    '';
-    shares = {
-      public = {
-        path = "/home/user/Public";
-        browseable = "yes";
-        "read only" = "yes";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-      };
-    };
-  };
-
-  # Apparently samba service doesn't open the ports it needs
-  networking.firewall.allowedTCPPorts = [ 445 139 ];
-  networking.firewall.allowedUDPPorts = [ 137 138 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
