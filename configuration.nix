@@ -83,17 +83,6 @@ in
   boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
   boot.blacklistedKernelModules = [ "amdgpu" ];
   boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
-  boot.extraModprobeConfig = ''
-    softdep amdgpu pre: vfio vfio-pci
-    options vfio-pci ids=1002:687f,1002:aaf8
-  '';
-  boot.initrd.preDeviceCommands = ''
-    DEVS="0000:0a:00.0 0000:0a:00.1"
-    for DEV in $DEVS; do
-      echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
-    done
-    modprobe -i vfio-pci
-  '';
   virtualisation.libvirtd = {
     enable = true;
     qemuOvmf = true;
