@@ -31,6 +31,7 @@ in
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
     firefox                        # Web Browser
+    ffmpeg                         # Record, Convert, and Stream Audio and Video
     gcc                            # GNU Compiler Collection
     gimp                           # The GNU Image Manipulation Program
     glxinfo                        # Info About OpenGL/Mesa

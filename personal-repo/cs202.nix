@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = builtins.fetchGit {
     url = "https://github.com/jnear/cs202-assignments";
     ref = "master";
-    rev = "6340604660fefc134cb84e57b773dcb1bac04e45";
+    rev = "5901954c31437d5c1373797f787f2466755b09a1";
   };
   propagatedBuildInputs = [ pandas lark-parser ];
 }
