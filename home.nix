@@ -153,16 +153,12 @@ in
         height = "25";
         locale = "en_US.UTF8";
         modules-left = "i3";
-        modules-right = "xkeyboard vpn cpu memory date";
+        modules-right = "xkeyboard vpn date";
         monitor = "\${env:MONITOR:}";
         padding-right = "1";
         separator = " | ";
         tray-position = "right";
         tray-max-size = "12";
-      };
-      "module/cpu" = {
-        label = "CPU %percentage%%";
-        type = "internal/cpu";
       };
       "module/date" = {
         date = "%a %b %d";
@@ -171,7 +167,7 @@ in
         type = "internal/date";
       };
       "module/i3" = {
-        enable-scroll = false;
+        enable-scroll = true;
         label-focused-background = "#285577";
         label-focused-padding-right = "1";
         label-visible-background= "#5f676a";
@@ -187,10 +183,6 @@ in
         format = "<label-layout>";
         label-layout = "%name%";
         type = "internal/xkeyboard";
-      };
-      "module/memory" = {
-        label = "RAM %percentage_used%%";
-        type = "internal/memory";
       };
       "module/vpn" = {
         exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN ON"; else echo "%{F#ff3333}VPN OFF"; fi'';
@@ -347,35 +339,31 @@ in
         normal.family = "terminus";
         size = 12;
       };
-      # Solarized Light Theme
+      # Uber High-Contrast Light Theme
       colors = {
-        cursor = {
-          text   = "#fdf6e3";
-          cursor = "#657b83";
-        };
-        bright = {
-          black   = "#002b36";
-          blue    = "#839496";
-          cyan    = "#93a1a1";
-          green   = "#586e75";
-          magenta = "#6c71c4";
-          red     = "#cb4b16";
-          white   = "#fdf6e3";
-          yellow  = "#657b83";
+        primary = {
+          foreground = "#000000";
+          background = "#ffffff";
         };
         normal = {
-          black   = "#073642";
-          blue    = "#268bd2";
-          cyan    = "#2aa198";
-          green   = "#859900";
-          magenta = "#d33682";
-          red     = "#dc322f";
-          white   = "#eee8d5";
-          yellow  = "#b58900";
+          black   = "#000000";
+          red     = "#990000";
+          green   = "#00A600";
+          yellow  = "#999900";
+          blue    = "#0000B2";
+          magenta = "#B200B2";
+          cyan    = "#00A6B2";
+          white   = "#BFBFBF";
         };
-        primary = {
-          background = "#fdf6e3";
-          foreground = "#657b83";
+        bright = {
+          black   = "#666666";
+          red     = "#E50000";
+          green   = "#00D900";
+          yellow  = "#E5E500";
+          blue    = "#0000FF";
+          magenta = "#E500E5";
+          cyan    = "#00E5E5";
+          white   = "#E5E5E5";
         };
       };
     };
@@ -384,7 +372,6 @@ in
   # Vim Settings
   programs.vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes ];
     settings = {
       expandtab = true;  # Convert Tabs to Spaces
       history = 700;     # Undo Limit
@@ -437,10 +424,6 @@ in
       set noerrorbells
       set novisualbell
 
-      " enable syntax highlighting
-      syntax enable
-      autocmd BufEnter * :syntax sync fromstart
-
       " why isn't this universal yet?
       set encoding=utf8
       set ffs=unix,dos,mac
@@ -462,15 +445,6 @@ in
 
       " get rid of trailing white space on save
       autocmd BufWritePre * :%s/\s\+$//e
-
-      " plugins
-      let g:airline_powerline_fonts = 1
-      if !exists('g:airline_symbols')
-          let g:airline_symbols = {}
-      endif
-      let g:airline_symbols.space = " "
-      let g:airline_theme='base16_google'
-      let g:airline#extensions#tabline#enabled = 1
       '';
   };
 }
