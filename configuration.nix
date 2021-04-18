@@ -10,6 +10,7 @@ let
     rev = "f33be4894cf5260f99d95ecd750c783837f33cfd";
     ref = "release-20.09";
   };
+  unstable = import <unstable> {};
 in
 {
   imports = [
@@ -170,9 +171,17 @@ in
   programs.dconf.enable = true;
   fonts.fonts = with pkgs; [
     ibm-plex
-    noto-fonts
+    (unstable.iosevka.override {
+      set = "slab";
+      privateBuildPlan = ''
+        [buildPlans.iosevka-slab]
+        family = "Iosevka Slab"
+        spacing = "normal"
+        serifs = "slab"
+      '';
+    })
+    unstable.iosevka
     noto-fonts-cjk
-    symbola
     terminus_font
   ];
 
