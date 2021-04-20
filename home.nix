@@ -13,6 +13,7 @@ let my-python-packages = python-packages: with python-packages; [
       python-language-server  # For Doom Emacs Python LSP Support
     ];
     python-with-my-packages = python3.withPackages my-python-packages;
+    unstable = import <unstable> {};
 in
 {
   # User Programs
@@ -37,6 +38,7 @@ in
     glxinfo                        # Info About OpenGL/Mesa
     gnumake                        # Build Automation Tool
     htop                           # Pretty and Interactive Process Viewer
+    unstable.i3-auto-layout        # Rearrangeable Fibonacci Layout for i3wm
     killall                        # Kill Processes by Name
     libtool                        # Generic Library Support Script
     mesa                           # OpenGL Library
@@ -86,11 +88,26 @@ in
     scriptPath = ".hm-xsession";
     windowManager.i3 = {
       enable = true;
+      package = pkgs.i3-gaps;
       config = {
-        modifier = "Mod4";          # Use Super/Windows Key Instead of Alt
-        fonts = [ "terminus 8" ];   # Titlebar Font
+        modifier = "Mod4";                     # Use Super Key Instead of Alt
+        fonts = [ "Iosevka Slab Extended 9" ]; # Titlebar Font
+        colors = {
+          focused = {
+            background  = "#285577"; # default
+            border      = "#4c7899"; # default
+            childBorder = "#4f7ca9"; # new color
+            indicator   = "#2e9ef4"; # default
+            text        = "#ffffff"; # default
+          };
+        };
+        gaps = {
+          inner = 12;
+          outer = 3;
+          smartGaps = true;
+        };
         terminal = "alacritty";
-        bars = [ ];                 # Use Polybar
+        bars = [ ];                            # Use Polybar
         keybindings =
           let
             modifier = config.xsession.windowManager.i3.config.modifier;
@@ -98,6 +115,11 @@ in
             "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun -icon-theme \"Papirus\" -show-icons";
             "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -modi window -show window -icon-theme \"Papirus\" -show-icons";
           };
+        window = {
+          border = 5;
+          titlebar = false;
+          hideEdgeBorders = "smart";
+        };
         window.commands = [
           { # enable floating mode for all network manager windows
             criteria = {
@@ -122,7 +144,16 @@ in
             command = "floating enable";
           }
         ];
-        startup = [ { command = "~/.reload_polybar.sh"; always = true; } ];
+        startup = [
+          {
+            command = "~/.reload_polybar.sh";
+            always = true;
+          }
+
+          { command = "i3-auto-layout";
+            always = true;
+          }
+        ];
       };
     };
     profileExtra = ''
@@ -134,7 +165,7 @@ in
   # Window Switcher + Run Dialog (dmenu replacement)
   programs.rofi = {
     enable = true;
-    font = "DejaVu Sans 11";
+    font = "IBM Plex Sans 11";
     terminal = "alacritty";
     theme = "Paper";
   };
@@ -149,27 +180,27 @@ in
       "bar/bottom" = {
         bottom = true;
         enable-ipc = true;
-        font-0 = "terminus:size=12;1";
-        height = "25";
+        font-0 = "Iosevka Extended:size=9;3";
         locale = "en_US.UTF8";
-        modules-left = "i3";
+        modules-left = "i3 xwindow";
         modules-right = "xkeyboard vpn date";
         monitor = "\${env:MONITOR:}";
         padding-right = "1";
-        separator = " | ";
         tray-position = "right";
-        tray-max-size = "12";
       };
       "module/date" = {
         date = "%a %b %d";
+        format = "| <label>";
         label = "%date% %time%";
-        time = "%H:%M:%S";
+        time = "%H:%M";
         type = "internal/date";
       };
       "module/i3" = {
         enable-scroll = true;
+        format = "<label-state> <label-mode> ";
         label-focused-background = "#285577";
         label-focused-padding-right = "1";
+        label-mode-background = "900000";
         label-visible-background= "#5f676a";
         label-visible-padding-right = "1";
         label-unfocused-background = "#222222";
@@ -179,14 +210,19 @@ in
         pin-workspaces = true;
         type = "internal/i3";
       };
+      "module/vpn" = {
+        exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN On"; else echo "%{F#ff3333}VPN Off"; fi'';
+        format = "<label> ";
+        type = "custom/script";
+      };
       "module/xkeyboard" = {
-        format = "<label-layout>";
+        format = "<label-layout> | ";
         label-layout = "%name%";
         type = "internal/xkeyboard";
       };
-      "module/vpn" = {
-        exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN ON"; else echo "%{F#ff3333}VPN OFF"; fi'';
-        type = "custom/script";
+      "module/xwindow" = {
+        format = " <label>";
+        type = "internal/xwindow";
       };
     };
     script = ""; # handle this in window manager

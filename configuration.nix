@@ -137,6 +137,7 @@ in
         '';
       }
     ];
+    desktopManager.wallpaper.mode = "scale";
   };
 
   # Configure AMD video drivers
