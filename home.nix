@@ -31,7 +31,6 @@ in
     emacs-all-the-icons-fonts      # Doom Emacs Fonts
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
-    firefox                        # Web Browser
     ffmpeg                         # Record, Convert, and Stream Audio and Video
     gcc                            # GNU Compiler Collection
     gimp                           # The GNU Image Manipulation Program
@@ -408,72 +407,127 @@ in
       number = true;     # Line Numbers
       shiftwidth = 4;    # Indent With 4 Spaces When Shifting Lines
       smartcase = true;  # Case Sensitive When Search Contains Uppercase Letter
-      tabstop = 4;       # Width of Tab Character
+      tabstop = 4;       # Use this many spaces for tab
     };
-    extraConfig =
-      ''
-      " Enable filetype plugins
-      filetype plugin indent on
-
-      " auto read when file in changed from outside buffer
-      set autoread
-
-      " sudo save file, good when write permission isn't given
-      command W w !sudo tee % > /dev/null
-
-      " set scrolloff (# of lines above/below cursor)
-      set so=10
-
-      " basic UI fixes
-      set ruler
-      set laststatus=2 " display statusline always
-
-      " hide abandoned buffers
-      set hidden
-
-      " backspace config
-      set backspace=eol,start,indent
-
-      " automatically move to next line after reaching
-      " first/last character in line (only normal mode)
-      set whichwrap+=<,>,h,l
-
-      " make search good
-      set hlsearch
+    extraConfig = ''
+      autocmd BufWritePre * :%s/\s\+$//e   " get rid of trailing white space on save
+      command W w !sudo tee % > /dev/null  " sudo save file
+      filetype plugin indent on            " enable filetype plugins
+      set autoread                         " auto read when file in changed elswhere
+      set so=10                            " # of lines above/below cursor
+      set ruler                            " display row,col
+      set laststatus=2                     " display statusline always
+      set hidden                           " hide abandoned buffers
+      set backspace=eol,start,indent       " backspace config
+      set hlsearch                         " make search good
       set incsearch
-
-      " don't redraw when executing macros (good performance)
-      set lazyredraw
-
-      " Show matching brackets on indicator hover
-      set showmatch
+      set lazyredraw                       " don't redraw when executing macros
+      set showmatch                        " show matching brackets on indicator hover
       set mat=2
-
-      " no bleeping bleeps!
-      set noerrorbells
+      set noerrorbells                     " no bleeping bleeps!
       set novisualbell
-
-      " why isn't this universal yet?
-      set encoding=utf8
+      set encoding=utf8                    " why isn't this universal yet?
       set ffs=unix,dos,mac
-
-      " no backups, no swap file(s) mess
-      set nobackup
+      set nobackup                         " no backups, no swap file(s) mess
       set nowb
       set noswapfile
-
-      " tab config, commence holy war
-      set smarttab
-
-      " auto and smart indent
-      set ai
+      set smarttab                         " tab config, commence holy war
+      set ai                               " auto and smart indent
       set si
+      set whichwrap+=<,>,h,l               " go to next/prev line after passing start/end
+      set wrap                             " wrap lines
+    '';
+  };
 
-      " wrap lines
-      set wrap
-
-      " get rid of trailing white space on save
-      autocmd BufWritePre * :%s/\s\+$//e
+  programs.firefox = {
+    enable = true;
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      greasemonkey
+      https-everywhere
+      reddit-enhancement-suite
+      tree-style-tab
+      ublock-origin
+    ];
+    profiles."default" = {
+      # Note: these settings are stored in profile's user.js
+      # Any settings modified from within firefox are overriden on next launch
+      settings = {
+        "accessibility.force_disabled" = 1;
+        "app.shield.optoutstudies.enabled" = false;             # not participating
+        "app.normandy.enabled" = false;                         # don't let mozilla change settings
+        "browser.aboutConfig.showWarning" = false;              # I generally know what I'm doing
+        "browser.contentblocking.category" = "strict";          # "enhanced tracking protection"
+        "browser.cache.disk_cache_ssl" = false;                 # disable cache for ssl connections
+        "browser.cache.offline.enable" = false;                 # offline means offline!
+        "browser.formfill.enable" = false;                      # disable saving form form data
+        "browser.newtabpage.activity-stream.feeds.section.highlights" = false;
+        "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+        "browser.newtabpage.activity-stream.feeds.snippets" = false;
+        "browser.newtabpage.activity-stream.feeds.telemetry" = false;
+        "browser.newtabpage.activity-stream.telemetry" = false;
+        "browser.newtabpage.activity-stream.improvesearch.topSiteSearchShortcuts" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+        "browser.newtabpage.activity-stream.topSitesRows" = 3;
+        "browser.ping-centre.telemetry" = false;
+        "browser.toolbars.bookmarks.visibility" = "never";
+        "browser.search.widget.inNavBar" = true;                # enable separate search bar
+        "browser.uidensity" = 1;                                # compact ui
+        "browser.urlbar.speculativeConnect.enabled" = false;    # don't preload autocomplete URLs
+        "browser.urlbar.suggest.searches" = false;              # disable suggestions in url bar
+        "browser.sessionstore.interval" = 200000;               # save stuff less often: 15s -> 5m
+        "browser.sessionstore.privacy_level" = 2;               # reduce save/restore granularity
+        "datareporting.healthreport.uploadEnabled" = false;
+        "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+        "extensions.htmlaboutaddons.recommendations.enabled" = false;
+        "extensions.formautofill.addresses.enabled" = false;    # no ask/remember/autofill
+        "extensions.formautofill.creditCards.enabled" = false;  # no ask/remember/autofill
+        "extensions.pocket.enabled" = false;                    # get this shit away from me
+        "extensions.pocket.onSaveRecs" = false;
+        "extensions.pocket.site" = "";
+        "extensions.pocket.api" = "";
+        "geo.enabled" = false;                                  # disable geolocation
+        "gfx.font_rendering.graphite.enabled" = false;          # disable smart font system
+        "media.peerconnection.enabled" = false;                 # disables WebRTC
+        "network.dnsCacheEntries" = 100;
+        "network.dns.disablePrefetch" = true;                   # no prefetching
+        "network.http.speculative-parallel-limit" = 0;          # disable prefetch link on hover
+        "network.http.referer.trimmingPolicy" = 2;              # only send origin in referrer header
+        "network.http.referer.XOriginTrimmingPolicy" = 2;
+        "network.IDN_show_punycode" = true;                     # prevent unicode-based phishing
+        "network.predictor.enabled" = false;                    # disable prefetching
+        "network.prefetch-next" = false;                        # disable link prefetching
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.firstparty.isolate" = true;                    # seperates site cookies
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "privacy.resistFingerprinting" = true;
+        "signon.rememberSignons" = false;                       # don't ask/remember passwords
+        "startup.homepage_welcome_url" = "";
+        "startup.homepage_welcome_url.additional" = "";
+        "startup.homepage_override_url" = "";
+        "system.rsexperimentloader.enabled" = false;            # disable new feature experiments
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;  # use userChrome.css
+        "toolkit.telemetry.enabled" = false;                           # disable telemetry
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.firstShutdownPing.enabled" = false;
+        "toolkit.telemetry.newProfilePing.enabled" = false;
+        "toolkit.telemetry.server" = "";
+        "toolkit.telemetry.shutdownPingSender.enabled" = false;
+        "toolkit.telemetry.unified" = false;
+        "toolkit.telemetry.updatePing.enabled" = false;
+        "webgl.disabled" = true;                                       # webgl is insecure
+      };
+      userChrome = ''
+        /* hides the native tabs */
+        #TabsToolbar {
+          visibility: collapse !important;
+        }
+        /* put burger menu on left */
+        #PanelUI-button {
+          -moz-box-ordinal-group: 0 !important;
+          color: blue;
+        }
       '';
+    };
   };
 }
