@@ -155,6 +155,12 @@ in
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
@@ -171,8 +177,9 @@ in
   # Ricing
   programs.dconf.enable = true;
   fonts.fonts = with pkgs; [
-    ibm-plex
-    (unstable.iosevka.override {
+    # DejaVu fonts are already installed
+    ibm-plex                           # has my favorite serif font
+    (unstable.iosevka.override {       # secondary programming font
       set = "slab";
       privateBuildPlan = ''
         [buildPlans.iosevka-slab]
@@ -181,9 +188,11 @@ in
         serifs = "slab"
       '';
     })
-    unstable.iosevka
-    noto-fonts-cjk
-    terminus_font
+    unstable.iosevka                   # primary programming font
+    noto-fonts-cjk                     # for asian languages
+    noto-fonts                         # for unicode coverage
+    symbola                            # for more unicode coverage
+    terminus_font                      # good bitmap font
   ];
 
   # Sorry Stallman Senpai
