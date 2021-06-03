@@ -10,7 +10,6 @@ let my-python-packages = python-packages: with python-packages; [
       pybullet                # Physics Engine for Robot Simulation
       pyflakes                # For Doom Emacs Python Linting
       pytest                  # Framework for Writing Python Tests
-      python-language-server  # For Doom Emacs Python LSP Support
     ];
     python-with-my-packages = python3.withPackages my-python-packages;
     unstable = import <unstable> {};
@@ -19,7 +18,6 @@ in
   # User Programs
   home.packages = [
     # Does not include software enabled by options programs.* and services.*
-    adwaita-qt                     # Make Qt Apps Match GTK Apps
     alacritty                      # Terminal Emulator
     arandr                         # Display Configuration Tool
     audacity                       # Audio Editor and Recording Software
@@ -37,8 +35,9 @@ in
     glxinfo                        # Info About OpenGL/Mesa
     gnumake                        # Build Automation Tool
     htop                           # Pretty and Interactive Process Viewer
-    unstable.i3-auto-layout        # Rearrangeable Fibonacci Layout for i3wm
+    i3-auto-layout                 # Rearrangeable Fibonacci Layout for i3wm
     killall                        # Kill Processes by Name
+    libgccjit                      # API for embedding GCC inside programs
     libtool                        # Generic Library Support Script
     mesa                           # OpenGL Library
     networkmanager-openvpn         # NM Plugin for VPNs
@@ -49,6 +48,7 @@ in
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
     python-with-my-packages        # Guido's Programming Language WITH packages in path
+    python-language-server         # For Doom Emacs Python LSP Support
     qbittorrent                    # GUI Torrent Client
     racket                         # For SICP
     radeon-profile                 # GUI Application to Set GPU Fan Curve
@@ -64,6 +64,7 @@ in
     texlive.combined.scheme-full   # LaTeX Distribution
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
+    volctl                         # Per-application tray icon volume control
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xorg.xev                       # Prints Contents of X Events for Debugging
     xvkbd                          # Virtual Keyboard Commands
@@ -76,9 +77,14 @@ in
   home.keyboard.options = [ "caps:super" ];
   home.keyboard.layout = "dvorak, us";
 
-  # Environment Variables
-  home.sessionVariables = {
-    QT_STYLE_OVERRIDE = "adwaita";
+  # Get Uniform Look Between GTK and QT Programs
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = {
+      name = "adwaita";
+      package = pkgs.adwaita-qt;
+    };
   };
 
   # Launch i3wm automatically from gdm
@@ -90,14 +96,17 @@ in
       package = pkgs.i3-gaps;
       config = {
         modifier = "Mod4";                     # Use Super Key Instead of Alt
-        fonts = [ "Iosevka Slab Extended 9" ]; # Titlebar Font
+        fonts = {                              # Titlebar Font
+          names = [ "Iosevka Slab Extended" ];
+          size = 9.0;
+        };
         colors = {
           focused = {
-            background  = "#285577"; # default
-            border      = "#4c7899"; # default
-            childBorder = "#4f7ca9"; # new color
-            indicator   = "#2e9ef4"; # default
-            text        = "#ffffff"; # default
+            background  = "#285577";           # default
+            border      = "#4c7899";           # default
+            childBorder = "#4f7ca9";           # new color
+            indicator   = "#2e9ef4";           # default
+            text        = "#ffffff";           # default
           };
         };
         gaps = {
@@ -111,8 +120,8 @@ in
           let
             modifier = config.xsession.windowManager.i3.config.modifier;
           in lib.mkOptionDefault {
-            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun -icon-theme \"Papirus\" -show-icons";
-            "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -modi window -show window -icon-theme \"Papirus\" -show-icons";
+            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun";
+            "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
           };
         window = {
           border = 5;
@@ -147,10 +156,18 @@ in
           {
             command = "~/.reload_polybar.sh";
             always = true;
+            notification = false;  # equal to --no-startup-id parameter
           }
 
-          { command = "i3-auto-layout";
+          {
+            command = "i3-auto-layout";
             always = true;
+            notification = false;  # equal to --no-startup-id parameter
+          }
+
+          {
+            command = "volctl";
+            notification = false;  # equal to --no-startup-id parameter
           }
         ];
       };
@@ -164,6 +181,11 @@ in
   # Window Switcher + Run Dialog (dmenu replacement)
   programs.rofi = {
     enable = true;
+    extraConfig = {
+      icon-theme = "Papirus";
+      modi = "drun,window";
+      show-icons = true;
+    };
     font = "IBM Plex Sans 11";
     terminal = "alacritty";
     theme = "Paper";
@@ -180,11 +202,13 @@ in
         bottom = true;
         enable-ipc = true;
         font-0 = "Iosevka Extended:size=9;3";
+        font-1 = "Noto Sans Mono CJK JP:size=9;3";
         locale = "en_US.UTF8";
         modules-left = "i3 xwindow";
         modules-right = "xkeyboard vpn date";
         monitor = "\${env:MONITOR:}";
-        padding-right = "1";
+        padding-right = 1;
+        tray-offset-y = 1;
         tray-position = "right";
       };
       "module/date" = {
@@ -198,14 +222,14 @@ in
         enable-scroll = true;
         format = "<label-state> <label-mode> ";
         label-focused-background = "#285577";
-        label-focused-padding-right = "1";
+        label-focused-padding-right = 1;
         label-mode-background = "900000";
         label-visible-background= "#5f676a";
-        label-visible-padding-right = "1";
+        label-visible-padding-right = 1;
         label-unfocused-background = "#222222";
-        label-unfocused-padding-right = "1";
+        label-unfocused-padding-right = 1;
         label-urgent-background = "#900000";
-        label-urgent-padding-right = "1";
+        label-urgent-padding-right = 1;
         pin-workspaces = true;
         type = "internal/i3";
       };
@@ -221,6 +245,7 @@ in
       };
       "module/xwindow" = {
         format = " <label>";
+        label-maxlen = 150;
         type = "internal/xwindow";
       };
     };
@@ -298,9 +323,6 @@ in
     };
   };
 
-  # PulseAudio System Tray Applet
-  services.pasystray.enable = true;
-
   # Network Manager System Tray Applet
   services.network-manager-applet.enable = true;
 
@@ -336,7 +358,13 @@ in
   # Emacs
   programs.emacs = {
     enable = true;
-    extraPackages = (epkgs: [ epkgs.vterm epkgs.emojify ]);
+    # package = pkgs.emacsGcc;
+    # Packages That Require Compiling Some (non-elisp) Component
+    # extraPackages = (epkgs: [
+    #   epkgs.vterm
+    #   epkgs.emojify
+    #   epkgs.pdf-tools
+    # ]);
   };
 
   # Default Git User
@@ -403,6 +431,7 @@ in
     settings = {
       expandtab = true;  # Convert Tabs to Spaces
       history = 700;     # Undo Limit
+      hidden = true;     # Hide Abandoned Buffers
       ignorecase = true; # Search Option
       number = true;     # Line Numbers
       shiftwidth = 4;    # Indent With 4 Spaces When Shifting Lines
@@ -417,7 +446,6 @@ in
       set so=10                            " # of lines above/below cursor
       set ruler                            " display row,col
       set laststatus=2                     " display statusline always
-      set hidden                           " hide abandoned buffers
       set backspace=eol,start,indent       " backspace config
       set hlsearch                         " make search good
       set incsearch
@@ -441,15 +469,16 @@ in
 
   programs.firefox = {
     enable = true;
+    # Install just the bare basics to get going. Install the rest normally.
+    # These are disabled by default. Remember to manually enable them.
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      decentraleyes
       greasemonkey
       https-everywhere
-      reddit-enhancement-suite
       tree-style-tab
       ublock-origin
     ];
     profiles."default" = {
-      # Note: these settings are stored in profile's user.js
       # Any settings modified from within firefox are overriden on next launch
       settings = {
         "accessibility.force_disabled" = 1;
@@ -457,6 +486,7 @@ in
         "app.normandy.enabled" = false;                         # don't let mozilla change settings
         "browser.aboutConfig.showWarning" = false;              # I generally know what I'm doing
         "browser.contentblocking.category" = "strict";          # "enhanced tracking protection"
+        "browser.cache.disk.enable" = false;                    # makes my hard drive LOUD
         "browser.cache.disk_cache_ssl" = false;                 # disable cache for ssl connections
         "browser.cache.offline.enable" = false;                 # offline means offline!
         "browser.formfill.enable" = false;                      # disable saving form form data
@@ -469,63 +499,66 @@ in
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
         "browser.newtabpage.activity-stream.topSitesRows" = 3;
         "browser.ping-centre.telemetry" = false;
-        "browser.toolbars.bookmarks.visibility" = "never";
+        "browser.toolbars.bookmarks.visibility" = "never";      # just use bookmarks manager
         "browser.search.widget.inNavBar" = true;                # enable separate search bar
         "browser.uidensity" = 1;                                # compact ui
         "browser.urlbar.speculativeConnect.enabled" = false;    # don't preload autocomplete URLs
         "browser.urlbar.suggest.searches" = false;              # disable suggestions in url bar
         "browser.sessionstore.interval" = 200000;               # save stuff less often: 15s -> 5m
         "browser.sessionstore.privacy_level" = 2;               # reduce save/restore granularity
-        "datareporting.healthreport.uploadEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;     # send less stuff to mozilla
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
         "extensions.htmlaboutaddons.recommendations.enabled" = false;
         "extensions.formautofill.addresses.enabled" = false;    # no ask/remember/autofill
         "extensions.formautofill.creditCards.enabled" = false;  # no ask/remember/autofill
         "extensions.pocket.enabled" = false;                    # get this shit away from me
-        "extensions.pocket.onSaveRecs" = false;
-        "extensions.pocket.site" = "";
-        "extensions.pocket.api" = "";
+        "extensions.pocket.onSaveRecs" = false;                 # "                        "
+        "extensions.pocket.site" = "";                          # "                        "
+        "extensions.pocket.api" = "";                           # "                        "
+        "font.language.group" = "x-western";
+        "font.name.monospace.ja" = "Noto Sans CJK JP";
+        "font.name.monospace.x-western" = "IBM Plex Mono";
+        "font.name.sans-serif.ja" = "Noto Sans CJK JP";
+        "font.name.sans-serif.x-western" = "IBM Plex Sans";
+        "font.name.serif.ja" = "Noto Sans CJK JP";
+        "font.name.serif.x-western" = "IBM Plex Serif";
         "geo.enabled" = false;                                  # disable geolocation
         "gfx.font_rendering.graphite.enabled" = false;          # disable smart font system
         "media.peerconnection.enabled" = false;                 # disables WebRTC
+        "media.navigator.enabled" = false;                      # "                        "
         "network.dnsCacheEntries" = 100;
         "network.dns.disablePrefetch" = true;                   # no prefetching
         "network.http.speculative-parallel-limit" = 0;          # disable prefetch link on hover
         "network.http.referer.trimmingPolicy" = 2;              # only send origin in referrer header
-        "network.http.referer.XOriginTrimmingPolicy" = 2;
+        "network.http.referer.XOriginTrimmingPolicy" = 2;       # "                                 "
         "network.IDN_show_punycode" = true;                     # prevent unicode-based phishing
         "network.predictor.enabled" = false;                    # disable prefetching
         "network.prefetch-next" = false;                        # disable link prefetching
-        "privacy.donottrackheader.enabled" = true;
+        "privacy.donottrackheader.enabled" = true;              # probably useless
         "privacy.firstparty.isolate" = true;                    # seperates site cookies
-        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.enabled" = true;            # probably useless
         "privacy.trackingprotection.socialtracking.enabled" = true;
         "privacy.resistFingerprinting" = true;
         "signon.rememberSignons" = false;                       # don't ask/remember passwords
-        "startup.homepage_welcome_url" = "";
-        "startup.homepage_welcome_url.additional" = "";
-        "startup.homepage_override_url" = "";
+        "startup.homepage_welcome_url" = "";                    # prevent unnecessary phoning home
+        "startup.homepage_welcome_url.additional" = "";         # "                              "
+        "startup.homepage_override_url" = "";                   # "                              "
         "system.rsexperimentloader.enabled" = false;            # disable new feature experiments
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;  # use userChrome.css
         "toolkit.telemetry.enabled" = false;                           # disable telemetry
-        "toolkit.telemetry.archive.enabled" = false;
-        "toolkit.telemetry.firstShutdownPing.enabled" = false;
-        "toolkit.telemetry.newProfilePing.enabled" = false;
-        "toolkit.telemetry.server" = "";
-        "toolkit.telemetry.shutdownPingSender.enabled" = false;
-        "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.updatePing.enabled" = false;
+        "toolkit.telemetry.archive.enabled" = false;                   # "               "
+        "toolkit.telemetry.firstShutdownPing.enabled" = false;         # "               "
+        "toolkit.telemetry.newProfilePing.enabled" = false;            # "               "
+        "toolkit.telemetry.server" = "";                               # "               "
+        "toolkit.telemetry.shutdownPingSender.enabled" = false;        # "               "
+        "toolkit.telemetry.unified" = false;                           # "               "
+        "toolkit.telemetry.updatePing.enabled" = false;                # "               "
         "webgl.disabled" = true;                                       # webgl is insecure
       };
       userChrome = ''
         /* hides the native tabs */
         #TabsToolbar {
           visibility: collapse !important;
-        }
-        /* put burger menu on left */
-        #PanelUI-button {
-          -moz-box-ordinal-group: 0 !important;
-          color: blue;
         }
       '';
     };

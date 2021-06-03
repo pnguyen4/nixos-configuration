@@ -7,8 +7,8 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "f33be4894cf5260f99d95ecd750c783837f33cfd";
-    ref = "release-20.09";
+    rev = "ab64dc32493996c24607eab2cae6663466ddfb8a";
+    ref = "release-21.05";
   };
   unstable = import <unstable> {};
 in
@@ -80,7 +80,8 @@ in
 
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ];
+  # boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ]; # vega 56
+  boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:6939,1002:aad8" ]; # r9 380
   boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
   boot.blacklistedKernelModules = [ "amdgpu" ];
   boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
@@ -137,7 +138,7 @@ in
         '';
       }
     ];
-    desktopManager.wallpaper.mode = "scale";
+    # desktopManager.wallpaper.mode = "scale";
   };
 
   # Configure AMD video drivers
@@ -148,18 +149,34 @@ in
     driSupport = true;
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # Enable CUPS to print documents
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.gutenprint ];
+  };
+
+  # Zeroconf Service to Locate Printer
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+  };
 
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # Overlays and Overrides for non-offical packages
   nixpkgs.config.packageOverrides = pkgs: {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
     };
   };
+
+  # nixpkgs.overlays = [
+  #   (import (builtins.fetchTarball {
+  #     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+  #   }))
+  # ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
@@ -179,7 +196,8 @@ in
   fonts.fonts = with pkgs; [
     # DejaVu fonts are already installed
     ibm-plex                           # has my favorite serif font
-    (unstable.iosevka.override {       # secondary programming font
+    iosevka                            # primary programming font
+    (iosevka.override {                # secondary programming font
       set = "slab";
       privateBuildPlan = ''
         [buildPlans.iosevka-slab]
@@ -188,7 +206,6 @@ in
         serifs = "slab"
       '';
     })
-    unstable.iosevka                   # primary programming font
     noto-fonts-cjk                     # for asian languages
     noto-fonts                         # for unicode coverage
     symbola                            # for more unicode coverage
@@ -199,14 +216,14 @@ in
   nixpkgs.config.allowUnfree = true;
 
   # Security Settings
-  security.hideProcessInformation = true;
+  hardware.cpu.amd.updateMicrocode = true;
   security.protectKernelImage = true;
   security.pam.services.gdm.enableGnomeKeyring = true;
-  services.gnome3.gnome-keyring.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Samba for shared folder with virtual machine
   services.samba = {
-    enable = true;
+    enable = false;
     enableNmbd = true;
     securityType = "user";
     extraConfig = ''
@@ -242,5 +259,5 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 }
