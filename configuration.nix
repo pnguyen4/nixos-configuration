@@ -7,13 +7,13 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "ab64dc32493996c24607eab2cae6663466ddfb8a";
-    ref = "release-21.05";
+    rev = "7244c6715cb8f741f3b3e1220a9279e97b2ed8f5";
+    ref = "release-21.11";
   };
   unstable = import <unstable> {};
 in
-{
-  imports = [
+  {
+    imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     # Home-Manager Module
@@ -28,14 +28,14 @@ in
     enableCryptodisk = true;
     mirroredBoots = [
       { devices = [ "nodev" ];
-        efiSysMountPoint = "/boot/efi";
-        path = "/boot/efi";
-      }
-      { devices = [ "nodev" ];
-        efiSysMountPoint = "/boot/efi-fallback";
-        path = "/boot/efi-fallback";
-      }
-    ];
+      efiSysMountPoint = "/boot/efi";
+      path = "/boot/efi";
+    }
+    { devices = [ "nodev" ];
+    efiSysMountPoint = "/boot/efi-fallback";
+    path = "/boot/efi-fallback";
+  }
+];
   };
 
   # Storage & Swap
@@ -46,19 +46,19 @@ in
   };
   boot.initrd.luks.devices."crypted-nixos1".device =
     "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
-  boot.initrd.luks.devices."crypted-nixos2".device =
-    "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
-  boot.initrd.luks.reusePassphrases = true;
-  swapDevices = [
-    { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
-      encrypted = {
-      enable = true;
-      label = "crypted-swap";
-      blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
-      };
-    }
-  ];
-  boot.resumeDevice = "/dev/mapper/crypted-swap";
+    boot.initrd.luks.devices."crypted-nixos2".device =
+      "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
+      boot.initrd.luks.reusePassphrases = true;
+      swapDevices = [
+        { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
+        encrypted = {
+          enable = true;
+          label = "crypted-swap";
+          blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
+        };
+      }
+    ];
+    boot.resumeDevice = "/dev/mapper/crypted-swap";
 
   # NTFS support via FUSE
   boot.supportedFilesystems = [ "ntfs" ];
@@ -87,21 +87,21 @@ in
   boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
   virtualisation.libvirtd = {
     enable = true;
-    qemuOvmf = true;
-    qemuRunAsRoot = false;
+    qemu.ovmf.enable = true;
+    qemu.runAsRoot = false;
     onBoot = "ignore";
     onShutdown = "shutdown";
   };
 
   # Set your time zone.
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Chicago";
 
   # Networking Settings
   networking = {
     hostName = "nixos-machine";
-    useDHCP = false;
-    interfaces.enp4s0.useDHCP = true;
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+    };
   };
 
   # Select internationalisation properties.
@@ -149,6 +149,17 @@ in
     driSupport = true;
   };
 
+  # Installs Steam and enables all necessary system options
+  programs.steam.enable = true;
+  hardware.steam-hardware.enable = true;
+  hardware.opengl.driSupport32Bit = true;
+
+  # Oculus Rift
+  services.udev.extraRules = ''
+    KERNEL=="hidraw*", RTTRS{busnum}=="1", ATTRS{idVendor}=="2833", MODE="0666", GROUP="plugdev"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2833", MODE="0666", GROUP="plugdev"
+  '';
+
   # Enable CUPS to print documents
   services.printing = {
     enable = true;
@@ -161,6 +172,10 @@ in
     nssmdns = true;
   };
 
+  # Bluetooth
+  # hardware.bluetooth.enable = true;
+  # hardware.bluetooth.package = pkgs.bluezFull;
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -172,16 +187,16 @@ in
     };
   };
 
-  # nixpkgs.overlays = [
-  #   (import (builtins.fetchTarball {
-  #     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-  #   }))
-  # ];
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "libvirtd" "networkmanager" "jupyter" ];
+    extraGroups = [ "wheel" "input" "video" "libvirtd" "networkmanager" "jupyter" ];
   };
   home-manager.users.user = import /home/user/home.nix;
   home-manager.useGlobalPkgs = true;
@@ -195,6 +210,7 @@ in
   programs.dconf.enable = true;
   fonts.fonts = with pkgs; [
     # DejaVu fonts are already installed
+    emacs-all-the-icons-fonts
     ibm-plex                           # has my favorite serif font
     iosevka                            # primary programming font
     (iosevka.override {                # secondary programming font

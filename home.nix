@@ -4,7 +4,7 @@ with import <nixpkgs> {
   config.allowUnfree = true;
 };
 let my-python-packages = python-packages: with python-packages; [
-      (import ./personal-repo/cs202.nix)
+      # (import ./personal-repo/cs202.nix)
       matplotlib              # plotting library
       numpy                   # numerical python for data science
       pybullet                # Physics Engine for Robot Simulation
@@ -22,11 +22,14 @@ in
     arandr                         # Display Configuration Tool
     audacity                       # Audio Editor and Recording Software
     autorandr                      # Create and Apply Display Profiles
+    #bluez                          # Bluetooth Support for Linux
+    #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     brave                          # Privacy Browser
     cmake                          # Cross-Platform Makefile Generator
+    darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
     discord                        # Voice and Text Chat for Gamers
-    emacs-all-the-icons-fonts      # Doom Emacs Fonts
+    exfatprogs                     # exFAT filesystem userspace utilities
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
     ffmpeg                         # Record, Convert, and Stream Audio and Video
@@ -37,13 +40,17 @@ in
     htop                           # Pretty and Interactive Process Viewer
     i3-auto-layout                 # Rearrangeable Fibonacci Layout for i3wm
     killall                        # Kill Processes by Name
+    libarchive                     # Multi-format Archive and Compression Library
     libgccjit                      # API for embedding GCC inside programs
     libtool                        # Generic Library Support Script
+    melonDS                        # WIP Nintendo DS Emulator
     mesa                           # OpenGL Library
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
     nixfmt                         # Formatter for Nix Code
     obs-studio                     # Video Recording and Live Streaming Software
+    openhmd
+    p7zip                          # Utility for 7z archives
     pandoc                         # Universal Document Converter
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
@@ -53,6 +60,7 @@ in
     racket                         # For SICP
     radeon-profile                 # GUI Application to Set GPU Fan Curve
     ripgrep                        # Doom Emacs Dependency
+    unrar                          # Utility for RAR Archives
     runelite                       # Old School Runescape
     screenfetch                    # System Information Tool
     scrot                          # Simple Screenshot Tool
@@ -64,13 +72,16 @@ in
     texlive.combined.scheme-full   # LaTeX Distribution
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
+    vlc                            # Personally, just for CD/DVD playback
     volctl                         # Per-application tray icon volume control
+    woeusb                         # Create Bootable USB Disks from Windows ISO Images
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xorg.xev                       # Prints Contents of X Events for Debugging
     xvkbd                          # Virtual Keyboard Commands
     youtube-dl                     # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
     zip                            # Compressor/Archiver
+    zoom-us
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -318,8 +329,8 @@ in
       dpmsEnabled = true;  # Enable display power management
       dpmsSuspend = 180;   # Go into power saving mode after 3 hours
       lock = true;         # Ask for user password to reenter
-      lockTimeout = 30;    # Lock after (total) 60 minutes idle
-      timeout = 30;        # Activate when idle for 30 minutes
+      lockTimeout = 120;   # Lock after (total) 2 hours idle
+      timeout = 60;        # Activate when idle for 1 hour
     };
   };
 
@@ -358,13 +369,13 @@ in
   # Emacs
   programs.emacs = {
     enable = true;
-    # package = pkgs.emacsGcc;
+    package = pkgs.emacsNativeComp;
     # Packages That Require Compiling Some (non-elisp) Component
-    # extraPackages = (epkgs: [
-    #   epkgs.vterm
+     extraPackages = (epkgs: [
+       epkgs.vterm
     #   epkgs.emojify
-    #   epkgs.pdf-tools
-    # ]);
+       epkgs.pdf-tools
+     ]);
   };
 
   # Default Git User
@@ -383,6 +394,9 @@ in
       tscale = "oversample";
       video-sync = "display-resample";
     };
+    # package = pkgs.mpv-unwrapped.override {
+    #   cddaSupport = true;
+    # };
   };
 
   # Terminal Settings
