@@ -177,8 +177,17 @@ in
   # hardware.bluetooth.package = pkgs.bluezFull;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire ={
+    enable = true;
+    package = unstable.pipewire;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
 
   # Overlays and Overrides for non-offical packages
   nixpkgs.config.packageOverrides = pkgs: {
