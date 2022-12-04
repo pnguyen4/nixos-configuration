@@ -1,8 +1,5 @@
 { config, pkgs, lib, ... }:
 
-# with import <nixpkgs> {
-#   config.allowUnfree = true;
-# };
 let my-python-packages = python-packages: with python-packages; [
       matplotlib              # plotting library
       numpy                   # numerical python for data science
@@ -12,9 +9,6 @@ let my-python-packages = python-packages: with python-packages; [
       pip
     ];
     python-with-my-packages = pkgs.python3.withPackages my-python-packages;
-    # unstable = import <unstable> {
-    #   config.allowUnfree = true;
-    # };
 in
 {
   # User Programs
@@ -53,7 +47,7 @@ in
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
     nixfmt                         # Formatter for Nix Code
-    #unstable.nyxt
+    unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
     p7zip                          # Utility for 7z archives
     pandoc                         # Universal Document Converter
@@ -181,6 +175,14 @@ in
             };
             command = "floating enable";
           }
+
+          { # enable floating mode for all Zoom Popups
+            criteria = {
+              title = "^zoom$";
+              class = "[zoom]*";
+            };
+            command = "floating enable";
+          }
         ];
         workspaceOutputAssign = [
           # My preferred scheme is to have odd numbered workspaces on
@@ -214,6 +216,16 @@ in
       ${pkgs.autorandr}/bin/autorandr -c
       ${pkgs.xbindkeys}/bin/xbindkeys
     '';
+  };
+
+  # Dim Blue Light For Sleep Hygiene
+  services.redshift = {
+    enable = true;
+    tray = true;
+    temperature.day = 6500;
+    provider = "manual";
+    latitude = 36.17;
+    longitude = -86.76;
   };
 
   # Window Switcher + Run Dialog (dmenu replacement)

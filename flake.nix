@@ -1,8 +1,9 @@
 {
-  description = "A very basic flake";
+  description = "Personal NixOS + HomeManager Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,13 +13,19 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nur }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ nur.overlay ];
+        overlays = [ nur.overlay overlay-unstable ];
+      };
+      overlay-unstable = final: prev: {
+        unstable = import nixpkgs-unstable {
+          inherit system;
+          config.allowUnfree = true;
+        };
       };
       lib = nixpkgs.lib;
     in {

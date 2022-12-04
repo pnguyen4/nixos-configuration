@@ -8,8 +8,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    # Home-Manager Module (NOT USED WITH FLAKES IN THIS WAY)
-    # <home-manager/nixos>
   ];
 
   # Enable Flakes
@@ -137,25 +135,7 @@
     deviceSection = ''
       Option "TearFree" "true"
     '';
-    # NixOS uses systemd to launch x11 but at least this way xorg runs rootless
-    #displayManager.gdm.enable = true;
     displayManager.startx.enable = true;
-    # This is a single user system with FDE
-    # displayManager.autoLogin = {
-    #   enable = true;
-    #   user = "user";
-    # };
-    # Use home manager configure window manager
-    # desktopManager.session = [
-    #   { manage = "desktop";
-    #     name = "home-manager";
-    #     start = ''
-    #       ${pkgs.runtimeShell} $HOME/.hm-xsession &
-    #       waitPID=$!
-    #     '';
-    #   }
-    # ];
-    # desktopManager.wallpaper.mode = "scale";
   };
 
   # Configure AMD video drivers
@@ -205,22 +185,6 @@
   #   pulse.enable = true;
   # };
 
-
-  # Overlays and Overrides for non-offical packages
-  #nixpkgs.config.packageOverrides = pkgs: {
-  #  nur = import (builtins.fetchTarball
-  #    "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-  #    inherit pkgs;
-  #  };
-  #};
-
-  # Emacs Community Overlay
-  # nixpkgs.overlays = [
-  #   (import (builtins.fetchTarball {
-  #     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-  #   }))
-  # ];
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
@@ -237,16 +201,6 @@
 
   # Ricing
   programs.dconf.enable = true;
-  services.redshift = {
-    enable = true;
-    temperature.day = 6500;
-  };
-  location = {
-    provider = "manual";
-    latitude = 36.17;
-    longitude = -86.76;
-  };
-
   fonts.fonts = with pkgs; [
     # DejaVu fonts are already installed
     emacs-all-the-icons-fonts
