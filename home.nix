@@ -4,15 +4,17 @@ with import <nixpkgs> {
   config.allowUnfree = true;
 };
 let my-python-packages = python-packages: with python-packages; [
-      # (import ./personal-repo/cs202.nix)
       matplotlib              # plotting library
       numpy                   # numerical python for data science
       pybullet                # Physics Engine for Robot Simulation
       pyflakes                # For Doom Emacs Python Linting
       pytest                  # Framework for Writing Python Tests
+      pip
     ];
     python-with-my-packages = python3.withPackages my-python-packages;
-    unstable = import <unstable> {};
+    unstable = import <unstable> {
+      config.allowUnfree = true;
+    };
 in
 {
   # User Programs
@@ -29,6 +31,7 @@ in
     darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
     discord                        # Voice and Text Chat for Gamers
+    # easyeffects                   # useless without pipewire
     exfatprogs                     # exFAT filesystem userspace utilities
     fd                             # Doom Emacs Dependency
     file                           # Standard UNIX Utility to Detect File Types
@@ -37,28 +40,35 @@ in
     gimp                           # The GNU Image Manipulation Program
     glxinfo                        # Info About OpenGL/Mesa
     gnumake                        # Build Automation Tool
+    gnome.file-roller              # GUI Archive Management Utility
     htop                           # Pretty and Interactive Process Viewer
-    i3-auto-layout                 # Rearrangeable Fibonacci Layout for i3wm
     killall                        # Kill Processes by Name
     libarchive                     # Multi-format Archive and Compression Library
+    libsForQt5.kdenlive            # Video Editor
     libgccjit                      # API for embedding GCC inside programs
     libtool                        # Generic Library Support Script
+    libreoffice-fresh
     melonDS                        # WIP Nintendo DS Emulator
     mesa                           # OpenGL Library
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
     nixfmt                         # Formatter for Nix Code
+    unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
-    openhmd
     p7zip                          # Utility for 7z archives
     pandoc                         # Universal Document Converter
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
+    postman
     python-with-my-packages        # Guido's Programming Language WITH packages in path
-    python-language-server         # For Doom Emacs Python LSP Support
+    nodePackages.pyright           # For Doom Emacs Python LSP Support
+    nodePackages.typescript        # Better Javascript
+    nodePackages.nodemon
+    unstable.nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
+    unstable.nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
+    nodejs
     qbittorrent                    # GUI Torrent Client
     racket                         # For SICP
-    radeon-profile                 # GUI Application to Set GPU Fan Curve
     ripgrep                        # Doom Emacs Dependency
     unrar                          # Utility for RAR Archives
     runelite                       # Old School Runescape
@@ -68,20 +78,27 @@ in
     signal-desktop                 # Encrypted Messaging
     slack                          # Corporate IRC
     smartmontools                  # Get HDD SMART Information
-    teams                          # Microsoft Teams
     texlive.combined.scheme-full   # LaTeX Distribution
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     vlc                            # Personally, just for CD/DVD playback
     volctl                         # Per-application tray icon volume control
+    vscode
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
+    xclip                          # For emacs everywhere
+    xdotool                        # For emacs everywhere
+    xfce.thunar                    # File manager, cuz it get annoying not having one
+    xfce.tumbler                   # Enables thumbnails
     xorg.xev                       # Prints Contents of X Events for Debugging
+    xorg.xprop                     # For emacs everywhere
+    xorg.xwininfo                  # For emacs everywhere
+    xournalpp                      # Edit and Annotate PDFs
     xvkbd                          # Virtual Keyboard Commands
-    youtube-dl                     # Download Videos From YouTube & Other Sites
+    yt-dlp                         # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
     zip                            # Compressor/Archiver
-    zoom-us
+    zoom-us                        # Ugh.
   ];
 
   # My IBM Model M Doesn't Have Super Key
@@ -99,9 +116,10 @@ in
   };
 
   # Launch i3wm automatically from gdm
+  home.file.".xinitrc".source = /home/user/.xsession;
   xsession = {
     enable = true;
-    scriptPath = ".hm-xsession";
+    #scriptPath = ".hm-xsession";
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps;
@@ -133,6 +151,7 @@ in
           in lib.mkOptionDefault {
             "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun";
             "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
+            "${modifier}+Control+e" = "exec emacsclient --eval \"(emacs-everywhere)\"";
           };
         window = {
           border = 5;
@@ -163,15 +182,23 @@ in
             command = "floating enable";
           }
         ];
-        startup = [
+        workspaceOutputAssign = [
+          # My preferred scheme is to have odd numbered workspaces on
+          # left monitor counting up and even numbered workspaces on
+          # right monitor counting down. Don't know why, but it works.
           {
-            command = "~/.reload_polybar.sh";
-            always = true;
-            notification = false;  # equal to --no-startup-id parameter
+            output = "DisplayPort-1";
+            workspace = "1";
           }
 
           {
-            command = "i3-auto-layout";
+            output = "DisplayPort-2";
+            workspace = "10";
+          }
+        ];
+        startup = [
+          {
+            command = "~/.reload_polybar.sh";
             always = true;
             notification = false;  # equal to --no-startup-id parameter
           }
@@ -351,15 +378,25 @@ in
     profiles = {
       "default" = {
         fingerprint = {
-          "DVI-D-1" = "00ffffffffffff00047228060e0c1084291c0103803c22782a9055a75553a028135054b36c00714f818081c081009500b300d1c00101023a801871382d40582c450056502100001e000000ff0054394441413030333339303000000000fd0030901ea021000a202020202020000000fc00454432373320410a202020202001df02030700421890fb7e8088703812401820350056502100001e1a1d008051d01c204080350056502100001c866f80a0703840403020350056502100001e023a801871382d40582c450056502100001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012";
+          "DisplayPort-1" = "00ffffffffffff000472280601010101321a0104a53c22783bdcf1a655519d260e5054bfef8081c08140818090409500a940b300a9c0fc7e8088703812401820350056502100001e023a801871382d40582c450056502100001e000000fd003090b4b422010a202020202020000000fc00454432373320410a20202020200189020323f150010304050790121314161f2021223f40230907078301000065030c001000fe5b80a0703835403020350056502100001e866f80a0703840403020350056502100001e011d007251d01e206e28550056502100001e8c0ad08a20e02d10103e9600565021000018011d007251d01e206e28550056502100001e00004c";
+          "DisplayPort-2" = "00ffffffffffff0010acbaa04c303635311c010380342078ea0495a9554d9d26105054a54b00714f8180a940d1c0d100010101010101283c80a070b023403020360006442100001e000000ff00434656394e3843353536304c0a000000fc0044454c4c2055323431350a2020000000fd00313d1e5311000a20202020202001a9020322f14f9005040302071601141f12132021222309070765030c00100083010000023a801871382d40582c450006442100001e011d8018711c1620582c250006442100009e011d007251d01e206e28550006442100001e8c0ad08a20e02d10103e960006442100001800000000000000000000000000000000000000000082";
         };
         config = {
-          "DVI-D-1" = {
+          "DisplayPort-1" = {
             enable = true;
+            crtc = 0;
             primary = true;
             position = "0x0";
             mode = "1920x1080";
-            rate = "60.00";
+            rate = "144.00";
+          };
+          "DisplayPort-2" = {
+            enable = true;
+            crtc = 1;
+            position = "1920x0";
+            rotate = "right";
+            mode = "1920x1200";
+            rate = "60";
           };
         };
       };
@@ -373,7 +410,7 @@ in
     # Packages That Require Compiling Some (non-elisp) Component
      extraPackages = (epkgs: [
        epkgs.vterm
-    #   epkgs.emojify
+       epkgs.emojify
        epkgs.pdf-tools
      ]);
   };
@@ -489,6 +526,7 @@ in
       decentraleyes
       greasemonkey
       https-everywhere
+      privacy-badger
       tree-style-tab
       ublock-origin
     ];
@@ -577,4 +615,5 @@ in
       '';
     };
   };
+  home.stateVersion = "22.05";
 }

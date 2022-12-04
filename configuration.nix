@@ -7,8 +7,8 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "7244c6715cb8f741f3b3e1220a9279e97b2ed8f5";
-    ref = "release-21.11";
+    rev = "8f26dec249deb2ad2d53eb3f5a0d558620035642";
+    ref = "release-22.11";
   };
   unstable = import <unstable> {};
 in
@@ -42,7 +42,7 @@ in
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/b04a4d37-b78e-4dcc-ae0b-010cb58e2911";
     fsType = "btrfs";
-    options = [ "subvol=nixos" "compress=zstd" "noatime" ];
+    options = [ "subvol=nixos" "compress=zstd" "noatime" "autodefrag" ];
   };
   boot.initrd.luks.devices."crypted-nixos1".device =
     "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
@@ -76,7 +76,7 @@ in
   };
 
   # Save Space by Optimizing the Store (hardlink identical files)
-  nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
 
   # GPU Passthrough for VMs
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -92,6 +92,7 @@ in
     onBoot = "ignore";
     onShutdown = "shutdown";
   };
+  virtualisation.spiceUSBRedirection.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -112,6 +113,20 @@ in
   };
 
   # Configure X Server and Window Manager
+  services.greetd = {
+    enable = true;
+    package = pkgs.greetd.tuigreet;
+    settings = {
+      default_session = {
+        command = "tuigreet --cmd startx";
+        user = "user";
+      };
+      initial_session = {
+        command = "startx";
+        user = "user";
+      };
+    };
+  };
   services.xserver = {
     enable = true;
     # Configure keymap in X11
@@ -122,22 +137,23 @@ in
       Option "TearFree" "true"
     '';
     # NixOS uses systemd to launch x11 but at least this way xorg runs rootless
-    displayManager.gdm.enable = true;
+    #displayManager.gdm.enable = true;
+    displayManager.startx.enable = true;
     # This is a single user system with FDE
-    displayManager.autoLogin = {
-      enable = true;
-      user = "user";
-    };
+    # displayManager.autoLogin = {
+    #   enable = true;
+    #   user = "user";
+    # };
     # Use home manager configure window manager
-    desktopManager.session = [
-      { manage = "desktop";
-        name = "home-manager";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.hm-xsession &
-          waitPID=$!
-        '';
-      }
-    ];
+    # desktopManager.session = [
+    #   { manage = "desktop";
+    #     name = "home-manager";
+    #     start = ''
+    #       ${pkgs.runtimeShell} $HOME/.hm-xsession &
+    #       waitPID=$!
+    #     '';
+    #   }
+    # ];
     # desktopManager.wallpaper.mode = "scale";
   };
 
@@ -149,21 +165,18 @@ in
     driSupport = true;
   };
 
+  # Tool to Overclock GPU and Control Fans
+  programs.corectrl.enable = true;
+
   # Installs Steam and enables all necessary system options
   programs.steam.enable = true;
   hardware.steam-hardware.enable = true;
   hardware.opengl.driSupport32Bit = true;
 
-  # Oculus Rift
-  services.udev.extraRules = ''
-    KERNEL=="hidraw*", RTTRS{busnum}=="1", ATTRS{idVendor}=="2833", MODE="0666", GROUP="plugdev"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="2833", MODE="0666", GROUP="plugdev"
-  '';
-
   # Enable CUPS to print documents
   services.printing = {
     enable = true;
-    drivers = [ pkgs.gutenprint ];
+    drivers = [ pkgs.gutenprint pkgs.hplipWithPlugin ];
   };
 
   # Zeroconf Service to Locate Printer
@@ -178,20 +191,24 @@ in
 
   # Enable sound.
   # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
   security.rtkit.enable = true;
-  services.pipewire ={
-    enable = true;
-    package = unstable.pipewire;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
+
+  # Unfortunately zoom does not work with pipewire
+  # services.pipewire ={
+  #   enable = true;
+  #   # package = pipewire;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  #   pulse.enable = true;
+  # };
 
 
   # Overlays and Overrides for non-offical packages
   nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+    nur = import (builtins.fetchTarball
+      "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
     };
   };
@@ -205,18 +222,28 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "input" "video" "libvirtd" "networkmanager" "jupyter" ];
+    extraGroups = [ "wheel" "input" "video" "libvirtd" "networkmanager" "jupyter" "corectrl"];
   };
   home-manager.users.user = import /home/user/home.nix;
   home-manager.useGlobalPkgs = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git virtmanager samba
+    wget vim parted pciutils git virtmanager samba greetd.tuigreet
   ];
 
   # Ricing
   programs.dconf.enable = true;
+  services.redshift = {
+    enable = true;
+    temperature.day = 6500;
+  };
+  location = {
+    provider = "manual";
+    latitude = 36.17;
+    longitude = -86.76;
+  };
+
   fonts.fonts = with pkgs; [
     # DejaVu fonts are already installed
     emacs-all-the-icons-fonts
@@ -247,36 +274,36 @@ in
   services.gnome.gnome-keyring.enable = true;
 
   # Samba for shared folder with virtual machine
-  services.samba = {
-    enable = false;
-    enableNmbd = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = smbnix
-      netbios name = smbnix
-      security = user
-      ntlm auth = yes
-      hosts allow = 192.168.122.  localhost
-      hosts deny = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
-    '';
-    shares = {
-      public = {
-        path = "/home/user/Public";
-        browseable = "yes";
-        "read only" = "yes";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-      };
-    };
-  };
-
-  # Apparently samba service doesn't open the ports it needs
-  networking.firewall.allowedTCPPorts = [ 445 139 ];
-  networking.firewall.allowedUDPPorts = [ 137 138 ];
+#  services.samba = {
+#    enable = false;
+#    enableNmbd = true;
+#    securityType = "user";
+#    extraConfig = ''
+#      workgroup = WORKGROUP
+#      server string = smbnix
+#      netbios name = smbnix
+#      security = user
+#      ntlm auth = yes
+#      hosts allow = 192.168.122.  localhost
+#      hosts deny = 0.0.0.0/0
+#      guest account = nobody
+#      map to guest = bad user
+#    '';
+#    shares = {
+#      public = {
+#        path = "/home/user/Public";
+#        browseable = "yes";
+#        "read only" = "yes";
+#        "guest ok" = "no";
+#        "create mask" = "0644";
+#        "directory mask" = "0755";
+#      };
+#    };
+#  };
+#
+#  # Apparently samba service doesn't open the ports it needs
+#  networking.firewall.allowedTCPPorts = [ 445 139 ];
+#  networking.firewall.allowedUDPPorts = [ 137 138 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
