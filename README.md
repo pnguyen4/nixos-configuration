@@ -111,29 +111,23 @@ I found that not having swap was less than ideal so I decided to put a swap part
     
 ## Part 5: Install NixOS
 
-```console
-# nixos-generate-config --root /mnt
-```
+*12/04/22 UPDATE*: We're using flakes now. For old instructions refer to git history.
 
-Last time I tried this nixos-generate-config failed to detect my second luks partition. It also did not correctly set my btrfs mounting options. I moved and corrected all disk configuration to my configuration.nix and deleted the duplicate options in hardware-configuration.nix
-
-```console
-# vim /mnt/etc/nixos/hardware-configuration.nix
-```
-
-Make your changes to system configuration before installation (feel free to use my example on github)
-
-```console
-# vim /mnt/etc/nixos/configuration.nix
-# nixos-install
-```
-
-Fingers crossed
-
-```console
+``` console
+# nix-env -iA nixos.git
+# git clone https://github.com/pnguyen4/nixos-configuration.git /mnt/
+# nixos-install --flake /mnt/nixos-configuration#<hostname here>
 # reboot
 ```
     
+After login:
+
+``` console
+$ sudo rm -r /etc/nixos/configuration.nix
+```
+
+Then move the repository to your desired location (ex: right into home) or reclone.
+
 ## References:
 
 https://gist.github.com/MaxXor/ba1665f47d56c24018a943bb114640d7
@@ -147,4 +141,9 @@ https://nixos.wiki/wiki/Bootloader
 https://nixos.org/manual/nixos/stable/index.html#sec-obtaining
 
 https://jappieklooster.nl/nixos-on-encrypted-btrfs.html
+
+https://www.youtube.com/watch?v=AGVXJ-TIv3Y
+
+https://nixos.wiki/wiki/Flakes
+
 
