@@ -4,21 +4,19 @@
 
 { config, pkgs, ... }:
 
-let
-  home-manager = builtins.fetchGit {
-    url = "https://github.com/nix-community/home-manager.git";
-    rev = "8f26dec249deb2ad2d53eb3f5a0d558620035642";
-    ref = "release-22.11";
-  };
-  unstable = import <unstable> {};
-in
-  {
-    imports = [
+{
+  imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    # Home-Manager Module
-    (import "${home-manager}/nixos")
+    # Home-Manager Module (NOT USED WITH FLAKES IN THIS WAY)
+    # <home-manager/nixos>
   ];
+
+  # Enable Flakes
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = "experimental-features = nix-command flakes";
+  };
 
   # Bootloader Settings
   boot.loader.efi.canTouchEfiVariables = true;
@@ -27,15 +25,17 @@ in
     efiSupport = true;
     enableCryptodisk = true;
     mirroredBoots = [
-      { devices = [ "nodev" ];
-      efiSysMountPoint = "/boot/efi";
-      path = "/boot/efi";
-    }
-    { devices = [ "nodev" ];
-    efiSysMountPoint = "/boot/efi-fallback";
-    path = "/boot/efi-fallback";
-  }
-];
+      {
+        devices = [ "nodev" ];
+        efiSysMountPoint = "/boot/efi";
+        path = "/boot/efi";
+      }
+      {
+        devices = [ "nodev" ];
+        efiSysMountPoint = "/boot/efi-fallback";
+        path = "/boot/efi-fallback";
+      }
+    ];
   };
 
   # Storage & Swap
@@ -44,21 +44,22 @@ in
     fsType = "btrfs";
     options = [ "subvol=nixos" "compress=zstd" "noatime" "autodefrag" ];
   };
-  boot.initrd.luks.devices."crypted-nixos1".device =
-    "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
-    boot.initrd.luks.devices."crypted-nixos2".device =
-      "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
-      boot.initrd.luks.reusePassphrases = true;
-      swapDevices = [
-        { device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
-        encrypted = {
-          enable = true;
-          label = "crypted-swap";
-          blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
-        };
-      }
-    ];
-    boot.resumeDevice = "/dev/mapper/crypted-swap";
+  boot.initrd.luks = {
+    reusePassphrases = true;
+    devices."crypted-nixos1".device = "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
+    devices."crypted-nixos2".device = "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
+  };
+  swapDevices = [
+    {
+      device = "/dev/disk/by-uuid/122c1b66-6c3f-4f0b-8a4f-e6d09c0b69d5";
+      encrypted = {
+        enable = true;
+        label = "crypted-swap";
+        blkDev = "/dev/disk/by-uuid/7eabef9d-6f00-4edb-bd1d-43a474417953";
+      };
+    }
+  ];
+  boot.resumeDevice = "/dev/mapper/crypted-swap";
 
   # NTFS support via FUSE
   boot.supportedFilesystems = [ "ntfs" ];
@@ -206,26 +207,28 @@ in
 
 
   # Overlays and Overrides for non-offical packages
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball
-      "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
-  };
+  #nixpkgs.config.packageOverrides = pkgs: {
+  #  nur = import (builtins.fetchTarball
+  #    "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+  #    inherit pkgs;
+  #  };
+  #};
 
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-    }))
-  ];
+  # Emacs Community Overlay
+  # nixpkgs.overlays = [
+  #   (import (builtins.fetchTarball {
+  #     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+  #   }))
+  # ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
     extraGroups = [ "wheel" "input" "video" "libvirtd" "networkmanager" "jupyter" "corectrl"];
   };
-  home-manager.users.user = import /home/user/home.nix;
-  home-manager.useGlobalPkgs = true;
+  # NOT USED WITH FLAKES
+  # home-manager.users.user = import /home/user/home.nix;
+  # home-manager.useGlobalPkgs = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [

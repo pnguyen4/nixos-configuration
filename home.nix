@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-with import <nixpkgs> {
-  config.allowUnfree = true;
-};
+# with import <nixpkgs> {
+#   config.allowUnfree = true;
+# };
 let my-python-packages = python-packages: with python-packages; [
       matplotlib              # plotting library
       numpy                   # numerical python for data science
@@ -11,14 +11,14 @@ let my-python-packages = python-packages: with python-packages; [
       pytest                  # Framework for Writing Python Tests
       pip
     ];
-    python-with-my-packages = python3.withPackages my-python-packages;
-    unstable = import <unstable> {
-      config.allowUnfree = true;
-    };
+    python-with-my-packages = pkgs.python3.withPackages my-python-packages;
+    # unstable = import <unstable> {
+    #   config.allowUnfree = true;
+    # };
 in
 {
   # User Programs
-  home.packages = [
+  home.packages = with pkgs; [
     # Does not include software enabled by options programs.* and services.*
     alacritty                      # Terminal Emulator
     arandr                         # Display Configuration Tool
@@ -53,7 +53,7 @@ in
     networkmanager-openvpn         # NM Plugin for VPNs
     networkmanagerapplet           # NM GUI for Taskbar
     nixfmt                         # Formatter for Nix Code
-    unstable.nyxt
+    #unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
     p7zip                          # Utility for 7z archives
     pandoc                         # Universal Document Converter
@@ -64,8 +64,8 @@ in
     nodePackages.pyright           # For Doom Emacs Python LSP Support
     nodePackages.typescript        # Better Javascript
     nodePackages.nodemon
-    unstable.nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
-    unstable.nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
+    nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
+    nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
     nodejs
     qbittorrent                    # GUI Torrent Client
     racket                         # For SICP
@@ -116,7 +116,7 @@ in
   };
 
   # Launch i3wm automatically from gdm
-  home.file.".xinitrc".source = /home/user/.xsession;
+  home.file.".xinitrc".source = config.lib.file.mkOutOfStoreSymlink "/home/user/.xsession";
   xsession = {
     enable = true;
     #scriptPath = ".hm-xsession";
@@ -406,7 +406,7 @@ in
   # Emacs
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsNativeComp;
+    #package = pkgs.emacsNativeComp; # use emacs from overlay
     # Packages That Require Compiling Some (non-elisp) Component
      extraPackages = (epkgs: [
        epkgs.vterm
