@@ -110,7 +110,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git virtmanager samba greetd.tuigreet
+    wget vim parted pciutils git virtmanager samba
   ];
 
   # Security Settings

@@ -12,42 +12,46 @@ let my-python-packages = python-packages: with python-packages; [
 in
 {
   # User Programs
+  # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
-    # Does not include software enabled by options programs.* and services.*
+    # General Applications
     audacity                       # Audio Editor and Recording Software
-    autorandr                      # Create and Apply Display Profiles
-    #bluez                          # Bluetooth Support for Linux
-    #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     brave                          # Privacy Browser
     darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
     discord                        # Voice and Text Chat for Gamers
-    # easyeffects                   # useless without pipewire
-    ffmpeg                         # Record, Convert, and Stream Audio and Video
     gimp                           # The GNU Image Manipulation Program
-    glxinfo                        # Info About OpenGL/Mesa
     libsForQt5.kdenlive            # Video Editor
     libreoffice-fresh
     melonDS                        # WIP Nintendo DS Emulator
-    mesa                           # OpenGL Library
-    networkmanager-openvpn         # NM Plugin for VPNs
     unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
-    postman
-    python-with-my-packages        # Guido's Programming Language WITH packages in path
     qbittorrent                    # GUI Torrent Client
-    racket                         # For SICP
     runelite                       # Old School Runescape
     signal-desktop                 # Encrypted Messaging
     slack                          # Corporate IRC
-    smartmontools                  # Get HDD SMART Information
     vlc                            # Personally, just for CD/DVD playback
     vscode
+    xournalpp                      # Edit and Annotate PDFs
+    zoom-us                        # Ugh.
+
+    # Development
+    python-with-my-packages        # Guido's Programming Language WITH packages in path
+    racket                         # For SICP
+
+    # Utils
+    autorandr                      # Create and Apply Display Profiles
+    #bluez                          # Bluetooth Support for Linux
+    #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
+    # easyeffects                   # useless without pipewire
+    ffmpeg                         # Record, Convert, and Stream Audio and Video
+    glxinfo                        # Info About OpenGL/Mesa
+    mesa                           # OpenGL Library
+    networkmanager-openvpn         # NM Plugin for VPNs
+    smartmontools                  # Get HDD SMART Information
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
-    xournalpp                      # Edit and Annotate PDFs
     xvkbd                          # Virtual Keyboard Commands
-    zoom-us                        # Ugh.
   ];
 
   # My Cooler Master MM710 Thumb Button Preference

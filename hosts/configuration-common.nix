@@ -31,20 +31,6 @@
   };
 
   # Configure X Server and Window Manager
-  services.greetd = {
-    enable = true;
-    package = pkgs.greetd.tuigreet;
-    settings = {
-      default_session = {
-        command = "tuigreet --cmd startx";
-        user = "user";
-      };
-      initial_session = {
-        command = "startx";
-        user = "user";
-      };
-    };
-  };
   services.xserver = {
     enable = true;
     # Configure keymap in X11
@@ -54,7 +40,24 @@
     deviceSection = ''
       Option "TearFree" "true"
     '';
-    displayManager.startx.enable = true;
+    # This just handles all the dbus and systemd stuff automatically
+    displayManager.gdm.enable = true;
+    displayManager.autoLogin = {
+      enable = true;
+      user = "user";
+    };
+    # Use home manager to configure window manager
+    desktopManager.session = [
+      {
+        manage = "desktop";
+        name = "home-manager";
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.xsession &
+          waitPID=$!
+        '';
+      }
+    ];
+    desktopManager.wallpaper.mode = "scale";
   };
 
   # Enable CUPS to print documents

@@ -1,51 +1,60 @@
 { config, pkgs, lib, ...}:
 
 {
+  # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
-    # Does not include software enabled by options programs.* and services.*
-    alacritty                      # Terminal Emulator
-    arandr                         # Display Configuration Tool
+    # General Applications
+    xfce.thunar                    # File manager, cuz it get annoying not having one
+    xfce.tumbler                   # Enables thumbnails
+    yt-dlp                         # Download Videos From YouTube & Other Sites
+    zathura                        # PDF/PS/DJVU/CB Viewer
+
+    # Development
     cmake                          # Cross-Platform Makefile Generator
-    exfatprogs                     # exFAT filesystem userspace utilities
-    fd                             # Doom Emacs Dependency
-    file                           # Standard UNIX Utility to Detect File Types
     gcc                            # GNU Compiler Collection
     gnumake                        # Build Automation Tool
-    htop                           # Pretty and Interactive Process Viewer
-    killall                        # Kill Processes by Name
-    libarchive                     # Multi-format Archive and Compression Library
-    libgccjit                      # API for embedding GCC inside programs
-    libtool                        # Generic Library Support Script
-    networkmanagerapplet           # NM GUI for Taskbar
-    nixfmt                         # Formatter for Nix Code
-    p7zip                          # Utility for 7z archives
-    pandoc                         # Universal Document Converter
-    papirus-icon-theme             # Pretty Icons
-    pavucontrol                    # Audio Control Panel
-    nodePackages.pyright           # For Doom Emacs Python LSP Support
-    nodePackages.typescript        # Better Javascript
     nodePackages.nodemon
+    nodejs
+    postman
+    sass                           # CSS Extension Language (SASS & SCSS)
+
+    # Emacs Dependencies
+    fd                                        # Doom Emacs Dependency
+    libgccjit                                 # API for embedding GCC inside programs
+    nixfmt                                    # Formatter for Nix Code
+    nodePackages.pyright                      # For Doom Emacs Python LSP Support
+    nodePackages.typescript                   # Better Javascript
     nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
     nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
-    nodejs
-    ripgrep                        # Doom Emacs Dependency
+    pandoc                                    # Universal Document Converter
+    ripgrep                                   # Doom Emacs Dependency
+    texlive.combined.scheme-full              # LaTeX Distribution
+    xclip                                     # For emacs everywhere
+    xdotool                                   # For emacs everywhere
+    xorg.xprop                                # For emacs everywhere
+    xorg.xwininfo                             # For emacs everywhere
+
+    # Utilities
+    alacritty                      # Terminal Emulator
+    arandr                         # Display Configuration Tool
+    exfatprogs                     # exFAT filesystem userspace utilities
+    file                           # Standard UNIX Utility to Detect File Types
+    htop                           # Pretty and Interactive Process Viewer
+    libarchive                     # Multi-format Archive and Compression Library
+    libtool                        # Generic Library Support Script
+    killall                        # Kill Processes by Name
+    networkmanagerapplet           # NM GUI for Taskbar
+    papirus-icon-theme             # Pretty Icons
+    pavucontrol                    # Audio Control Panel
+    p7zip                          # Utility for 7z archives
     unrar                          # Utility for RAR Archives
     screenfetch                    # System Information Tool
     scrot                          # Simple Screenshot Tool
     shellcheck                     # Script Analysis Tool
-    texlive.combined.scheme-full   # LaTeX Distribution
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     volctl                         # Per-application tray icon volume control
-    xclip                          # For emacs everywhere
-    xdotool                        # For emacs everywhere
-    xfce.thunar                    # File manager, cuz it get annoying not having one
-    xfce.tumbler                   # Enables thumbnails
     xorg.xev                       # Prints Contents of X Events for Debugging
-    xorg.xprop                     # For emacs everywhere
-    xorg.xwininfo                  # For emacs everywhere
-    yt-dlp                         # Download Videos From YouTube & Other Sites
-    zathura                        # PDF/PS/DJVU/CB Viewer
     zip                            # Compressor/Archiver
   ];
 
@@ -64,7 +73,6 @@
   };
 
   # Launch i3wm automatically from gdm
-  home.file.".xinitrc".source = config.lib.file.mkOutOfStoreSymlink "/home/user/.xsession";
   xsession = {
     enable = true;
     #scriptPath = ".hm-xsession";
