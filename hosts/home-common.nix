@@ -19,6 +19,7 @@
     sass                           # CSS Extension Language (SASS & SCSS)
 
     # Emacs Dependencies
+    delta                                     # Adds Syntax Highlighting to Git Diffs
     fd                                        # Doom Emacs Dependency
     libgccjit                                 # API for embedding GCC inside programs
     nixfmt                                    # Formatter for Nix Code
