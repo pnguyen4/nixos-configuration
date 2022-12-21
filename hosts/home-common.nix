@@ -4,10 +4,15 @@
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
     # General Applications
+    brave                          # Privacy Browser
+    libreoffice-fresh
+    slack                          # Corporate IRC
+    vscode
     xfce.thunar                    # File manager, cuz it get annoying not having one
     xfce.tumbler                   # Enables thumbnails
     yt-dlp                         # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
+    zoom-us                        # Ugh.
 
     # Development
     cmake                          # Cross-Platform Makefile Generator
@@ -25,8 +30,8 @@
     nixfmt                                    # Formatter for Nix Code
     nodePackages.pyright                      # For Doom Emacs Python LSP Support
     nodePackages.typescript                   # Better Javascript
-    nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
     nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
+    nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
     pandoc                                    # Universal Document Converter
     ripgrep                                   # Doom Emacs Dependency
     texlive.combined.scheme-full              # LaTeX Distribution
@@ -45,6 +50,7 @@
     libtool                        # Generic Library Support Script
     killall                        # Kill Processes by Name
     networkmanagerapplet           # NM GUI for Taskbar
+    networkmanager-openvpn         # NM Plugin for VPNs
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
     p7zip                          # Utility for 7z archives
@@ -377,15 +383,23 @@
     enable = true;
     settings = {
       font = {
-        bold.family   = "terminus";
-        italic.family = "terminus";
-        normal.family = "terminus";
-        size = 12;
+        bold = {
+          family   = "iosevka";
+          style = "Bold";
+        };
+        italic = {
+          family = "iosevka";
+          style = "Italic";
+        };
+        normal = {
+          family = "iosevka";
+        };
+        size = 11;
       };
-      # Uber High-Contrast Light Theme
+      # Uber High-Contrast Light Theme (Terminal.app Basic)
       colors = {
         primary = {
-          foreground = "#000000";
+          foreground = "#1A1A1A";
           background = "#ffffff";
         };
         normal = {
