@@ -31,7 +31,7 @@ Boot into installation ISO and open terminal.
 # swapon /dev/nvme0n1p2
 ```
 
-# Part 4: Flake Magic
+## Part 4: Flake Magic
 
 ``` shell
 # nix-env -iA nixos.git
