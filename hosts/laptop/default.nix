@@ -12,35 +12,62 @@
 
   # Bootloader Settings
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-  };
+  boot.loader.systemd-boot.enable = true;
 
-  # TODO filesystems, boot device, swap
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Monthly btrfs scrubbing:
+  # - Read all data and metadata blocks and verify checksums.
+  # - Automatically repair corrupted blocks.
+  services.btrfs.autoScrub.enable = true;
 
   # Networking Settings
   networking = {
-    hostName = "nixos-traveller";
+    hostName = "nixos-latitude";
     networkmanager = {
       enable = true;
     };
+  };
+
+  # Graphics
+  boot.initrd.kernelModules = [ "i915" ];
+  environment.variables = {
+    VDPAU_DRIVER = "va_gl";
+  };
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-media-driver
+    ];
   };
 
   # Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.package = pkgs.bluezFull;
 
+  # Laptop Stuff
+  services = {
+    tlp.enable = true;
+    auto-cpufreq.enable = true;
+    thermald.enable = true;
+    fstrim.enable = true;
+    xserver.libinput.enable = true;
+    # TODO blueman?
+    # TODO sane?
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "input" "video"];
+    extraGroups = [ "wheel" "input" "video" "networkmanager"];
   };
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted git
+    wget vim parted pciutils git
   ];
+
+  hardware.enableAllFirmware = true;
 
 }

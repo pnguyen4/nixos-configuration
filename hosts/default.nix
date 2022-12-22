@@ -35,7 +35,7 @@ in {
   };
 
   # Main Laptop
-  nixos-traveller = lib.nixosSystem {
+  nixos-latitude = lib.nixosSystem {
     inherit system;
     specialArgs = { inherit inputs pkgs; };
     modules = [

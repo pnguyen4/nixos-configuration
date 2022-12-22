@@ -17,6 +17,8 @@
   # Save Space by Optimizing the Store (hardlink identical files)
   nix.settings.auto-optimise-store = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # NTFS support via FUSE
   boot.supportedFilesystems = [ "ntfs" ];
 

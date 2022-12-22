@@ -59,7 +59,6 @@
   services.btrfs.autoScrub.enable = true;
 
   # GPU Passthrough for VMs
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ]; # vega 56
   boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:6939,1002:aad8" ]; # r9 380
   boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
