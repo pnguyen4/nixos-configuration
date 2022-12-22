@@ -30,6 +30,11 @@
         tray-position = "right";
       };
       "module/battery" = {
+        format-charging = "| BAT <label-charging> | ";
+        format-discharging = "| BAT <label-discharging> | ";
+        format-full = "| BAT <label-full> | ";
+        label-charging = "%percentage% %time%";
+        label-discharging = "%percentage% %time%";
         full-at = 99;
         low-at = 5;
         battery = "BAT0";
@@ -38,7 +43,7 @@
       };
       "module/date" = {
         date = "%a %b %d";
-        format = "| <label>";
+        format = " <label>";
         label = "%date% %time%";
         time = "%H:%M";
         type = "internal/date";
