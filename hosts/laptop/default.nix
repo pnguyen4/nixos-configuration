@@ -47,6 +47,8 @@
   # hardware.bluetooth.package = pkgs.bluezFull;
 
   # Laptop Stuff
+  hardware.enableAllFirmware = true;
+
   services = {
     auto-cpufreq.enable = true;
     thermald.enable = true;
@@ -55,6 +57,25 @@
     # TODO blueman?
     # TODO sane?
   };
+
+  programs.light.enable = true;
+  services.actkbd = {
+    enable = true;
+    # For some reason the correct keycode is whatever xev returns minus 8
+    bindings = [
+      {
+        keys = [ 224 ];
+        events = [ "key" ];
+        command = "${pkgs.light}/bin/light -U 10";
+      }
+      {
+        keys = [ 225 ];
+        events = [ "key" ];
+        command = "${pkgs.light}/bin/light -A 10";
+      }
+    ];
+  };
+
   services.tlp = {
     enable = true;
     settings = {
@@ -73,7 +94,5 @@
   environment.systemPackages = with pkgs; [
     wget vim parted pciutils git iw
   ];
-
-  hardware.enableAllFirmware = true;
 
 }

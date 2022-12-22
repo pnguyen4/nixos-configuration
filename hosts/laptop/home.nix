@@ -4,8 +4,8 @@
   # User Programs
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
-    bluez                          # Bluetooth Support for Linux
-    bluez-tools                    # Command Line Bluetooth Manager for Bluez5
+    #bluez                          # Bluetooth Support for Linux
+    #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     python311
   ];
 
@@ -81,4 +81,18 @@
     };
     script = ""; # handle this in window manager
   };
+
+  home.file.".xbindkeysrc".text = ''
+    "pactl set-sink-volume @DEFAULT_SINK@ +1%"
+       XF86AudioRaiseVolume
+
+    "pactl set-sink-volume @DEFAULT_SINK@ -1%"
+       XF86AudioLowerVolume
+
+    "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+       XF86AudioMute
+
+    "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+       XF86AudioMicMute
+  '';
 }

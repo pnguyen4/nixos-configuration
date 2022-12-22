@@ -61,6 +61,7 @@
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     volctl                         # Per-application tray icon volume control
+    xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xorg.xev                       # Prints Contents of X Events for Debugging
     zip                            # Compressor/Archiver
   ];

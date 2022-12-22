@@ -44,7 +44,6 @@ in
     mesa                           # OpenGL Library
     smartmontools                  # Get HDD SMART Information
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
-    xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xvkbd                          # Virtual Keyboard Commands
   ];
 
