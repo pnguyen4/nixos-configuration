@@ -23,7 +23,7 @@
         font-1 = "Noto Sans Mono CJK JP:size=9;3";
         locale = "en_US.UTF8";
         modules-left = "i3 xwindow";
-        modules-right = "xkeyboard vpn date";
+        modules-right = "xkeyboard vpn battery date";
         monitor = "\${env:MONITOR:}";
         padding-right = 1;
         tray-offset-y = 1;
