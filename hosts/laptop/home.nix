@@ -30,12 +30,12 @@
         tray-position = "right";
       };
       "module/battery" = {
-        format-charging = "| BAT <label-charging> | ";
+        format-charging = "| AC <label-charging> | ";
         format-discharging = "| BAT <label-discharging> | ";
         format-full = "| BAT <label-full> | ";
-        label-charging = "%percentage% %time%";
-        label-discharging = "%percentage% %time%";
-        full-at = 99;
+        label-charging = "%percentage%% ETA %time%";
+        label-discharging = "%percentage%% TIME %time% DRAW %consumption%W";
+        time-format = "%H:%M";
         low-at = 5;
         battery = "BAT0";
         adapter = "AC";

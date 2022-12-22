@@ -83,7 +83,6 @@
 
   # Configure AMD video drivers
   services.xserver.videoDrivers = [ "amdgpu" ];
-  services.acpid.enable = true;
   hardware.opengl = {
     enable = true;
     driSupport = true;

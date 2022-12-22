@@ -43,18 +43,24 @@
   };
 
   # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = pkgs.bluezFull;
+  # hardware.bluetooth.enable = true;
+  # hardware.bluetooth.package = pkgs.bluezFull;
 
   # Laptop Stuff
   services = {
-    tlp.enable = true;
     auto-cpufreq.enable = true;
     thermald.enable = true;
     fstrim.enable = true;
     xserver.libinput.enable = true;
     # TODO blueman?
     # TODO sane?
+  };
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_BAT="powersave";
+      CPU_MAX_PERF_ON_BAT=75;
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -65,7 +71,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git
+    wget vim parted pciutils git iw
   ];
 
   hardware.enableAllFirmware = true;

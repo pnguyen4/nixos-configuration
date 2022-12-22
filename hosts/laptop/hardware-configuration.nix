@@ -21,9 +21,6 @@
     script = ''rmmod iwlmvm iwlwifi mac80211 cfg80211; modprobe iwlwifi'';
     wantedBy = [ "multi-user.target" ];
   };
-  #boot.extraModprobeConfig = ''
-  #  options iwlwifi power_save=1 11n_disable=1
-  #'';
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/4fe43f25-402b-451c-a040-9bf2da07cd42";
