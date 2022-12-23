@@ -23,18 +23,18 @@
   };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/4fe43f25-402b-451c-a040-9bf2da07cd42";
+    { device = "/dev/disk/by-uuid/2d58d3da-7e49-4111-b812-a23c7f6b839a";
       fsType = "btrfs";
       options = [ "compress=zstd" "noatime" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/72F6-3644";
+    { device = "/dev/disk/by-uuid/6FBE-7B6C";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/cc524c86-7e11-4766-9f73-4b1b2c242dc1"; }
+    [ { device = "/dev/disk/by-uuid/8ed9907d-201b-4c3c-8104-d7d09467eafc"; }
     ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
