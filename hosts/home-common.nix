@@ -19,6 +19,7 @@
     gcc                            # GNU Compiler Collection
     gnumake                        # Build Automation Tool
     nodePackages.nodemon
+    nodePackages."@angular/cli"
     nodejs
     postman
     sass                           # CSS Extension Language (SASS & SCSS)
@@ -55,7 +56,7 @@
     pavucontrol                    # Audio Control Panel
     p7zip                          # Utility for 7z archives
     unrar                          # Utility for RAR Archives
-    screenfetch                    # System Information Tool
+    neofetch                       # System Information Tool
     scrot                          # Simple Screenshot Tool
     shellcheck                     # Script Analysis Tool
     unzip                          # Extraction Utility for Zip Archives
@@ -86,7 +87,6 @@
     #scriptPath = ".hm-xsession";
     windowManager.i3 = {
       enable = true;
-      package = pkgs.i3-gaps;
       config = {
         modifier = "Mod4";                     # Use Super Key Instead of Alt
         fonts = {                              # Titlebar Font
@@ -101,11 +101,6 @@
             indicator   = "#2e9ef4";           # default
             text        = "#ffffff";           # default
           };
-        };
-        gaps = {
-          inner = 12;
-          outer = 3;
-          smartGaps = true;
         };
         terminal = "alacritty";
         bars = [ ];                            # Use Polybar

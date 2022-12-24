@@ -9,6 +9,10 @@
     python311
   ];
 
+  xsession.windowManager.i3.config = {
+    defaultWorkspace = "workspace number 1";
+  };
+
   services.polybar = {
     enable = true;
     package = pkgs.polybar.override {

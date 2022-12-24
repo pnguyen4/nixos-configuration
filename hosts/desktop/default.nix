@@ -83,6 +83,11 @@
 
   # Configure AMD video drivers
   services.xserver.videoDrivers = [ "amdgpu" ];
+  # Requiring login for a password-protected encrypted machine is redundant
+  services.xserver.displayManager.autoLogin = {
+    enable = true;
+    user = "user";
+  };
   hardware.opengl = {
     enable = true;
     driSupport = true;

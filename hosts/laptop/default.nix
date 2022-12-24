@@ -57,6 +57,11 @@
     # TODO blueman?
     # TODO sane?
   };
+  services.picom = {
+    enable = true;
+    backend = "glx";
+    vSync = true;
+  };
 
   programs.light.enable = true;
   services.actkbd = {

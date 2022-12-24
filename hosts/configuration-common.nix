@@ -44,10 +44,6 @@
     '';
     # This just handles all the dbus and systemd stuff automatically
     displayManager.gdm.enable = true;
-    displayManager.autoLogin = {
-      enable = true;
-      user = "user";
-    };
     # Use home manager to configure window manager
     desktopManager.session = [
       {

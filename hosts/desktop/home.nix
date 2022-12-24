@@ -48,6 +48,11 @@ in
   ];
 
   xsession.windowManager.i3.config = {
+    gaps = {
+      inner = 12;
+      outer = 3;
+      smartGaps = true;
+    };
     workspaceOutputAssign = [
       # My preferred scheme is to have odd numbered workspaces on
       # left monitor counting up and even numbered workspaces on
