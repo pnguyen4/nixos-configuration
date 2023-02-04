@@ -98,5 +98,10 @@
 
     "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
        XF86AudioMicMute
+
+    "xvkbd -text "\[Left]""
+      m:0x0 + b:8
+    "xvkbd -text "\[Right]""
+      m:0x0 + b:9
   '';
 }

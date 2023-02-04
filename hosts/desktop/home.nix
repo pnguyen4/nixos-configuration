@@ -18,17 +18,14 @@ in
     audacity                       # Audio Editor and Recording Software
     darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
-    discord                        # Voice and Text Chat for Gamers
     gimp                           # The GNU Image Manipulation Program
     libsForQt5.kdenlive            # Video Editor
     melonDS                        # WIP Nintendo DS Emulator
     unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
-    qbittorrent                    # GUI Torrent Client
     runelite                       # Old School Runescape
     signal-desktop                 # Encrypted Messaging
     vlc                            # Personally, just for CD/DVD playback
-    xournalpp                      # Edit and Annotate PDFs
 
     # Development
     python-with-my-packages        # Guido's Programming Language WITH packages in path
@@ -40,11 +37,8 @@ in
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     # easyeffects                   # useless without pipewire
     ffmpeg                         # Record, Convert, and Stream Audio and Video
-    glxinfo                        # Info About OpenGL/Mesa
-    mesa                           # OpenGL Library
     smartmontools                  # Get HDD SMART Information
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
-    xvkbd                          # Virtual Keyboard Commands
   ];
 
   xsession.windowManager.i3.config = {

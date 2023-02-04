@@ -1,15 +1,22 @@
 { config, pkgs, lib, ...}:
 
 {
+  home.sessionPath = [
+    "$HOME/.npm-global/bin"
+  ];
+
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
     # General Applications
     brave                          # Privacy Browser
+    discord                        # Voice and Text Chat for Gamers
     libreoffice-fresh
+    qbittorrent                    # GUI Torrent Client
     slack                          # Corporate IRC
     vscode
     xfce.thunar                    # File manager, cuz it get annoying not having one
     xfce.tumbler                   # Enables thumbnails
+    xournalpp                      # Edit and Annotate PDFs
     yt-dlp                         # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
     zoom-us                        # Ugh.
@@ -46,6 +53,7 @@
     arandr                         # Display Configuration Tool
     exfatprogs                     # exFAT filesystem userspace utilities
     file                           # Standard UNIX Utility to Detect File Types
+    glxinfo                        # Info About OpenGL/Mesa
     htop                           # Pretty and Interactive Process Viewer
     libarchive                     # Multi-format Archive and Compression Library
     libtool                        # Generic Library Support Script
@@ -55,15 +63,17 @@
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
     p7zip                          # Utility for 7z archives
-    unrar                          # Utility for RAR Archives
+    mesa                           # OpenGL Library
     neofetch                       # System Information Tool
     scrot                          # Simple Screenshot Tool
     shellcheck                     # Script Analysis Tool
+    unrar                          # Utility for RAR Archives
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     volctl                         # Per-application tray icon volume control
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xorg.xev                       # Prints Contents of X Events for Debugging
+    xvkbd                          # Virtual Keyboard Commands
     zip                            # Compressor/Archiver
   ];
 
@@ -111,6 +121,7 @@
             "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun";
             "${modifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
             "${modifier}+Control+e" = "exec emacsclient --eval \"(emacs-everywhere)\"";
+            "${modifier}+Shift+Escape" = "exec xdg-screensaver lock";
           };
         window = {
           border = 5;
@@ -396,7 +407,6 @@
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       decentraleyes
       greasemonkey
-      https-everywhere
       privacy-badger
       tree-style-tab
       ublock-origin
