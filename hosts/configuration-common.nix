@@ -90,21 +90,13 @@
   fonts.fonts = with pkgs; [
     # DejaVu fonts are already installed
     emacs-all-the-icons-fonts
-    ibm-plex                           # has my favorite serif font
-    iosevka                            # primary programming font
-    (iosevka.override {                # secondary programming font
-      set = "slab";
-      privateBuildPlan = ''
-        [buildPlans.iosevka-slab]
-        family = "Iosevka Slab"
-        spacing = "normal"
-        serifs = "slab"
-      '';
-    })
-    noto-fonts-cjk                     # for asian languages
-    noto-fonts                         # for unicode coverage
-    symbola                            # for more unicode coverage
-    terminus_font                      # good bitmap font
+    ibm-plex                                      # has my favorite serif font
+    iosevka-bin                                   # primary programming font
+    (iosevka-bin.override { variant = "slab"; })  # secondary programming font
+    noto-fonts-cjk                                # for asian languages
+    noto-fonts                                    # for unicode coverage
+    symbola                                       # for more unicode coverage
+    terminus_font                                 # good bitmap font
   ];
 
   # Sorry Stallman Senpai
