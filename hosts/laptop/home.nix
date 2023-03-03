@@ -6,6 +6,8 @@
   home.packages = with pkgs; [
     #bluez                          # Bluetooth Support for Linux
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
+    #awscli2
+    google-chrome
     python311
   ];
 

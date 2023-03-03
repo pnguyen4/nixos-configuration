@@ -100,4 +100,10 @@
     wget vim parted pciutils git iw
   ];
 
+  # Daemon for running docker containers
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
+
 }

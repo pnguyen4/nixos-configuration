@@ -26,7 +26,6 @@
     gcc                            # GNU Compiler Collection
     gnumake                        # Build Automation Tool
     nodePackages.nodemon
-    nodePackages."@angular/cli"
     nodejs
     postman
     sass                           # CSS Extension Language (SASS & SCSS)
@@ -328,31 +327,31 @@
         };
         size = 11;
       };
-      # Uber High-Contrast Light Theme (Terminal.app Basic)
+      # Modus-Operandi Theme
       colors = {
         primary = {
-          foreground = "#1A1A1A";
-          background = "#ffffff";
+          background = "#FFFFFF";
+          foreground = "#000000";
         };
         normal = {
           black   = "#000000";
-          red     = "#990000";
-          green   = "#00A600";
-          yellow  = "#999900";
-          blue    = "#0000B2";
-          magenta = "#B200B2";
-          cyan    = "#00A6B2";
+          red     = "#A60000";
+          green   = "#005E00";
+          yellow  = "#813E00";
+          blue    = "#0031A9";
+          magenta = "#721045";
+          cyan    = "#00538B";
           white   = "#BFBFBF";
         };
         bright = {
-          black   = "#666666";
-          red     = "#E50000";
-          green   = "#00D900";
-          yellow  = "#E5E500";
-          blue    = "#0000FF";
-          magenta = "#E500E5";
-          cyan    = "#00E5E5";
-          white   = "#E5E5E5";
+          black   = "#595959";
+          red     = "#972500";
+          green   = "#315B00";
+          yellow  = "#70480F";
+          blue    = "#2544BB";
+          magenta = "#5317AC";
+          cyan    = "#005A5F";
+          white   = "#FFFFFF";
         };
       };
     };
