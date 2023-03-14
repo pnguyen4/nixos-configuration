@@ -1,5 +1,16 @@
 { config, pkgs, lib, ...}:
 
+let my-python-packages = python-packages: with python-packages; [
+    ipykernel
+    jupyterlab
+    matplotlib              # plotting library
+    numpy                   # numerical python for data science
+    pandas                  # data analysis and manipulation tool
+    pyflakes                # For Doom Emacs Python Linting
+    pytest                  # Framework for Writing Python Tests
+  ];
+  python-with-my-packages = pkgs.python3.withPackages my-python-packages;
+in
 {
   home.sessionPath = [
     "$HOME/.npm-global/bin"
@@ -28,6 +39,7 @@
     nodePackages.nodemon
     nodejs
     postman
+    python-with-my-packages
     sass                           # CSS Extension Language (SASS & SCSS)
 
     # Emacs Dependencies

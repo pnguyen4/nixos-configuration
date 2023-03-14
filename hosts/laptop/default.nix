@@ -92,7 +92,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "input" "video" "networkmanager"];
+    extraGroups = [ "wheel" "input" "video" "networkmanager" "docker"];
   };
 
   # List packages installed in system profile.

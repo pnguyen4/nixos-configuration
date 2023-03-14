@@ -8,7 +8,6 @@
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     #awscli2
     google-chrome
-    python311
   ];
 
   xsession.windowManager.i3.config = {

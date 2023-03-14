@@ -1,15 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let my-python-packages = python-packages: with python-packages; [
-      matplotlib              # plotting library
-      numpy                   # numerical python for data science
-      pybullet                # Physics Engine for Robot Simulation
-      pyflakes                # For Doom Emacs Python Linting
-      pytest                  # Framework for Writing Python Tests
-      pip
-    ];
-    python-with-my-packages = pkgs.python3.withPackages my-python-packages;
-in
 {
   # User Programs
   # Does not include software enabled by options programs.* and services.*
