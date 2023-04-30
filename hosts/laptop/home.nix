@@ -6,9 +6,11 @@
   home.packages = with pkgs; [
     #bluez                          # Bluetooth Support for Linux
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
-    #awscli2
     google-chrome
+    #teamviewer
   ];
+
+  #services.teamviewer.enable = true;
 
   xsession.windowManager.i3.config = {
     defaultWorkspace = "workspace number 1";
@@ -31,8 +33,8 @@
         modules-right = "xkeyboard vpn battery date";
         monitor = "\${env:MONITOR:}";
         padding-right = 1;
-        tray-offset-y = 1;
-        tray-position = "right";
+        # tray-offset-y = 1;
+        tray-position = "none";
       };
       "module/battery" = {
         format-charging = "| AC <label-charging> | ";

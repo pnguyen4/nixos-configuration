@@ -74,6 +74,13 @@
   # sound.enable = true;
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.support32Bit = true;
+  hardware.pulseaudio.extraConfig = ''
+    load-module module-udev-detect tsched=0
+  '';
+  hardware.pulseaudio.daemon.config = {
+    default-sample-rate = 48000;
+    alternate-sample-rate = 48000;
+  };
   security.rtkit.enable = true;
 
   # Unfortunately zoom does not work with pipewire

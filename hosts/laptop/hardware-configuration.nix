@@ -13,7 +13,7 @@
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
 
   # Wifi card not playing nice. Dunno why this works.
-  #boot.blacklistedKernelModules = [ "iwlwifi" "iwlmvm" "mac80211" "cfg80211" ];
+  # boot.blacklistedKernelModules = [ "iwlwifi" "iwlmvm" "mac80211" "cfg80211" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
   systemd.services.mywifi = {
     path = with pkgs; [ kmod ];
