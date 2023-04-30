@@ -18,7 +18,6 @@
     vlc                            # Personally, just for CD/DVD playback
 
     # Development
-    python-with-my-packages        # Guido's Programming Language WITH packages in path
     racket                         # For SICP
 
     # Utilities
