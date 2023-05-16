@@ -119,6 +119,9 @@
   # Security Settings
   hardware.cpu.amd.updateMicrocode = true;
 
+  # Power Savings
+  powerManagement.cpuFreqGovernor = "ondemand";
+
   # Samba for shared folder with virtual machine
 #  services.samba = {
 #    enable = false;

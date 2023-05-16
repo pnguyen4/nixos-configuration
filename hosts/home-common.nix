@@ -24,7 +24,7 @@ in
     libreoffice-fresh
     qbittorrent                    # GUI Torrent Client
     slack                          # Corporate IRC
-    vscode
+    unstable.vscode
     xfce.thunar                    # File manager, cuz it get annoying not having one
     xfce.tumbler                   # Enables thumbnails
     xournalpp                      # Edit and Annotate PDFs
@@ -68,6 +68,7 @@ in
     htop                           # Pretty and Interactive Process Viewer
     libarchive                     # Multi-format Archive and Compression Library
     libtool                        # Generic Library Support Script
+    lm_sensors                     # Tools for Reading Hardware (Temperature) Sensors
     killall                        # Kill Processes by Name
     networkmanagerapplet           # NM GUI for Taskbar
     networkmanager-openvpn         # NM Plugin for VPNs
