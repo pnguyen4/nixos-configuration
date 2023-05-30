@@ -19,6 +19,9 @@
   # - Automatically repair corrupted blocks.
   services.btrfs.autoScrub.enable = true;
 
+  # Virtualisation
+  virtualisation.libvirtd.enable = true;
+
   # Networking Settings
   networking = {
     hostName = "nixos-latitude";
@@ -92,12 +95,12 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.user = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "input" "video" "networkmanager" "docker"];
+    extraGroups = [ "wheel" "input" "video" "libvirtd" "networkmanager" "docker"];
   };
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git iw
+    wget vim parted pciutils git iw virtmanager
   ];
 
   # Daemon for running docker containers

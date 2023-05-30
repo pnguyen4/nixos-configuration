@@ -33,8 +33,8 @@
         modules-right = "xkeyboard vpn battery date";
         monitor = "\${env:MONITOR:}";
         padding-right = 1;
-        # tray-offset-y = 1;
-        tray-position = "none";
+        tray-offset-y = 1;
+        tray-position = "right";
       };
       "module/battery" = {
         format-charging = "| AC <label-charging> | ";
