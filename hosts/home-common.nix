@@ -416,14 +416,14 @@ in
     enable = true;
     # Install just the bare basics to get going. Install the rest normally.
     # These are disabled by default. Remember to manually enable them.
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      decentraleyes
-      greasemonkey
-      privacy-badger
-      tree-style-tab
-      ublock-origin
-    ];
     profiles."default" = {
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        decentraleyes
+        greasemonkey
+        privacy-badger
+        tree-style-tab
+        ublock-origin
+      ];
       # Any settings modified from within firefox are overriden on next launch
       settings = {
         "accessibility.force_disabled" = 1;
