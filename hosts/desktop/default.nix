@@ -60,18 +60,20 @@
 
   # GPU Passthrough for VMs
   # boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:687f,1002:aaf8" ]; # vega 56
-  boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:6939,1002:aad8" ]; # r9 380
-  boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
-  boot.blacklistedKernelModules = [ "amdgpu" ];
-  boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu.ovmf.enable = true;
-    qemu.runAsRoot = false;
-    onBoot = "ignore";
-    onShutdown = "shutdown";
-  };
-  virtualisation.spiceUSBRedirection.enable = true;
+  # boot.kernelParams = [ "amd_iommu=on" "vfio-pci.ids=1002:6939,1002:aad8" ]; # r9 380
+  # boot.kernelModules = [ "kvm-amd" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio" ];
+  # boot.blacklistedKernelModules = [ "amdgpu" ];
+  # boot.initrd.kernelModules = [ "vfio_pci" "amdgpu" ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = [ "amdgpu.mcbp=0" ];
+  # virtualisation.libvirtd = {
+  #   enable = true;
+  #   qemu.ovmf.enable = true;
+  #   qemu.runAsRoot = false;
+  #   onBoot = "ignore";
+  #   onShutdown = "shutdown";
+  # };
+  # virtualisation.spiceUSBRedirection.enable = true;
 
   # Networking Settings
   networking = {
@@ -113,7 +115,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git virtmanager samba
+    wget vim parted pciutils git # virtmanager samba
   ];
 
   # Security Settings
@@ -121,6 +123,9 @@
 
   # Power Savings
   powerManagement.cpuFreqGovernor = "ondemand";
+
+  services.teamviewer.enable = true;
+  hardware.ledger.enable = true;
 
   # Samba for shared folder with virtual machine
 #  services.samba = {

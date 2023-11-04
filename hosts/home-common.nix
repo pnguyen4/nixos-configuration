@@ -19,7 +19,7 @@ in
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
     # General Applications
-    brave                          # Privacy Browser
+    unstable.brave                          # Privacy Browser
     discord                        # Voice and Text Chat for Gamers
     libreoffice-fresh
     qbittorrent                    # GUI Torrent Client
@@ -226,7 +226,7 @@ in
       global = {
         font = "DejaVu Sans 11";
         follow = "keyboard";
-        format = "<b>%s</b>\n%b";
+        format = "<b>%s</b>\\n%b";
         frame_width = 5;
         geometry = "300x5-30+50";
         icon_position = "left";

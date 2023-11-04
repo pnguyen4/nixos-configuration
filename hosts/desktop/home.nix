@@ -10,7 +10,9 @@
     desmume                        # Nintendo DS Emulator
     gimp                           # The GNU Image Manipulation Program
     libsForQt5.kdenlive            # Video Editor
+    unstable.ledger-live-desktop
     melonDS                        # WIP Nintendo DS Emulator
+    monero-gui
     unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
     runelite                       # Old School Runescape
@@ -145,7 +147,7 @@
             position = "1920x0";
             rotate = "right";
             mode = "1920x1200";
-            rate = "60";
+            rate = "59.95";
           };
         };
       };

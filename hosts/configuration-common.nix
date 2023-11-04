@@ -64,12 +64,6 @@
     drivers = [ pkgs.gutenprint pkgs.hplipWithPlugin ];
   };
 
-  # Zeroconf Service to Locate Printer
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-  };
-
   # Enable sound.
   # sound.enable = true;
   hardware.pulseaudio.enable = true;
