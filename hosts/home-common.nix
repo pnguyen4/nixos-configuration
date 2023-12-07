@@ -1,8 +1,8 @@
 { config, pkgs, lib, ...}:
 
 let my-python-packages = python-packages: with python-packages; [
-    ipykernel
-    jupyterlab
+    # ipykernel
+    # jupyterlab
     matplotlib              # plotting library
     numpy                   # numerical python for data science
     pandas                  # data analysis and manipulation tool
@@ -38,7 +38,7 @@ in
     gnumake                        # Build Automation Tool
     nodePackages.nodemon
     nodejs
-    postman
+    # postman
     python-with-my-packages
     sass                           # CSS Extension Language (SASS & SCSS)
 
@@ -99,7 +99,6 @@ in
     platformTheme = "gnome";
     style = {
       name = "adwaita";
-      package = pkgs.adwaita-qt;
     };
   };
 
