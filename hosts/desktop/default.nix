@@ -99,9 +99,11 @@
   programs.corectrl.enable = true;
 
   # Installs Steam and enables all necessary system options
-  programs.steam.enable = true;
-  hardware.steam-hardware.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+  programs.steam = {
+    enable = true;
+  };
+
+  programs.java.enable = true;
 
   # Bluetooth
   # hardware.bluetooth.enable = true;

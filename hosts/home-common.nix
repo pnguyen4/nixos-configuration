@@ -19,7 +19,8 @@ in
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
     # General Applications
-    unstable.brave                          # Privacy Browser
+    android-file-transfer          # Minimalist MTP client for android
+    unstable.brave                 # Privacy Browser
     discord                        # Voice and Text Chat for Gamers
     libreoffice-fresh
     qbittorrent                    # GUI Torrent Client
@@ -277,8 +278,8 @@ in
     enable = true;
     settings = {
       cycle = 5;           # Change screensavers every 5 minutes
-      dpmsEnabled = true;  # Enable display power management
-      dpmsSuspend = 180;   # Go into power saving mode after 3 hours
+      # dpmsEnabled = true;  # Enable display power management
+      # dpmsSuspend = 180;   # Go into power saving mode after 3 hours
       lock = true;         # Ask for user password to reenter
       lockTimeout = 120;   # Lock after (total) 2 hours idle
       timeout = 60;        # Activate when idle for 1 hour

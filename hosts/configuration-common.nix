@@ -36,8 +36,8 @@
   services.xserver = {
     enable = true;
     # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "dvorak";
+    xkb.layout = "us,us";
+    xkb.variant = "dvorak,";
     # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"
@@ -56,6 +56,8 @@
       }
     ];
     desktopManager.wallpaper.mode = "scale";
+    # Allows localectl to find keyboard definitions in /usr/share/X11/xkb
+    exportConfiguration = true;
   };
 
   # Enable CUPS to print documents
