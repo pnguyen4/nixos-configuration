@@ -98,7 +98,7 @@
         type = "internal/i3";
       };
       "module/vpn" = {
-        exec = ''if [[ $(ifconfig | grep tun0) ]]; then echo "%{F#00cc66}VPN On"; else echo "%{F#ff3333}VPN Off"; fi'';
+        exec = ''if [[ $(ifconfig | grep -E 'tun0|^wg-') ]]; then echo "%{F#00cc66}VPN On"; else echo "%{F#ff3333}VPN Off"; fi'';
         format = "<label> ";
         type = "custom/script";
       };

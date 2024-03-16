@@ -73,9 +73,9 @@ in
     killall                        # Kill Processes by Name
     networkmanagerapplet           # NM GUI for Taskbar
     networkmanager-openvpn         # NM Plugin for VPNs
+    p7zip                          # Utility for 7z archives
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
-    p7zip                          # Utility for 7z archives
     mesa                           # OpenGL Library
     neofetch                       # System Information Tool
     scrot                          # Simple Screenshot Tool
@@ -84,6 +84,7 @@ in
     unzip                          # Extraction Utility for Zip Archives
     usbutils                       # Utils Like lsusb
     volctl                         # Per-application tray icon volume control
+    wireguard-tools                # For modern VPNs
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
     xorg.xev                       # Prints Contents of X Events for Debugging
     xvkbd                          # Virtual Keyboard Commands
