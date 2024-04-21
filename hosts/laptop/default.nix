@@ -106,7 +106,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git iw virtmanager
+    wget vim parted pciutils git iw virt-manager
   ];
 
   # Daemon for running docker containers
