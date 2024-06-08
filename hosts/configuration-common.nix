@@ -95,7 +95,7 @@
     emacs-all-the-icons-fonts
     ibm-plex                                      # has my favorite serif font
     iosevka-bin                                   # primary programming font
-    (iosevka-bin.override { variant = "slab"; })  # secondary programming font
+    (iosevka-bin.override { variant = "Slab"; })  # secondary programming font
     nerdfonts
     noto-fonts-cjk                                # for asian languages
     noto-fonts                                    # for unicode coverage

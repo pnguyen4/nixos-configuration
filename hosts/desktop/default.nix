@@ -80,13 +80,15 @@
     hostName = "nixos-machine";
     networkmanager = {
       enable = true;
+      dns = "systemd-resolved";
     };
   };
+  services.resolved.enable = true;
 
   # Configure AMD video drivers
   services.xserver.videoDrivers = [ "amdgpu" ];
   # Requiring login for a password-protected encrypted machine is redundant
-  services.xserver.displayManager.autoLogin = {
+  services.displayManager.autoLogin = {
     enable = true;
     user = "user";
   };

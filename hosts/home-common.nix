@@ -47,7 +47,7 @@ in
     delta                                     # Adds Syntax Highlighting to Git Diffs
     fd                                        # Doom Emacs Dependency
     libgccjit                                 # API for embedding GCC inside programs
-    nixfmt                                    # Formatter for Nix Code
+    nixfmt-classic                            # Formatter for Nix Code
     nodePackages.pyright                      # For Doom Emacs Python LSP Support
     nodePackages.typescript                   # Better Javascript
     nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
@@ -98,7 +98,7 @@ in
   # Get Uniform Look Between GTK and QT Programs
   qt = {
     enable = true;
-    platformTheme = "gnome";
+    platformTheme.name = "adwaita";
     style = {
       name = "adwaita";
     };
@@ -509,5 +509,6 @@ in
       '';
     };
   };
+
   home.stateVersion = "22.05";
 }
