@@ -29,6 +29,7 @@
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     # easyeffects                   # useless without pipewire
     ffmpeg                         # Record, Convert, and Stream Audio and Video
+    poppler_utils                  # Includes pdftotext utility for checking resume ATS friendliness
     smartmontools                  # Get HDD SMART Information
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
   ];
