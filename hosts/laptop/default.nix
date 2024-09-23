@@ -30,12 +30,6 @@
     };
   };
 
-  # Zeroconf Service to Locate Printer
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-  };
-
   # Graphics
   boot.initrd.kernelModules = [ "i915" ];
   environment.variables = {

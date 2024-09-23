@@ -8,12 +8,13 @@
     audacity                       # Audio Editor and Recording Software
     darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
+    electrum
     gimp                           # The GNU Image Manipulation Program
     libsForQt5.kdenlive            # Video Editor
     unstable.ledger-live-desktop
     melonDS                        # WIP Nintendo DS Emulator
     monero-gui
-    unstable.nyxt
+    #unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software
     prismlauncher                  # Open Source Minecraft Launcher
     runelite                       # Old School Runescape
