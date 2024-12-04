@@ -119,7 +119,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git # virtmanager samba
+    wget vim parted pciutils git android-udev-rules # virtmanager samba
   ];
 
   # Security Settings
@@ -134,20 +134,19 @@
   # Samba for shared folder with virtual machine
 #  services.samba = {
 #    enable = false;
-#    enableNmbd = true;
-#    securityType = "user";
-#    extraConfig = ''
-#      workgroup = WORKGROUP
-#      server string = smbnix
-#      netbios name = smbnix
-#      security = user
-#      ntlm auth = yes
-#      hosts allow = 192.168.122.  localhost
-#      hosts deny = 0.0.0.0/0
-#      guest account = nobody
-#      map to guest = bad user
-#    '';
-#    shares = {
+#    nmbd = true;
+#    settings = {
+#       global = {
+#         "workgroup" = "WORKGROUP";
+#         "security type" = "user";
+#         "server string" = "smbnix";
+#         "netbios name" = "smbnix";
+#         "security" = "user";
+#         "hosts allow" = "192.168.122. localhost";
+#         "hosts deny" = "0.0.0.0/0";
+#         "guest account" = "nobody";
+#         "map to guest" = "bad user";
+#       };
 #      public = {
 #        path = "/home/user/Public";
 #        browseable = "yes";

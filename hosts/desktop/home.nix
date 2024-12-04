@@ -25,6 +25,7 @@
     racket                         # For SICP
 
     # Utilities
+    android-tools
     autorandr                      # Create and Apply Display Profiles
     #bluez                          # Bluetooth Support for Linux
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5

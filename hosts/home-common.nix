@@ -20,7 +20,7 @@ in
   home.packages = with pkgs; [
     # General Applications
     android-file-transfer          # Minimalist MTP client for android
-    unstable.brave                 # Privacy Browser
+    brave                 # Privacy Browser
     discord                        # Voice and Text Chat for Gamers
     libreoffice-fresh
     qbittorrent                    # GUI Torrent Client
@@ -76,6 +76,7 @@ in
     p7zip                          # Utility for 7z archives
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
+    profile-cleaner                # Optimizes browser profile sqlite database
     mesa                           # OpenGL Library
     neofetch                       # System Information Tool
     scrot                          # Simple Screenshot Tool
@@ -450,7 +451,7 @@ in
         "browser.uidensity" = 1;                                # compact ui
         "browser.urlbar.speculativeConnect.enabled" = false;    # don't preload autocomplete URLs
         "browser.urlbar.suggest.searches" = false;              # disable suggestions in url bar
-        "browser.sessionstore.interval" = 200000;               # save stuff less often: 15s -> 5m
+        "browser.sessionstore.interval" = 300000;               # save stuff less often: 15s -> 5m
         "browser.sessionstore.privacy_level" = 2;               # reduce save/restore granularity
         "datareporting.healthreport.uploadEnabled" = false;     # send less stuff to mozilla
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
