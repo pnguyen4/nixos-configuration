@@ -92,9 +92,8 @@
     enable = true;
     user = "user";
   };
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
   };
 
   # Tool to Overclock GPU and Control Fans

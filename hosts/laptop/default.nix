@@ -35,7 +35,7 @@
   environment.variables = {
     VDPAU_DRIVER = "va_gl";
   };
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       vaapiIntel

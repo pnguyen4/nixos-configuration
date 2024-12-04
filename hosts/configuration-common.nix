@@ -3,8 +3,8 @@
 {
   # Enable Flakes
   nix = {
-    package = pkgs.nixFlakes;
-    extraOptions = "experimental-features = nix-command flakes";
+    package = pkgs.nixVersions.stable;
+    settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
   # Automatic Garbage Collection of Nix Store
