@@ -90,7 +90,7 @@
     iosevka-bin                                   # primary programming font
     (iosevka-bin.override { variant = "Slab"; })  # secondary programming font
     nerdfonts
-    noto-fonts-cjk                                # for asian languages
+    noto-fonts-cjk-sans                           # for asian languages
     noto-fonts                                    # for unicode coverage
     symbola                                       # for more unicode coverage
     terminus_font                                 # good bitmap font

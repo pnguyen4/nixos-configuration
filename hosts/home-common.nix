@@ -48,11 +48,11 @@ in
     fd                                        # Doom Emacs Dependency
     libgccjit                                 # API for embedding GCC inside programs
     nixfmt-classic                            # Formatter for Nix Code
-    nodePackages.pyright                      # For Doom Emacs Python LSP Support
     nodePackages.typescript                   # Better Javascript
     nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
     nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
     pandoc                                    # Universal Document Converter
+    pyright                                   # For Doom Emacs Python LSP Support
     ripgrep                                   # Doom Emacs Dependency
     texlive.combined.scheme-full              # LaTeX Distribution
     xclip                                     # For emacs everywhere
@@ -221,7 +221,7 @@ in
   services.dunst = {
     enable = true;
     iconTheme = {
-      package = pkgs.gnome3.adwaita-icon-theme;
+      package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
     };
     settings = {
