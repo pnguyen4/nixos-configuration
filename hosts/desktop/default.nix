@@ -125,7 +125,7 @@
   hardware.cpu.amd.updateMicrocode = true;
 
   # Power Savings
-  powerManagement.cpuFreqGovernor = "ondemand";
+  # powerManagement.cpuFreqGovernor = "ondemand";
 
   services.teamviewer.enable = true;
   hardware.ledger.enable = true;

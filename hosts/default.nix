@@ -2,11 +2,11 @@
 
 let
   system = "x86_64-linux";
-  pkgs = import nixpkgs {
-    inherit system;
-    config.allowUnfree = true;
-    overlays = [ nur.overlay overlay-unstable ];
-  };
+  #pkgs = import nixpkgs {
+  #  inherit system;
+  #  config.allowUnfree = true;
+  #  overlays = [ nur.overlays.default overlay-unstable ];
+  #};
   overlay-unstable = final: prev: {
     unstable = import nixpkgs-unstable {
       inherit system;
@@ -18,8 +18,13 @@ in {
   # Main Desktop
   nixos-machine = lib.nixosSystem {
     inherit system;
-    specialArgs = { inherit inputs pkgs; };
+    # specialArgs = { inherit inputs pkgs; };
+    specialArgs = { inherit inputs; };
     modules = [
+      {
+        nixpkgs.overlays = [ nur.overlays.default overlay-unstable ];
+        nixpkgs.config.allowUnfree = true;
+      }
       # System Configuration
       ./desktop
       ./configuration-common.nix
@@ -37,9 +42,14 @@ in {
   # Main Laptop
   nixos-latitude = lib.nixosSystem {
     inherit system;
-    specialArgs = { inherit inputs pkgs; };
+    # specialArgs = { inherit inputs pkgs; };
+    specialArgs = { inherit inputs; };
     modules = [
       # System Configuration
+      {
+        nixpkgs.overlays = [ nur.overlays.default overlay-unstable ];
+        nixpkgs.config.allowUnfree = true;
+      }
       ./laptop
       ./configuration-common.nix
       # Home Configuration as a module

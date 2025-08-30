@@ -68,6 +68,7 @@ in
     glxinfo                        # Info About OpenGL/Mesa
     htop                           # Pretty and Interactive Process Viewer
     libarchive                     # Multi-format Archive and Compression Library
+    libva-utils                    # utilities for va-api
     libtool                        # Generic Library Support Script
     lm_sensors                     # Tools for Reading Hardware (Temperature) Sensors
     killall                        # Kill Processes by Name
@@ -77,6 +78,7 @@ in
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
     profile-cleaner                # Optimizes browser profile sqlite database
+    protonvpn-gui                  # VPN configuration
     mesa                           # OpenGL Library
     neofetch                       # System Information Tool
     scrot                          # Simple Screenshot Tool
@@ -297,9 +299,9 @@ in
     #package = pkgs.emacsNativeComp; # use emacs from overlay
     # Packages That Require Compiling Some (non-elisp) Component
      extraPackages = (epkgs: [
-       epkgs.vterm
-       epkgs.emojify
-       epkgs.pdf-tools
+       #epkgs.vterm
+       #epkgs.emojify
+       #epkgs.pdf-tools
      ]);
   };
 
@@ -419,7 +421,7 @@ in
     # Install just the bare basics to get going. Install the rest normally.
     # These are disabled by default. Remember to manually enable them.
     profiles."default" = {
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
         decentraleyes
         greasemonkey
         privacy-badger

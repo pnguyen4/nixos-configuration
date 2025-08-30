@@ -37,7 +37,8 @@
     enable = true;
     # Configure keymap in X11
     xkb.layout = "us,us";
-    xkb.variant = "dvorak,";
+    # xkb.variant = "dvorak,";
+    xkb.variant = ",dvorak";
     # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"
@@ -73,13 +74,25 @@
   };
 
   # Enable sound.
-  security.rtkit.enable = true;
-  services.pipewire ={
+  services.pulseaudio = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+    support32Bit = true;
+    extraConfig = ''
+      load-module module-udev-detect tsched=0
+    '';
+    daemon.config = {
+      default-sample-rate = 48000;
+      alternate-sample-rate = 48000;
+    };
   };
+  security.rtkit.enable = true;
+  services.pipewire.enable = false;
+  # services.pipewire = {
+  #   enable = true;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  #   pulse.enable = true;
+  # };
 
   # Ricing
   programs.dconf.enable = true;
@@ -89,10 +102,10 @@
     ibm-plex                                      # has my favorite serif font
     iosevka-bin                                   # primary programming font
     (iosevka-bin.override { variant = "Slab"; })  # secondary programming font
-    nerdfonts
+    # nerdfonts
     noto-fonts-cjk-sans                           # for asian languages
     noto-fonts                                    # for unicode coverage
-    symbola                                       # for more unicode coverage
+    # symbola                                       # for more unicode coverage
     terminus_font                                 # good bitmap font
   ];
 

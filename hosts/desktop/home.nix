@@ -26,6 +26,7 @@
 
     # Utilities
     android-tools
+    appimage-run
     autorandr                      # Create and Apply Display Profiles
     #bluez                          # Bluetooth Support for Linux
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
