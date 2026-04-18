@@ -19,6 +19,7 @@ in
   # Does not include software enabled by options programs.* and services.*
   home.packages = with pkgs; [
     # General Applications
+    android-tools
     android-file-transfer          # Minimalist MTP client for android
     brave                 # Privacy Browser
     unstable.discord                        # Voice and Text Chat for Gamers

@@ -28,7 +28,6 @@
     racket                         # For SICP
 
     # Utilities
-    android-tools
     appimage-run
     autorandr                      # Create and Apply Display Profiles
     #bluez                          # Bluetooth Support for Linux

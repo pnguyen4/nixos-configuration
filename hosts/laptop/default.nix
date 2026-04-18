@@ -30,6 +30,8 @@
     };
   };
 
+  services.xserver.xkb.options = "caps:super";
+
   # Graphics
   boot.initrd.kernelModules = [ "i915" ];
   environment.variables = {

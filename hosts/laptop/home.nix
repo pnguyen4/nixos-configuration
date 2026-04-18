@@ -8,6 +8,7 @@
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     google-chrome
     #teamviewer
+    runelite
   ];
 
   #services.teamviewer.enable = true;
