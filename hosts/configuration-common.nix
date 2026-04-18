@@ -102,14 +102,14 @@
   fonts.packages = with pkgs; [
     # DejaVu fonts are already installed
     emacs-all-the-icons-fonts
-    ibm-plex                                      # has my favorite serif font
-    iosevka-bin                                   # primary programming font
-    (iosevka-bin.override { variant = "Slab"; })  # secondary programming font
+    ibm-plex                                                 # has my favorite serif font
+    iosevka-bin                                              # primary programming font
+    (iosevka-bin.override { variant = "SGr-IosevkaSlab"; })  # secondary programming font
     # nerdfonts
-    noto-fonts-cjk-sans                           # for asian languages
-    noto-fonts                                    # for unicode coverage
-    # symbola                                       # for more unicode coverage
-    terminus_font                                 # good bitmap font
+    noto-fonts-cjk-sans                                      # for asian languages
+    noto-fonts                                               # for unicode coverage
+    # symbola                                                # for more unicode coverage
+    terminus_font                                            # good bitmap font
   ];
 
   # Sorry Stallman Senpai
