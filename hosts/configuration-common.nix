@@ -5,6 +5,7 @@
   nix = {
     package = pkgs.nixVersions.stable;
     settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.download-buffer-size = 524288000;
   };
 
   # Automatic Garbage Collection of Nix Store
@@ -43,8 +44,6 @@
     deviceSection = ''
       Option "TearFree" "true"
     '';
-    # This just handles all the dbus and systemd stuff automatically
-    displayManager.gdm.enable = true;
     # Use home manager to configure window manager
     desktopManager.session = [
       {
@@ -61,10 +60,14 @@
     exportConfiguration = true;
   };
 
+    # This just handles all the dbus and systemd stuff automatically
+  services.displayManager.gdm.enable = true;
+
   # Enable CUPS to print documents
   services.printing = {
     enable = true;
-    drivers = [ pkgs.gutenprint pkgs.hplipWithPlugin ];
+    drivers = [ pkgs.gutenprint ];
+    # pkgs.hplipWithPlugin ];
   };
 
   # Zeroconf Service to Locate Printer

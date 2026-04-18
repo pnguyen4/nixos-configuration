@@ -21,17 +21,17 @@ in
     # General Applications
     android-file-transfer          # Minimalist MTP client for android
     brave                 # Privacy Browser
-    discord                        # Voice and Text Chat for Gamers
+    unstable.discord                        # Voice and Text Chat for Gamers
     libreoffice-fresh
     qbittorrent                    # GUI Torrent Client
-    slack                          # Corporate IRC
+    # slack                          # Corporate IRC
     unstable.vscode
     xfce.thunar                    # File manager, cuz it get annoying not having one
     xfce.tumbler                   # Enables thumbnails
     xournalpp                      # Edit and Annotate PDFs
     yt-dlp                         # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
-    zoom-us                        # Ugh.
+    # zoom-us                        # Ugh.
 
     # Development
     cmake                          # Cross-Platform Makefile Generator
@@ -65,7 +65,7 @@ in
     arandr                         # Display Configuration Tool
     exfatprogs                     # exFAT filesystem userspace utilities
     file                           # Standard UNIX Utility to Detect File Types
-    glxinfo                        # Info About OpenGL/Mesa
+    mesa-demos                     # Info About OpenGL/Mesa
     htop                           # Pretty and Interactive Process Viewer
     libarchive                     # Multi-format Archive and Compression Library
     libva-utils                    # utilities for va-api
@@ -308,8 +308,10 @@ in
   # Default Git User
   programs.git = {
     enable = true;
-    userEmail = "pnguyen4711@gmail.com";
-    userName  = "Phillip Nguyen";
+    settings = {
+      user.email = "pnguyen4711@gmail.com";
+      user.name  = "Phillip Nguyen";
+    };
   };
 
   # The Best Video Player

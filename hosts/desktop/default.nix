@@ -118,7 +118,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vim parted pciutils git android-udev-rules # virtmanager samba
+    wget vim parted pciutils git # virtmanager samba
   ];
 
   # Security Settings
@@ -129,6 +129,13 @@
 
   services.teamviewer.enable = true;
   hardware.ledger.enable = true;
+
+  services.jellyfin = {
+    enable = true;
+    dataDir = "/home/user/jellyfin";
+    user = "user";
+    openFirewall = true;
+  };
 
   # Samba for shared folder with virtual machine
 #  services.samba = {

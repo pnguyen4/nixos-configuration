@@ -8,9 +8,12 @@
     audacity                       # Audio Editor and Recording Software
     darktable                      # Virtual Lighttable and Darkroom for Photographers
     desmume                        # Nintendo DS Emulator
-    electrum
+    # electrum (temporality disabled because python dependency has vulnerability)
     gimp                           # The GNU Image Manipulation Program
-    libsForQt5.kdenlive            # Video Editor
+    jellyfin
+    jellyfin-web
+    jellyfin-ffmpeg
+    kdePackages.kdenlive           # Video Editor
     unstable.ledger-live-desktop
     melonDS                        # WIP Nintendo DS Emulator
     monero-gui
@@ -31,8 +34,8 @@
     #bluez                          # Bluetooth Support for Linux
     #bluez-tools                    # Command Line Bluetooth Manager for Bluez5
     # easyeffects                   # useless without pipewire
-    ffmpeg                         # Record, Convert, and Stream Audio and Video
-    poppler_utils                  # Includes pdftotext utility for checking resume ATS friendliness
+    #ffmpeg                         # Record, Convert, and Stream Audio and Video
+    poppler-utils                  # Includes pdftotext utility for checking resume ATS friendliness
     smartmontools                  # Get HDD SMART Information
     woeusb                         # Create Bootable USB Disks from Windows ISO Images
   ];
@@ -102,7 +105,7 @@
         type = "internal/i3";
       };
       "module/vpn" = {
-        exec = ''if [[ $(ifconfig | grep -E 'tun0|^wg-') ]]; then echo "%{F#00cc66}VPN On"; else echo "%{F#ff3333}VPN Off"; fi'';
+        exec = ''if [[ $(ip link show | grep -E 'tun0|wg-|proton0') ]]; then echo "%{F#00cc66}VPN On"; else echo "%{F#ff3333}VPN Off"; fi'';
         format = "<label> ";
         type = "custom/script";
       };

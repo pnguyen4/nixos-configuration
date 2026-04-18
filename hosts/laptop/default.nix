@@ -56,7 +56,7 @@
     auto-cpufreq.enable = true;
     thermald.enable = true;
     fstrim.enable = true;
-    xserver.libinput.enable = true;
+    libinput.enable = true;
     # TODO blueman?
     # TODO sane?
   };
