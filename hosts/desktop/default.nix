@@ -37,7 +37,6 @@
     options = [ "subvol=nixos" "compress=zstd" "noatime" "autodefrag" ];
   };
   boot.initrd.luks = {
-    reusePassphrases = true;
     devices."crypted-nixos1".device = "/dev/disk/by-uuid/51dccb88-ffb9-41fc-ad2d-8d1a495fb085";
     devices."crypted-nixos2".device = "/dev/disk/by-uuid/140c4fdc-d067-4d49-b305-f84706caa019";
   };

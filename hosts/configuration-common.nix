@@ -62,6 +62,7 @@
 
     # This just handles all the dbus and systemd stuff automatically
   services.displayManager.gdm.enable = true;
+  services.displayManager.defaultSession = "home-manager";
 
   # Enable CUPS to print documents
   services.printing = {

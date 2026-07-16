@@ -15,7 +15,7 @@
     jellyfin-ffmpeg
     kdePackages.kdenlive           # Video Editor
     unstable.ledger-live-desktop
-    melonDS                        # WIP Nintendo DS Emulator
+    melonds                        # WIP Nintendo DS Emulator
     monero-gui
     #unstable.nyxt
     obs-studio                     # Video Recording and Live Streaming Software

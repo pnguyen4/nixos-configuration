@@ -27,8 +27,8 @@ in
     qbittorrent                    # GUI Torrent Client
     # slack                          # Corporate IRC
     unstable.vscode
-    xfce.thunar                    # File manager, cuz it get annoying not having one
-    xfce.tumbler                   # Enables thumbnails
+    thunar                         # File manager, cuz it get annoying not having one
+    tumbler                        # Enables thumbnails
     xournalpp                      # Edit and Annotate PDFs
     yt-dlp                         # Download Videos From YouTube & Other Sites
     zathura                        # PDF/PS/DJVU/CB Viewer
@@ -38,7 +38,7 @@ in
     cmake                          # Cross-Platform Makefile Generator
     gcc                            # GNU Compiler Collection
     gnumake                        # Build Automation Tool
-    nodePackages.nodemon
+    nodemon
     nodejs
     # postman
     python-with-my-packages
@@ -48,18 +48,18 @@ in
     delta                                     # Adds Syntax Highlighting to Git Diffs
     fd                                        # Doom Emacs Dependency
     libgccjit                                 # API for embedding GCC inside programs
-    nixfmt-classic                            # Formatter for Nix Code
-    nodePackages.typescript                   # Better Javascript
-    nodePackages.typescript-language-server   # For Doom Emacs Javascript LSP Support
-    nodePackages.vscode-langservers-extracted # For Doom Emacs HTML/CSS LSP Support
+    nixfmt                                    # Formatter for Nix Code
+    typescript                                # Better Javascript
+    typescript-language-server                # For Doom Emacs Javascript LSP Support
+    vscode-langservers-extracted              # For Doom Emacs HTML/CSS LSP Support
     pandoc                                    # Universal Document Converter
     pyright                                   # For Doom Emacs Python LSP Support
     ripgrep                                   # Doom Emacs Dependency
     texlive.combined.scheme-full              # LaTeX Distribution
     xclip                                     # For emacs everywhere
     xdotool                                   # For emacs everywhere
-    xorg.xprop                                # For emacs everywhere
-    xorg.xwininfo                             # For emacs everywhere
+    xprop                                     # For emacs everywhere
+    xwininfo                                  # For emacs everywhere
 
     # Utilities
     alacritty                      # Terminal Emulator
@@ -79,9 +79,9 @@ in
     papirus-icon-theme             # Pretty Icons
     pavucontrol                    # Audio Control Panel
     profile-cleaner                # Optimizes browser profile sqlite database
-    protonvpn-gui                  # VPN configuration
+    proton-vpn                      # VPN configuration
     mesa                           # OpenGL Library
-    neofetch                       # System Information Tool
+    fastfetch                      # System Information Tool
     scrot                          # Simple Screenshot Tool
     shellcheck                     # Script Analysis Tool
     unrar                          # Utility for RAR Archives
@@ -90,7 +90,7 @@ in
     volctl                         # Per-application tray icon volume control
     wireguard-tools                # For modern VPNs
     xbindkeys                      # Launch Cmds with Keyboard or Mouse Button
-    xorg.xev                       # Prints Contents of X Events for Debugging
+    xev                            # Prints Contents of X Events for Debugging
     xvkbd                          # Virtual Keyboard Commands
     zip                            # Compressor/Archiver
   ];
@@ -421,6 +421,7 @@ in
 
   programs.firefox = {
     enable = true;
+    configPath = ".mozilla/firefox";
     # Install just the bare basics to get going. Install the rest normally.
     # These are disabled by default. Remember to manually enable them.
     profiles."default" = {
