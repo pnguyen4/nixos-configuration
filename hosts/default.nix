@@ -1,12 +1,7 @@
-{lib, inputs, nixpkgs, nixpkgs-unstable, home-manager, nur}:
+{lib, inputs, nixpkgs, nixpkgs-unstable, home-manager }:
 
 let
   system = "x86_64-linux";
-  #pkgs = import nixpkgs {
-  #  inherit system;
-  #  config.allowUnfree = true;
-  #  overlays = [ nur.overlays.default overlay-unstable ];
-  #};
   overlay-unstable = final: prev: {
     unstable = import nixpkgs-unstable {
       inherit system;
@@ -22,7 +17,7 @@ in {
     specialArgs = { inherit inputs; };
     modules = [
       {
-        nixpkgs.overlays = [ nur.overlays.default overlay-unstable ];
+        nixpkgs.overlays = [ overlay-unstable ];
         nixpkgs.config.allowUnfree = true;
       }
       # System Configuration
@@ -47,7 +42,7 @@ in {
     modules = [
       # System Configuration
       {
-        nixpkgs.overlays = [ nur.overlays.default overlay-unstable ];
+        nixpkgs.overlays = [ overlay-unstable ];
         nixpkgs.config.allowUnfree = true;
       }
       ./laptop

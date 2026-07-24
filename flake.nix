@@ -9,16 +9,13 @@
     };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     #nixos-hardware.url = "github:NixOS/nixos-hardware";
-    nur = {
-      url = "github:nix-community/NUR";
-    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nur }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager }@inputs: {
     nixosConfigurations = (
       import ./hosts {
         inherit (nixpkgs) lib;
-        inherit inputs nixpkgs nixpkgs-unstable home-manager nur;
+        inherit inputs nixpkgs nixpkgs-unstable home-manager;
       }
     );
   };

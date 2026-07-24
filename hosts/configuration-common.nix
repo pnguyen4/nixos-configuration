@@ -38,8 +38,8 @@
     enable = true;
     # Configure keymap in X11
     xkb.layout = "us,us";
-    # xkb.variant = "dvorak,";   # preferred laptop setting
-    xkb.variant = ",dvorak";     # preferred desktop setting
+    xkb.variant = "dvorak,";   # preferred laptop setting
+    # xkb.variant = ",dvorak";     # preferred desktop setting
     # No more screen tearing!
     deviceSection = ''
       Option "TearFree" "true"
