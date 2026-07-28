@@ -198,7 +198,7 @@ in
   };
 
   # Dim Blue Light For Sleep Hygiene
-  services.redshift = {
+  services.gammastep = {
     enable = true;
     tray = true;
     temperature.day = 6500;
